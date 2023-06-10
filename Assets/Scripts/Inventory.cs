@@ -37,28 +37,51 @@ public class Inventory : MonoBehaviour
         return ref _container;
     }
 
-    bool EquipGear(Item item, EGearSlot gearSlot)
+    public bool EquipGear(Item item, EGearSlot gearSlot)
     {
         if (gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon)
         {
             if (item is GunItem)
+            {
+                if (gearSlot == EGearSlot.Primary_Weapon)
+                    primaryWeapon = item as GunItem;
+                else
+                    secondaryWeapon = item as GunItem;
+                Debug.Log("Equipped");
                 return true;
+            }
             else
                 return false;
         }
         else if (gearSlot == EGearSlot.Helmet || gearSlot == EGearSlot.Body_Armor)
         {
             if (item is ArmorItem)
+            {
+                if (gearSlot == EGearSlot.Helmet && (item as ArmorItem).GetArmorType() == EArmorType.Helmet)
+                    helmet = item as ArmorItem;
+                else
+                    bodyArmor = item as ArmorItem;
+                Debug.Log("Equipped");
                 return true;
+            }
             else
                 return false;
         }
         else if (gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget)
         {
             if (item is GunItem || item is ArmorItem)
+            {
                 return false;
+            }
             else
+            {
+                if (gearSlot == EGearSlot.Left_Gadget)
+                    leftGadget = item;
+                else
+                    rightGadget = item;
+                Debug.Log("Equipped");
                 return true;
+            }
         }
         return false;
     }

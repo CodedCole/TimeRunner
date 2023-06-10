@@ -18,7 +18,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     private Inventory _inventory;
     private ItemDataCardController _cardController;
 
-                                                //selected slot index for equipment
+                                                //selected slot index for gear
     private VisualElement _helmetSlot;          //-5    top middle
     private VisualElement _bodyArmorSlot;       //-2    bottom middle
     private VisualElement _primarySlot;         //-6    top left
@@ -26,13 +26,16 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     private VisualElement _leftGadgetSlot;      //-3    bottom left
     private VisualElement _rightGadgetSlot;     //-1    bottom right
 
+    private List<Item> _validGear;
+    private int _selectedValidGear;             //-1 if not selecting gear
+
     private int _inventorySize = -1;
     private int _lootContainerSize = -1;
     private ContainerListController _inventoryContainerController;
     private ContainerListController _lootContainerController;
     private VisualElement _lootPanel;
 
-    private int _currentSelectedSlot = -6;      //index of slot (a negative value is one of the equipment slots)
+    private int _currentSelectedSlot = -6;      //index of slot (a negative value is one of the gear slots)
     private bool _selectedLoot = false;         // whether the current selection is inside the non-inventory container
     private bool _lootPanelOpen = false;
 
@@ -55,7 +58,8 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
 
         _cardController = new ItemDataCardController(_uiDocument.rootVisualElement.Q<VisualElement>("ItemDataCard"));
 
-        _currentSelectedSlot = -6;
+        _selectedValidGear = -1;        //start by not selecting gear
+        _currentSelectedSlot = -6;      //start with primary weapon
     }
 
     /// <summary>
@@ -160,21 +164,32 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     {
         if (context.performed)
         {
-            //deselect
-            SelectIndex(_currentSelectedSlot).RemoveFromClassList(_selectedClass);
-
-            //move
             Vector2 navDir = context.ReadValue<Vector2>();
-            _currentSelectedSlot = FindCoreSlotNavigatedTo(_currentSelectedSlot, navDir);
+            if (_selectedValidGear != -1)
+            {
+                if (navDir.y > 0.5f && _selectedValidGear > 0)
+                    _selectedValidGear--;
+                else if (navDir.y < -0.5f && _selectedValidGear < _validGear.Count)
+                    _selectedValidGear++;
+                Debug.Log(_selectedValidGear);
+            }
+            else
+            {
+                //deselect
+                SelectIndex(_currentSelectedSlot).RemoveFromClassList(_selectedClass);
 
-            //select
-            SelectIndex(_currentSelectedSlot).AddToClassList(_selectedClass);
-            Debug.Log(_currentSelectedSlot);
+                //move
+                _currentSelectedSlot = FindCoreSlotNavigatedTo(_currentSelectedSlot, navDir);
 
-            if (_currentSelectedSlot >= 0)
-                _inventoryContainerController.ScrollToIndex(_currentSelectedSlot);
+                //select
+                SelectIndex(_currentSelectedSlot).AddToClassList(_selectedClass);
+                Debug.Log(_currentSelectedSlot);
 
-            _cardController.UpdateItemData(GetItemFromIndex(_currentSelectedSlot));
+                if (_currentSelectedSlot >= 0)
+                    _inventoryContainerController.ScrollToIndex(_currentSelectedSlot);
+
+                _cardController.UpdateItemData(GetItemFromIndex(_currentSelectedSlot));
+            }
         }
     }
 
@@ -311,45 +326,83 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         if (!context.performed)
             return;
 
+        //select gear
+        if (_selectedValidGear != -1)
+        {
+            switch(_currentSelectedSlot)
+            {
+                case -1:            //right gadget
+                    Debug.Log("Right_Gadget");
+                    _inventory.EquipGear(_validGear[_selectedValidGear], EGearSlot.Right_Gadget);
+                    break;
+                case -2:            //body armor
+                    Debug.Log("Body_Armor");
+                    _inventory.EquipGear(_validGear[_selectedValidGear], EGearSlot.Body_Armor);
+                    break;
+                case -3:            //left gadget
+                    Debug.Log("Left_Gadget");
+                    _inventory.EquipGear(_validGear[_selectedValidGear], EGearSlot.Left_Gadget);
+                    break;
+                case -4:            //secondary weapon
+                    Debug.Log("Secondary_Weapon");
+                    _inventory.EquipGear(_validGear[_selectedValidGear], EGearSlot.Secondary_Weapon);
+                    break;
+                case -5:            //helmet
+                    Debug.Log("Helmet");
+                    _inventory.EquipGear(_validGear[_selectedValidGear], EGearSlot.Helmet);
+                    break;
+                case -6:            //primary weapon
+                    Debug.Log("Primary_Weapon");
+                    _inventory.EquipGear(_validGear[_selectedValidGear], EGearSlot.Primary_Weapon);
+                    break;
+                default:
+                    break;
+            }
+
+            //stop selecting gear
+            CloseGearEquipMenu();
+        }
+
         //gear equip
-        if (_currentSelectedSlot < 0)
+        else if (_currentSelectedSlot < 0)
         {
             Debug.Log("Gear Select");
-            List<Item> validItems;
             switch (_currentSelectedSlot)
             {
                 case -1:            //right gadget
                     Debug.Log("Right_Gadget");
-                    validItems = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Right_Gadget);
+                    _validGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Right_Gadget);
                     break;
                 case -2:            //body armor
                     Debug.Log("Body_Armor");
-                    validItems = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Body_Armor);
+                    _validGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Body_Armor);
                     break;
                 case -3:            //left gadget
                     Debug.Log("Left_Gadget");
-                    validItems = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Left_Gadget);
+                    _validGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Left_Gadget);
                     break;
                 case -4:            //secondary weapon
                     Debug.Log("Secondary_Weapon");
-                    validItems = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Secondary_Weapon);
+                    _validGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Secondary_Weapon);
                     break;
                 case -5:            //helmet
                     Debug.Log("Helmet");
-                    validItems = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Helmet);
+                    _validGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Helmet);
                     break;
                 case -6:            //primary weapon
                     Debug.Log("Primary_Weapon");
-                    validItems = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Primary_Weapon);
+                    _validGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Primary_Weapon);
                     break;
                 default:
-                    validItems = new List<Item>();
+                    _validGear = new List<Item>();
                     break;
             }
             string debug = "valid: ";
-            foreach (var i in validItems)
+            foreach (var i in _validGear)
                 debug += i.GetItemName() + ", ";
             Debug.Log(debug);
+            if (_validGear.Count > 0)
+                OpenGearEquipMenu();
         }
 
         //swap item between containers
@@ -375,6 +428,23 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
 
     public void OnBack(InputAction.CallbackContext context)
     {
-        GetComponent<HUD>().HideInventoryList();
+        if (_selectedValidGear >= 0)
+        {
+            CloseGearEquipMenu();
+        }
+        else
+        {
+            GetComponent<HUD>().HideInventoryList();
+        }
+    }
+
+    void OpenGearEquipMenu()
+    {
+        _selectedValidGear = 0;
+    }
+
+    void CloseGearEquipMenu()
+    {
+        _selectedValidGear = -1;
     }
 }
