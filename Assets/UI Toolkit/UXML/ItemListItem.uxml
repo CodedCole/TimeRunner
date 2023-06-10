@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(128, 128, 128, 0.5); flex-direction: row; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgba(58, 58, 58, 0.5); border-right-color: rgba(58, 58, 58, 0.5); border-top-color: rgba(58, 58, 58, 0.5); border-bottom-color: rgba(58, 58, 58, 0.5);">
+        <ui:VisualElement style="flex-grow: 1; justify-content: space-between; align-self: stretch;">
+            <ui:Label tabindex="-1" text="item name" display-tooltip-when-elided="true" name="ItemName" style="height: 30px; -unity-font-style: bold; font-size: 20px; -unity-text-align: upper-left; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 3px; padding-right: 0; padding-top: 3px; padding-bottom: 0;" />
+            <ui:Label tabindex="-1" text="2.6kg" display-tooltip-when-elided="true" name="ItemWeight" style="height: 20px; text-overflow: ellipsis; white-space: normal; -unity-text-align: lower-left; font-size: 14px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 3px; padding-right: 0; padding-top: 0; padding-bottom: 3px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ItemIcon" style="background-image: url(&apos;project://database/Assets/Sprites/Kenney/Weapons/Previews/blasterD.png?fileID=21300000&amp;guid=245d9fd5cdd57134cb173a69b46f6231&amp;type=3#blasterD&apos;); -unity-background-scale-mode: scale-to-fit; background-color: rgb(61, 165, 226); align-self: stretch; flex-basis: 96px;" />
+    </ui:VisualElement>
+</ui:UXML>

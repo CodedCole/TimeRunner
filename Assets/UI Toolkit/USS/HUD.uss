@@ -1,0 +1,104 @@
+.border {
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.inventory-panel {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    background-color: rgba(51, 51, 51, 0.5);
+    align-self: stretch;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 0;
+    height: 96%;
+    max-width: 33.3%;
+    flex-basis: 450px;
+}
+
+.inventory-label {
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 25px;
+    -unity-text-align: middle-center;
+    height: 50px;
+}
+
+.hidden {
+    display: none;
+}
+
+.gear-slot-column {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.gear-slot {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-self: stretch;
+    background-color: rgb(202, 202, 202);
+}
+
+.gadget-slot {
+}
+
+.weapon-slot {
+}
+
+.helmet-slot {
+}
+
+.body-armor-slot {
+}
+
+.item-list {
+}
+
+.slot-label {
+    align-self: stretch;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#ItemSlotScrollView .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.item-slot {
+    background-color: rgb(202, 202, 202);
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    -unity-background-scale-mode: scale-to-fit;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.item-slot-highlighted {
+    background-color: rgb(219, 113, 113);
+}

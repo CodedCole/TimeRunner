@@ -1,0 +1,45 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="ItemDataCard" src="project://database/Assets/UI%20Toolkit/UXML/ItemDataCard.uxml?fileID=9197481963319205126&amp;guid=196d985edd6d3c1488c263aa3dc82dc2&amp;type=3#ItemDataCard" />
+    <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+        <ui:VisualElement name="CharacterPanel" class="inventory-panel">
+            <ui:Label tabindex="-1" text="Character" display-tooltip-when-elided="true" class="inventory-label" />
+            <ui:VisualElement name="GearSlots" style="background-color: rgb(128, 128, 128); flex-direction: row; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; height: 50%; align-self: stretch;">
+                <ui:VisualElement name="Left" class="gear-slot-column" style="align-self: stretch; flex-grow: 1;">
+                    <ui:VisualElement name="PrimaryWeapon" class="gear-slot weapon-slot item-slot-highlighted" style="height: 60%;">
+                        <ui:Label tabindex="-1" text="Primary" display-tooltip-when-elided="true" class="slot-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="LeftGadget" class="gear-slot gadget-slot" style="height: 40%;">
+                        <ui:Label tabindex="-1" text="Left Gadget" display-tooltip-when-elided="true" class="slot-label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Middle" class="gear-slot-column" style="align-self: stretch; flex-grow: 1;">
+                    <ui:VisualElement name="Helmet" class="gear-slot helmet-slot" style="height: 40%;">
+                        <ui:Label tabindex="-1" text="Helmet" display-tooltip-when-elided="true" class="slot-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="BodyArmor" class="gear-slot body-armor-slot" style="height: 60%;">
+                        <ui:Label tabindex="-1" text="Body Armor" display-tooltip-when-elided="true" class="slot-label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Right" class="gear-slot-column" style="align-self: stretch; flex-grow: 1;">
+                    <ui:VisualElement name="SecondaryWeapon" class="gear-slot weapon-slot" style="height: 60%;">
+                        <ui:Label tabindex="-1" text="Secondary" display-tooltip-when-elided="true" class="slot-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="RightGadget" class="gear-slot gadget-slot" style="height: 40%;">
+                        <ui:Label tabindex="-1" text="Right Gadget" display-tooltip-when-elided="true" class="slot-label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="InventorySlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.2); align-self: stretch; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="InventoryPanel" class="inventory-panel">
+            <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="inventory-label" />
+            <ui:ScrollView name="ItemSlotScrollView" vertical-scroller-visibility="AlwaysVisible" />
+        </ui:VisualElement>
+        <ui:VisualElement name="LootPanel" class="inventory-panel">
+            <ui:Label tabindex="-1" text="Loot" display-tooltip-when-elided="true" class="inventory-label" />
+            <ui:ScrollView name="ItemSlotScrollView" vertical-scroller-visibility="AlwaysVisible" />
+        </ui:VisualElement>
+        <ui:Instance template="ItemDataCard" name="ItemDataCard" style="position: absolute;" />
+    </ui:VisualElement>
+</ui:UXML>

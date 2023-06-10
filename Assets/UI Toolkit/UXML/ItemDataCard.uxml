@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
+    <ui:VisualElement style="background-color: rgb(255, 255, 255); width: 300px;">
+        <ui:VisualElement name="TopRow" style="background-color: rgb(149, 213, 237); flex-direction: row; height: 120px; flex-grow: 1;">
+            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 60%;">
+                <ui:Label tabindex="-1" text="Key Card" display-tooltip-when-elided="true" name="ItemName" style="flex-grow: 1; flex-shrink: 1; -unity-font-style: bold; font-size: 18px;" />
+                <ui:Label tabindex="-1" text="Key" display-tooltip-when-elided="true" name="ItemClass" style="flex-grow: 1; flex-shrink: 1; color: rgb(101, 101, 101); -unity-font-style: italic;" />
+                <ui:Label tabindex="-1" text="0.1kg" display-tooltip-when-elided="true" name="ItemWeight" style="flex-grow: 1; flex-shrink: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ItemIcon" style="background-color: rgb(61, 202, 255); align-self: stretch; width: 40%; flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Kenney/Items/PNG/Colored/key_card.png?fileID=21300000&amp;guid=40d3203816b76554198d4490dd802bd3&amp;type=3#key_card&apos;); -unity-background-scale-mode: scale-to-fit;" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="This is a description of this item that extends past the bounds so that it wraps." display-tooltip-when-elided="true" name="ItemDescription" style="white-space: normal;" />
+        <ui:VisualElement name="Stats" style="background-color: rgba(0, 0, 0, 0); align-self: stretch;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98a81a959f16d0e4992f1edac945dfc4, type: 3}
+  m_Name: MP8
+  m_EditorClassIdentifier: 
+  itemName: MP8
+  description: German engineered SMG designed in the end of the 21st century. Still
+    reliable today.
+  icon: {fileID: 21300000, guid: 4f799c225c005304cb47c5de5d8da8f8, type: 3}
+  weight: 2.4
+  stats:
+    damage: 20
+    damageType: 0
+    rateOfFire: 15
+    magSize: 30
+    reloadTime: 2.5

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
+    <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); flex-grow: 1; align-self: stretch;">
+        <ui:VisualElement name="Icon" class="item-slot" />
+    </ui:VisualElement>
+</ui:UXML>
