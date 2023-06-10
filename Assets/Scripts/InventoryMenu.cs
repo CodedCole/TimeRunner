@@ -131,6 +131,9 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// <param name="container">loot container to show contents of in loot scroll view</param>
     public void OpenWithLootContainer(Container container)
     {
+        if (_selectedValidGear != -1)
+            CloseGearEquipMenu();
+
         if (container == null)
         {
             _lootPanel.AddToClassList(_hiddenClass);
@@ -169,7 +172,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             {
                 if (navDir.y > 0.5f && _selectedValidGear > 0)
                     _selectedValidGear--;
-                else if (navDir.y < -0.5f && _selectedValidGear < _validGear.Count)
+                else if (navDir.y < -0.5f && _selectedValidGear < _validGear.Count - 1)
                     _selectedValidGear++;
                 Debug.Log(_selectedValidGear);
             }
