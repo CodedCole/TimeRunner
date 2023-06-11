@@ -27,7 +27,7 @@ public class Crate : MonoBehaviour, IInteractable
 
     void Update()
     {
-        if (_interacting && !_opened)
+        if (_interacting)
         {
             if (Time.time - _interactionStartTime >= _unlockTime)
             {
@@ -42,9 +42,6 @@ public class Crate : MonoBehaviour, IInteractable
 
     public void StartInteract()
     {
-        if (_opened)
-            return;
-
         _interacting = true;
         _interactionStartTime = Time.time;
         enabled = true;
@@ -63,7 +60,7 @@ public class Crate : MonoBehaviour, IInteractable
 
     public bool IsInteractable()
     {
-        return !_opened;
+        return true;
     }
 
     public string GetInteractDescription()
