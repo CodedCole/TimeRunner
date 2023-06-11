@@ -75,7 +75,7 @@ public class Container
     /// <returns>whether the item was successfully removed</returns>
     public bool RemoveItem(Item item)
     {
-        for (int i = _items.Count; i >= 0; i--)
+        for (int i = _items.Count - 1; i >= 0; i--)
         {
             if (item == _items[i])
             {

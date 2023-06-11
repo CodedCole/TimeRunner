@@ -133,19 +133,21 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
 
     public void OnAim(InputAction.CallbackContext context)
     {
-        if (context.control.name == "rightStick")
+        if (context.performed)
         {
-            Vector2 v = context.ReadValue<Vector2>();
-            Vector2 retPos = _camera.WorldToScreenPoint(((Vector2)transform.position) + v);
-            _hud.MoveReticle(Vector2.down * retPos.y + Vector2.right * retPos.x);
-            _gunController.AimAtPos(((Vector2)transform.position) + v);
+            if (context.control.name == "rightStick")
+            {
+                Vector2 v = context.ReadValue<Vector2>();
+                Vector2 retPos = _camera.WorldToScreenPoint(((Vector2)transform.position) + v);
+                _hud.MoveReticle(Vector2.down * retPos.y + Vector2.right * retPos.x);
+                _gunController.AimAtPos(((Vector2)transform.position) + v);
+            }
+            else
+            {
+                Vector2 v = context.ReadValue<Vector2>();
+                _hud.MoveReticle(Vector2.down * v.y + Vector2.right * v.x);
+                _gunController.AimAtPos(_camera.ScreenToWorldPoint(v));
+            }
         }
-        else
-        {
-            Vector2 v = context.ReadValue<Vector2>();
-            _hud.MoveReticle(Vector2.down * v.y + Vector2.right * v.x);
-            _gunController.AimAtPos(_camera.ScreenToWorldPoint(v));
-        }
-        
     }
 }

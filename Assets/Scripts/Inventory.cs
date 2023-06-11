@@ -38,6 +38,20 @@ public class Inventory : MonoBehaviour
         return ref _container;
     }
 
+    public Item GetGearSlot(EGearSlot gearSlot)
+    {
+        switch(gearSlot)
+        {
+            case EGearSlot.Helmet: return helmet;
+            case EGearSlot.Body_Armor: return bodyArmor;
+            case EGearSlot.Primary_Weapon: return primaryWeapon;
+            case EGearSlot.Secondary_Weapon: return secondaryWeapon;
+            case EGearSlot.Left_Gadget: return leftGadget;
+            case EGearSlot.Right_Gadget: return rightGadget;
+        }
+        return null;
+    }
+
     public bool EquipGear(Item item, EGearSlot gearSlot)
     {
         if (gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon)
