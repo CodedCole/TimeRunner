@@ -37,6 +37,7 @@
         <ui:VisualElement name="InventoryPanel" class="inventory-panel">
             <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="inventory-label" />
             <ui:ScrollView name="ItemSlotScrollView" vertical-scroller-visibility="AlwaysVisible" />
+            <ui:ScrollView vertical-scroller-visibility="AlwaysVisible" name="GearSelectScrollView" />
         </ui:VisualElement>
         <ui:VisualElement name="LootPanel" class="inventory-panel">
             <ui:Label tabindex="-1" text="Loot" display-tooltip-when-elided="true" class="inventory-label" />

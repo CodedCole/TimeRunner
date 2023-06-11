@@ -102,3 +102,12 @@
 .item-slot-highlighted {
     background-color: rgb(219, 113, 113);
 }
+
+.error-message {
+    background-color: rgb(207, 26, 26);
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    font-size: 20px;
+    white-space: normal;
+}

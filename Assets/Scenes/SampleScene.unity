@@ -2194,9 +2194,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.0008628128
+    x: 0
     y: 0
-    width: 0.99763256
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -3387,9 +3387,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20055284f32bf394c9af8c18acffd49e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gearSelectEntryTemplate: {fileID: 9197481963319205126, guid: 00e763f14f63a474aaaf65332b32b582, type: 3}
+  _gearSelectNoItemsFitErrorTemplate: {fileID: 9197481963319205126, guid: d5889ed52bace6c4cb4095558e67c5f4, type: 3}
   _itemSlotTemplate: {fileID: 9197481963319205126, guid: ee0d85f9362a98d45aacf12063393f41, type: 3}
-  _selectedClass: item-slot-highlighted
   _itemSlotsPerRow: 4
+  _selectedClass: item-slot-highlighted
   _hiddenClass: hidden
 --- !u!1 &1829152523
 GameObject:

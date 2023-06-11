@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
+    <ui:VisualElement name="Background" class="error-message" style="height: 64px;">
+        <ui:Label tabindex="-1" text="No items in inventory fit this gear slot" display-tooltip-when-elided="true" style="white-space: normal;" />
+    </ui:VisualElement>
+</ui:UXML>

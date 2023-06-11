@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
 {
     [SerializeField] private VisualTreeAsset _gearSelectEntryTemplate;
+    [SerializeField] private VisualTreeAsset _gearSelectNoItemsFitErrorTemplate;
     [SerializeField] private VisualTreeAsset _itemSlotTemplate;
     [SerializeField] private int _itemSlotsPerRow = 4;
     [SerializeField] private string _selectedClass;
@@ -27,9 +28,12 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     private VisualElement _rightGadgetSlot;     //-1    bottom right
 
     private List<Item> _selectableGear;
+    private ScrollView _gearSelectScrollView;
     private int _selectedGearIndex;             //-1 if not selecting gear
+    private bool _gearSlotHasItem;
 
     private int _inventorySize = -1;
+    private ScrollView _inventoryScrollView;
     private int _lootContainerSize = -1;
     private ContainerListController _inventoryContainerController;
     private ContainerListController _lootContainerController;
@@ -55,6 +59,9 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _leftGadgetSlot = _uiDocument.rootVisualElement.Q<VisualElement>("LeftGadget");
         _rightGadgetSlot = _uiDocument.rootVisualElement.Q<VisualElement>("RightGadget");
 
+        _gearSelectScrollView = _uiDocument.rootVisualElement.Q<ScrollView>("GearSelectScrollView");
+        _inventoryScrollView = _uiDocument.rootVisualElement.Q<VisualElement>("InventoryPanel").Q<ScrollView>("ItemSlotScrollView");
+
         _lootPanel = _uiDocument.rootVisualElement.Q<VisualElement>("LootPanel");
 
         _cardController = new ItemDataCardController(_uiDocument.rootVisualElement.Q<VisualElement>("ItemDataCard"));
@@ -71,9 +78,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _inventorySize = _inventory.GetContainer().GetMaxItems();
 
         _inventoryContainerController = new ContainerListController();
-        _inventoryContainerController.InitializeList(
-            _uiDocument.rootVisualElement.Q<VisualElement>("InventoryPanel").Q<ScrollView>("ItemSlotScrollView"),
-            _itemSlotTemplate, ref _inventory.GetContainer(), _itemSlotsPerRow);
+        _inventoryContainerController.InitializeList(_inventoryScrollView, _itemSlotTemplate, ref _inventory.GetContainer(), _itemSlotsPerRow);
 
         _lootContainerController = new ContainerListController();
         _lootContainerController.InitializeList(
@@ -183,11 +188,22 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             Vector2 navDir = context.ReadValue<Vector2>();
             if (_selectedGearIndex != -1)
             {
-                if (navDir.y > 0.5f && _selectedGearIndex > 0)
-                    _selectedGearIndex--;
-                else if (navDir.y < -0.5f && _selectedGearIndex < _selectableGear.Count - 1)
-                    _selectedGearIndex++;
-                Debug.Log(_selectedGearIndex);
+                //still capture navigation, but no need to navigate no items
+                if (_selectableGear.Count > 0)
+                {
+                    //deselect
+                    _gearSelectScrollView.ElementAt(_selectedGearIndex).Q<VisualElement>("Background").RemoveFromClassList(_selectedClass);
+
+                    //move
+                    if (navDir.y > 0.5f && _selectedGearIndex > 0)
+                        _selectedGearIndex--;
+                    else if (navDir.y < -0.5f && _selectedGearIndex < _selectableGear.Count - 1)
+                        _selectedGearIndex++;
+                    Debug.Log(_selectedGearIndex);
+
+                    //select
+                    _gearSelectScrollView.ElementAt(_selectedGearIndex).Q<VisualElement>("Background").AddToClassList(_selectedClass);
+                }
             }
             else
             {
@@ -381,42 +397,58 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     void StartSelectGear()
     {
         Debug.Log("Gear Select");
+        Item currentGear;
         switch (_currentSelectedSlot)
         {
             case -1:            //right gadget
                 Debug.Log("Right_Gadget");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Right_Gadget);
+                currentGear = _inventory.GetGearSlot(EGearSlot.Right_Gadget);
                 break;
             case -2:            //body armor
                 Debug.Log("Body_Armor");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Body_Armor);
+                currentGear = _inventory.GetGearSlot(EGearSlot.Body_Armor);
                 break;
             case -3:            //left gadget
                 Debug.Log("Left_Gadget");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Left_Gadget);
+                currentGear = _inventory.GetGearSlot(EGearSlot.Left_Gadget);
                 break;
             case -4:            //secondary weapon
                 Debug.Log("Secondary_Weapon");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Secondary_Weapon);
+                currentGear = _inventory.GetGearSlot(EGearSlot.Secondary_Weapon);
                 break;
             case -5:            //helmet
                 Debug.Log("Helmet");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Helmet);
+                currentGear = _inventory.GetGearSlot(EGearSlot.Helmet);
                 break;
             case -6:            //primary weapon
                 Debug.Log("Primary_Weapon");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Primary_Weapon);
+                currentGear = _inventory.GetGearSlot(EGearSlot.Primary_Weapon);
                 break;
             default:
                 _selectableGear = new List<Item>();
+                currentGear = null;
                 break;
+        }
+        if (currentGear != null)
+        {
+            _selectableGear.Insert(0, currentGear);
+            _gearSlotHasItem = true;
+        }
+        else
+        {
+            _gearSlotHasItem = false;
         }
         string debug = "valid: ";
         foreach (var i in _selectableGear)
             debug += i.GetItemName() + ", ";
         Debug.Log(debug);
-        if (_selectableGear.Count > 0)
-            OpenGearEquipMenu();
+        OpenGearEquipMenu();
     }
 
     /// <summary>
@@ -424,34 +456,37 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// </summary>
     void ConfirmSelectGear()
     {
-        switch (_currentSelectedSlot)
+        if (_selectableGear.Count > 0)
         {
-            case -1:            //right gadget
-                Debug.Log("Right_Gadget");
-                EquipGear(EGearSlot.Right_Gadget);
-                break;
-            case -2:            //body armor
-                Debug.Log("Body_Armor");
-                EquipGear(EGearSlot.Body_Armor);
-                break;
-            case -3:            //left gadget
-                Debug.Log("Left_Gadget");
-                EquipGear(EGearSlot.Left_Gadget);
-                break;
-            case -4:            //secondary weapon
-                Debug.Log("Secondary_Weapon");
-                EquipGear(EGearSlot.Secondary_Weapon);
-                break;
-            case -5:            //helmet
-                Debug.Log("Helmet");
-                EquipGear(EGearSlot.Helmet);
-                break;
-            case -6:            //primary weapon
-                Debug.Log("Primary_Weapon");
-                EquipGear(EGearSlot.Primary_Weapon);
-                break;
-            default:
-                break;
+            switch (_currentSelectedSlot)
+            {
+                case -1:            //right gadget
+                    Debug.Log("Right_Gadget");
+                    EquipGear(EGearSlot.Right_Gadget);
+                    break;
+                case -2:            //body armor
+                    Debug.Log("Body_Armor");
+                    EquipGear(EGearSlot.Body_Armor);
+                    break;
+                case -3:            //left gadget
+                    Debug.Log("Left_Gadget");
+                    EquipGear(EGearSlot.Left_Gadget);
+                    break;
+                case -4:            //secondary weapon
+                    Debug.Log("Secondary_Weapon");
+                    EquipGear(EGearSlot.Secondary_Weapon);
+                    break;
+                case -5:            //helmet
+                    Debug.Log("Helmet");
+                    EquipGear(EGearSlot.Helmet);
+                    break;
+                case -6:            //primary weapon
+                    Debug.Log("Primary_Weapon");
+                    EquipGear(EGearSlot.Primary_Weapon);
+                    break;
+                default:
+                    break;
+            }
         }
 
         UpdateItemDataCard();
@@ -466,6 +501,10 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// <param name="gearSlot"></param>
     void EquipGear(EGearSlot gearSlot)
     {
+        //gear is already equipped
+        if (_gearSlotHasItem && _selectedGearIndex == 0)
+            return;
+
         Item currentGear = _inventory.GetGearSlot(gearSlot);
         bool success = _inventory.EquipGear(_selectableGear[_selectedGearIndex], gearSlot);
         if (success)
@@ -481,7 +520,34 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// </summary>
     void OpenGearEquipMenu()
     {
+        //start gear select
         _selectedGearIndex = 0;
+
+        //reveal gear select and hide inventory
+        _gearSelectScrollView.RemoveFromClassList(_hiddenClass);
+        _inventoryScrollView.AddToClassList(_hiddenClass);
+
+        //populate the gear select scroll view
+        _gearSelectScrollView.Clear();
+        if (_selectableGear.Count > 0)
+        {
+            for (int i = 0; i < _selectableGear.Count; i++)
+            {
+                var gear = _gearSelectEntryTemplate.Instantiate();
+                _gearSelectScrollView.Add(gear);
+                gear.Q<VisualElement>("ItemIcon").style.backgroundImage = new StyleBackground(_selectableGear[i].GetIcon());
+                gear.Q<Label>("ItemName").text = _selectableGear[i].GetItemName() + ((i == 0 && _gearSlotHasItem) ? " (current)" : "");
+                gear.Q<Label>("ItemWeight").text = _selectableGear[i].GetWeight() + "kg";
+            }
+
+            //first item starts selected
+            _gearSelectScrollView.ElementAt(0).Q<VisualElement>("Background").AddToClassList(_selectedClass);
+        }
+        else
+        {
+            var notification = _gearSelectNoItemsFitErrorTemplate.Instantiate();
+            _gearSelectScrollView.Add(notification);
+        }
     }
 
     /// <summary>
@@ -489,18 +555,26 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// </summary>
     void CloseGearEquipMenu()
     {
+        //end gear select
         _selectedGearIndex = -1;
+
+        //reveal inventory and hide gear select
+        _gearSelectScrollView.AddToClassList(_hiddenClass);
+        _inventoryScrollView.RemoveFromClassList(_hiddenClass);
     }
 
     public void OnBack(InputAction.CallbackContext context)
     {
-        if (_selectedGearIndex >= 0)
+        if (!context.performed)
+            return;
+
+        if (_selectedGearIndex == -1)
         {
-            CloseGearEquipMenu();
+            GetComponent<HUD>().HideInventoryList();
         }
         else
         {
-            GetComponent<HUD>().HideInventoryList();
+            CloseGearEquipMenu();
         }
     }
 }
