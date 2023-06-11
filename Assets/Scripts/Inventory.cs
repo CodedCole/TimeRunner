@@ -17,6 +17,7 @@ public class Inventory : MonoBehaviour
 
     private Container _container;
     private Action onStart;
+    private Action onEquip;
 
     private void Start()
     {
@@ -48,6 +49,9 @@ public class Inventory : MonoBehaviour
                 else
                     secondaryWeapon = item as GunItem;
                 Debug.Log("Equipped");
+                if (onEquip != null)
+                    onEquip();
+
                 return true;
             }
             else
@@ -62,6 +66,9 @@ public class Inventory : MonoBehaviour
                 else
                     bodyArmor = item as ArmorItem;
                 Debug.Log("Equipped");
+                if (onEquip != null)
+                    onEquip();
+
                 return true;
             }
             else
@@ -80,9 +87,15 @@ public class Inventory : MonoBehaviour
                 else
                     rightGadget = item;
                 Debug.Log("Equipped");
+                if (onEquip != null)
+                    onEquip();
+
                 return true;
             }
         }
         return false;
     }
+
+    public void RegisterOnEquip(Action action) { onEquip += action; }
+    public void UnregisterOnEquip(Action action) { onEquip -= action; }
 }

@@ -30,7 +30,9 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="InventorySlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.2); align-self: stretch; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+            <ui:VisualElement name="InventorySlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.2); align-self: stretch; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                <ui:Instance template="ItemDataCard" name="ItemDataCard" />
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="InventoryPanel" class="inventory-panel">
             <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="inventory-label" />
@@ -40,6 +42,5 @@
             <ui:Label tabindex="-1" text="Loot" display-tooltip-when-elided="true" class="inventory-label" />
             <ui:ScrollView name="ItemSlotScrollView" vertical-scroller-visibility="AlwaysVisible" />
         </ui:VisualElement>
-        <ui:Instance template="ItemDataCard" name="ItemDataCard" style="position: absolute;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -44,6 +44,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _uiDocument = GetComponent<UIDocument>();
         _inventory = FindObjectOfType<Inventory>();
         _inventory.RegisterOnStart(OnInventoryInitialized);
+        _inventory.RegisterOnEquip(UpdateGear);
 
         _helmetSlot = _uiDocument.rootVisualElement.Q<VisualElement>("Helmet");
         _bodyArmorSlot = _uiDocument.rootVisualElement.Q<VisualElement>("BodyArmor");
@@ -123,6 +124,16 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     {
         if (_controls != null)
             _controls.Menu.Disable();
+    }
+    
+    void UpdateGear()
+    {
+        _helmetSlot.style.backgroundImage = _inventory.helmet != null ? new StyleBackground(_inventory.helmet.GetIcon()) : null;
+        _bodyArmorSlot.style.backgroundImage = _inventory.bodyArmor!= null ? new StyleBackground(_inventory.bodyArmor.GetIcon()) : null;
+        _primarySlot.style.backgroundImage = _inventory.primaryWeapon != null ? new StyleBackground(_inventory.primaryWeapon.GetIcon()) : null;
+        _secondarySlot.style.backgroundImage = _inventory.secondaryWeapon != null ? new StyleBackground(_inventory.secondaryWeapon.GetIcon()) : null;
+        _leftGadgetSlot.style.backgroundImage = _inventory.leftGadget != null ? new StyleBackground(_inventory.leftGadget.GetIcon()) : null;
+        _rightGadgetSlot.style.backgroundImage = _inventory.rightGadget != null ? new StyleBackground(_inventory.rightGadget.GetIcon()) : null;
     }
 
     /// <summary>
