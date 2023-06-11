@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] private GunStats stats;
+    [SerializeField] private GunItem gunItem;
 
-    private int mag;
-    private float shotTimer;
-    private float reloadTimer;
+    private int _mag;
+    private float _nextShotTime;
+    private float _reloadedTime;
 
     private void Start()
     {
-        mag = stats.magSize;
+        _mag = gunItem.GetStats().magSize;
+        _reloadedTime = Time.time;
+        _nextShotTime = Time.time;
     }
 
-    private void Update()
+    public void Fire()
     {
-        
+        if (_nextShotTime <= Time.time && _mag > 0)
+        {
+            _nextShotTime = Time.time + (1f / gunItem.GetStats().rateOfFire);
+            _mag--;
+
+            Projectile p = Instantiate(gunItem.GetProjectile(), transform.position + (transform.right * gunItem.GetProjectileSpawn().x) + (transform.up * gunItem.GetProjectileSpawn().y), transform.rotation);
+            p.damage = gunItem.GetStats().damage;
+            p.damageType = gunItem.GetStats().damageType;
+            p.GetComponent<Rigidbody2D>().velocity = transform.right * gunItem.GetStats().projectileVelocity;
+        }
     }
 }

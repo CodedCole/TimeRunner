@@ -105,7 +105,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         {
             if (context.control.magnitude > 0.5f && !_firing)
             {
-                GetComponent<Health>().TakeDamage(10, EDamageType.Kinetic);
+                GetComponentInChildren<Gun>().Fire();
                 _firing = true;
                 Debug.Log("Firing");
             }

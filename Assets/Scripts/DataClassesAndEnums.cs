@@ -26,4 +26,5 @@ public struct GunStats
     public float rateOfFire;
     public int magSize;
     public float reloadTime;
+    public float projectileVelocity;
 }

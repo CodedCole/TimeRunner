@@ -8,7 +8,6 @@ public class HUD : MonoBehaviour
 {
     [SerializeField] private VisualTreeAsset _itemListTemplate;
     [SerializeField] private string _hiddenClass = "hidden";
-    [SerializeField] private int _slotsPerRow = 4;
 
     UIDocument _hud;
 

@@ -5,7 +5,6 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     [SerializeField] private Transform _anchor;
-    [SerializeField] private Transform _bulletSpawn;
 
     // Start is called before the first frame update
     void Start()

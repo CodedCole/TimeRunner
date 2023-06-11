@@ -23,3 +23,6 @@ MonoBehaviour:
     rateOfFire: 15
     magSize: 30
     reloadTime: 2.5
+    projectileVelocity: 20
+  projectile: {fileID: 590177837319269931, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+  projectileSpawn: {x: 0.25, y: 0}
