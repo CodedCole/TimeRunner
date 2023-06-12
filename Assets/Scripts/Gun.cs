@@ -18,11 +18,13 @@ public class Gun : MonoBehaviour
                 _nextShotTime = Time.time;
                 _reloadedTime = Time.time;
                 spriteRenderer.sprite = value.gun.GetSprite();
+                _reloading = false;
             }
             else
             {
                 _gunInstance = null;
                 spriteRenderer.sprite = null;
+                _reloading = false;
             }
         } 
     }
@@ -32,6 +34,7 @@ public class Gun : MonoBehaviour
     private GunItemInstance _gunInstance;
     private float _nextShotTime;
     private float _reloadedTime;
+    private bool _reloading;
 
     private void Start()
     {
@@ -39,9 +42,18 @@ public class Gun : MonoBehaviour
         _nextShotTime = Time.time;
     }
 
+    private void Update()
+    {
+        if (_reloading && _reloadedTime <= Time.time)
+        {
+            _gunInstance.mag = _gunInstance.gun.GetStats().magSize;
+            _reloading = false;
+        }
+    }
+
     public void Fire()
     {
-        if (_gunInstance != null && _nextShotTime <= Time.time && _gunInstance.mag > 0)
+        if (_gunInstance != null && _nextShotTime <= Time.time && _gunInstance.mag > 0 && !_reloading)
         {
             _nextShotTime = Time.time + (1f / _gunInstance.gun.GetStats().rateOfFire);
             _gunInstance.mag--;
@@ -50,6 +62,15 @@ public class Gun : MonoBehaviour
             p.damage = _gunInstance.gun.GetStats().damage;
             p.damageType = _gunInstance.gun.GetStats().damageType;
             p.GetComponent<Rigidbody2D>().velocity = transform.right * _gunInstance.gun.GetStats().projectileVelocity;
+
+            if (_gunInstance.mag <= 0)
+                Reload();
         }
+    }
+
+    public void Reload()
+    {
+        _reloading = true;
+        _reloadedTime = Time.time + _gunInstance.gun.GetStats().reloadTime;
     }
 }

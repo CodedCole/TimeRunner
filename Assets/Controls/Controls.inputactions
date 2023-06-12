@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Aim",
+                    "type": "PassThrough",
+                    "id": "6e22cfdc-4916-47f0-a606-50760424e230",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Interact",
                     "type": "PassThrough",
                     "id": "6694b6af-a001-42b5-8246-d99bc0fab1f4",
@@ -42,18 +51,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Aim",
-                    "type": "PassThrough",
-                    "id": "6e22cfdc-4916-47f0-a606-50760424e230",
-                    "expectedControlType": "Vector2",
+                    "name": "SwapWeapons",
+                    "type": "Button",
+                    "id": "3fb7ab29-f648-437a-ab82-9746e85acaa2",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwapWeapons",
+                    "name": "Reload",
                     "type": "Button",
-                    "id": "3fb7ab29-f648-437a-ab82-9746e85acaa2",
+                    "id": "08e1d204-71d5-45b1-854c-6d9f4c0133ab",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -141,7 +150,7 @@
                 {
                     "name": "",
                     "id": "e59187da-c6c8-44c0-81ae-868839f7f817",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "Gamepad",
@@ -195,6 +204,28 @@
                 },
                 {
                     "name": "",
+                    "id": "40454029-62c5-4c71-a938-8bd8abf9d9d0",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SwapWeapons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a6860be-a70b-4b8d-836f-066365abef20",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "cf622dd7-6cb4-432d-b94f-be2dbc05aae1",
                     "path": "<Mouse>/position",
                     "interactions": "",
@@ -212,17 +243,6 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "40454029-62c5-4c71-a938-8bd8abf9d9d0",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "SwapWeapons",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

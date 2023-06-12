@@ -37,6 +37,14 @@ public class GunController : MonoBehaviour
     }
 
     /// <summary>
+    /// Reloads the active weapon
+    /// </summary>
+    public void Reload()
+    {
+        _gun.Reload();
+    }
+
+    /// <summary>
     /// Switches the active weapon to either primary or secondary weapon
     /// </summary>
     /// <param name="secondary">whether to switch to the secondary weapon</param>

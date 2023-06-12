@@ -37,6 +37,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Aim"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""6e22cfdc-4916-47f0-a606-50760424e230"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""PassThrough"",
                     ""id"": ""6694b6af-a001-42b5-8246-d99bc0fab1f4"",
@@ -64,18 +73,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Aim"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""6e22cfdc-4916-47f0-a606-50760424e230"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""SwapWeapons"",
+                    ""type"": ""Button"",
+                    ""id"": ""3fb7ab29-f648-437a-ab82-9746e85acaa2"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SwapWeapons"",
+                    ""name"": ""Reload"",
                     ""type"": ""Button"",
-                    ""id"": ""3fb7ab29-f648-437a-ab82-9746e85acaa2"",
+                    ""id"": ""08e1d204-71d5-45b1-854c-6d9f4c0133ab"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -163,7 +172,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e59187da-c6c8-44c0-81ae-868839f7f817"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": ""Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -217,6 +226,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""40454029-62c5-4c71-a938-8bd8abf9d9d0"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SwapWeapons"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a6860be-a70b-4b8d-836f-066365abef20"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""cf622dd7-6cb4-432d-b94f-be2dbc05aae1"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
@@ -234,17 +265,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""40454029-62c5-4c71-a938-8bd8abf9d9d0"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""SwapWeapons"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -429,11 +449,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // During Run
         m_DuringRun = asset.FindActionMap("During Run", throwIfNotFound: true);
         m_DuringRun_Move = m_DuringRun.FindAction("Move", throwIfNotFound: true);
+        m_DuringRun_Aim = m_DuringRun.FindAction("Aim", throwIfNotFound: true);
         m_DuringRun_Interact = m_DuringRun.FindAction("Interact", throwIfNotFound: true);
         m_DuringRun_Fire = m_DuringRun.FindAction("Fire", throwIfNotFound: true);
         m_DuringRun_Inventory = m_DuringRun.FindAction("Inventory", throwIfNotFound: true);
-        m_DuringRun_Aim = m_DuringRun.FindAction("Aim", throwIfNotFound: true);
         m_DuringRun_SwapWeapons = m_DuringRun.FindAction("SwapWeapons", throwIfNotFound: true);
+        m_DuringRun_Reload = m_DuringRun.FindAction("Reload", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Navigation = m_Menu.FindAction("Navigation", throwIfNotFound: true);
@@ -501,21 +522,23 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_DuringRun;
     private List<IDuringRunActions> m_DuringRunActionsCallbackInterfaces = new List<IDuringRunActions>();
     private readonly InputAction m_DuringRun_Move;
+    private readonly InputAction m_DuringRun_Aim;
     private readonly InputAction m_DuringRun_Interact;
     private readonly InputAction m_DuringRun_Fire;
     private readonly InputAction m_DuringRun_Inventory;
-    private readonly InputAction m_DuringRun_Aim;
     private readonly InputAction m_DuringRun_SwapWeapons;
+    private readonly InputAction m_DuringRun_Reload;
     public struct DuringRunActions
     {
         private @Controls m_Wrapper;
         public DuringRunActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_DuringRun_Move;
+        public InputAction @Aim => m_Wrapper.m_DuringRun_Aim;
         public InputAction @Interact => m_Wrapper.m_DuringRun_Interact;
         public InputAction @Fire => m_Wrapper.m_DuringRun_Fire;
         public InputAction @Inventory => m_Wrapper.m_DuringRun_Inventory;
-        public InputAction @Aim => m_Wrapper.m_DuringRun_Aim;
         public InputAction @SwapWeapons => m_Wrapper.m_DuringRun_SwapWeapons;
+        public InputAction @Reload => m_Wrapper.m_DuringRun_Reload;
         public InputActionMap Get() { return m_Wrapper.m_DuringRun; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -528,6 +551,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
@@ -537,12 +563,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
-            @Aim.started += instance.OnAim;
-            @Aim.performed += instance.OnAim;
-            @Aim.canceled += instance.OnAim;
             @SwapWeapons.started += instance.OnSwapWeapons;
             @SwapWeapons.performed += instance.OnSwapWeapons;
             @SwapWeapons.canceled += instance.OnSwapWeapons;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(IDuringRunActions instance)
@@ -550,6 +576,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
@@ -559,12 +588,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
-            @Aim.started -= instance.OnAim;
-            @Aim.performed -= instance.OnAim;
-            @Aim.canceled -= instance.OnAim;
             @SwapWeapons.started -= instance.OnSwapWeapons;
             @SwapWeapons.performed -= instance.OnSwapWeapons;
             @SwapWeapons.canceled -= instance.OnSwapWeapons;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(IDuringRunActions instance)
@@ -665,11 +694,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public interface IDuringRunActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
-        void OnAim(InputAction.CallbackContext context);
         void OnSwapWeapons(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

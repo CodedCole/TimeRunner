@@ -162,4 +162,10 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         if (context.performed)
             _gunController.SwapWeapons();
     }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            _gunController.Reload();
+    }
 }
