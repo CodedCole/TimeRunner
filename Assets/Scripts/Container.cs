@@ -7,14 +7,14 @@ public class Container
 {
     public class ItemStack
     {
-        public Item item { get; protected set; }
-        public int count { get; protected set; }
+        public ItemInstance itemInstance { get; set; }
+        public int count { get; set; }
     }
 
     private float _maxWeight;
     private int _maxItems;
     
-    private List<Item> _items = new List<Item>();
+    private List<ItemStack> _items = new List<ItemStack>();
     private float _currentWeight = 0;
 
     Action onItemAdded;
@@ -27,15 +27,18 @@ public class Container
     }
 
     // returns true if the item was able to fit in the container
-    public bool AddItem(Item item)
+    public bool AddItem(ItemInstance item)
     {
         //check for space in container
-        if (item == null || _currentWeight + item.GetWeight() > _maxWeight || _items.Count >= _maxItems)
+        if (item == null || _currentWeight + item.item.GetWeight() > _maxWeight || _items.Count >= _maxItems)
             return false;
 
         //add item into container
-        _items.Add(item);
-        _currentWeight += item.GetWeight();
+        ItemStack itemStack = new ItemStack();
+        itemStack.itemInstance = item;
+        itemStack.count = 1;
+        _items.Add(itemStack);
+        _currentWeight += item.item.GetWeight();
 
         //trigger event
         if (onItemAdded != null)
@@ -44,7 +47,7 @@ public class Container
         return true;
     }
 
-    public Item GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
+    public ItemInstance GetItemAtIndex(int index) { return index < _items.Count ? _items[index].itemInstance : null; }
 
     /// <summary>
     /// Removes the item at the given index
@@ -58,7 +61,7 @@ public class Container
             return false;
 
         //remove item from container
-        _currentWeight -= _items[index].GetWeight();
+        _currentWeight -= _items[index].itemInstance.item.GetWeight();
         _items.RemoveAt(index);
 
         //trigger event
@@ -73,11 +76,11 @@ public class Container
     /// </summary>
     /// <param name="item">item to remove</param>
     /// <returns>whether the item was successfully removed</returns>
-    public bool RemoveItem(Item item)
+    public bool RemoveItem(ItemInstance item)
     {
         for (int i = _items.Count - 1; i >= 0; i--)
         {
-            if (item == _items[i])
+            if (item == _items[i].itemInstance)
             {
                 RemoveItemAtIndex(i);
                 return true;
@@ -86,7 +89,7 @@ public class Container
         return false;
     }
 
-    public List<Item> GetItemsList() { return _items; }
+    public List<ItemStack> GetItemsList() { return _items; }
 
     public float GetWeight() { return _currentWeight; }
     public float GetMaxWeight() { return _maxWeight; }
@@ -99,17 +102,17 @@ public class Container
     public void UnregisterItemAddEvent(Action action) { onItemAdded -= action; }
     public void UnregisterItemRemovedEvent(Action action) { onItemRemoved -= action; }
 
-    public List<Item> GetItemsForSlot(EGearSlot gearSlot)
+    public List<ItemInstance> GetItemsForSlot(EGearSlot gearSlot)
     {
-        List<Item> validItems = new List<Item>();
+        List<ItemInstance> validItems = new List<ItemInstance>();
         for (int i = 0; i < _items.Count; i++)
         {
-            if ((gearSlot == EGearSlot.Helmet && _items[i] is ArmorItem && (_items[i] as ArmorItem).GetArmorType() == EArmorType.Helmet) ||
-                (gearSlot == EGearSlot.Body_Armor && _items[i] is ArmorItem && (_items[i] as ArmorItem).GetArmorType() == EArmorType.Body_Armor) ||
-                ((gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon) && _items[i] is GunItem) ||
-                ((gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget) && !(_items[i] is GunItem) && !(_items[i] is ArmorItem)))
+            if ((gearSlot == EGearSlot.Helmet && _items[i].itemInstance is ArmorItemInstance && ((_items[i].itemInstance as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Helmet) ||
+                (gearSlot == EGearSlot.Body_Armor && _items[i].itemInstance is ArmorItemInstance && ((_items[i].itemInstance as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Body_Armor) ||
+                ((gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon) && _items[i].itemInstance is GunItemInstance) ||
+                ((gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget) && !(_items[i].itemInstance is GunItemInstance) && !(_items[i].itemInstance is ArmorItemInstance)))
             {
-                validItems.Add(_items[i]);
+                validItems.Add(_items[i].itemInstance);
             }
         }
         return validItems;

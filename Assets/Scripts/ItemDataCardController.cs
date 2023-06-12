@@ -34,15 +34,15 @@ public class ItemDataCardController
     /// A null 'item' resets the ItemDataCard
     /// </summary>
     /// <param name="item">data to use</param>
-    public void UpdateItemData(Item item)
+    public void UpdateItemData(ItemInstance item)
     {
         if (item != null)
         {
-            _name.text = item.GetItemName();
+            _name.text = item.item.GetItemName();
             _class.text = item.GetType().Name;
-            _weight.text = item.GetWeight() + "kg";
-            _description.text = item.GetDescription();
-            _icon.style.backgroundImage = new StyleBackground(item.GetIcon());
+            _weight.text = item.item.GetWeight() + "kg";
+            _description.text = item.item.GetDescription();
+            _icon.style.backgroundImage = new StyleBackground(item.item.GetIcon());
         }
         else
         {

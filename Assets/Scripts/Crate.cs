@@ -21,7 +21,7 @@ public class Crate : MonoBehaviour, IInteractable
         _container = new Container(_maxWeight, _maxItems);
         foreach(var i in _startingItems)
         {
-            _container.AddItem(i);
+            _container.AddItem(i.MakeItemInstance());
         }
     }
 

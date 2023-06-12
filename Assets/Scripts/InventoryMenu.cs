@@ -27,7 +27,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     private VisualElement _leftGadgetSlot;      //-3    bottom left
     private VisualElement _rightGadgetSlot;     //-1    bottom right
 
-    private List<Item> _selectableGear;
+    private List<ItemInstance> _selectableGear;
     private ScrollView _gearSelectScrollView;
     private int _selectedGearIndex;             //-1 if not selecting gear
     private bool _gearSlotHasItem;
@@ -133,12 +133,12 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     
     void UpdateGear()
     {
-        _helmetSlot.style.backgroundImage = _inventory.helmet != null ? new StyleBackground(_inventory.helmet.GetIcon()) : null;
-        _bodyArmorSlot.style.backgroundImage = _inventory.bodyArmor!= null ? new StyleBackground(_inventory.bodyArmor.GetIcon()) : null;
-        _primarySlot.style.backgroundImage = _inventory.primaryWeapon != null ? new StyleBackground(_inventory.primaryWeapon.GetIcon()) : null;
-        _secondarySlot.style.backgroundImage = _inventory.secondaryWeapon != null ? new StyleBackground(_inventory.secondaryWeapon.GetIcon()) : null;
-        _leftGadgetSlot.style.backgroundImage = _inventory.leftGadget != null ? new StyleBackground(_inventory.leftGadget.GetIcon()) : null;
-        _rightGadgetSlot.style.backgroundImage = _inventory.rightGadget != null ? new StyleBackground(_inventory.rightGadget.GetIcon()) : null;
+        _helmetSlot.style.backgroundImage = _inventory.helmet != null ? new StyleBackground(_inventory.helmet.item.GetIcon()) : null;
+        _bodyArmorSlot.style.backgroundImage = _inventory.bodyArmor!= null ? new StyleBackground(_inventory.bodyArmor.item.GetIcon()) : null;
+        _primarySlot.style.backgroundImage = _inventory.primaryWeapon != null ? new StyleBackground(_inventory.primaryWeapon.item.GetIcon()) : null;
+        _secondarySlot.style.backgroundImage = _inventory.secondaryWeapon != null ? new StyleBackground(_inventory.secondaryWeapon.item.GetIcon()) : null;
+        _leftGadgetSlot.style.backgroundImage = _inventory.leftGadget != null ? new StyleBackground(_inventory.leftGadget.item.GetIcon()) : null;
+        _rightGadgetSlot.style.backgroundImage = _inventory.rightGadget != null ? new StyleBackground(_inventory.rightGadget.item.GetIcon()) : null;
     }
 
     void UpdateItemDataCard() { _cardController.UpdateItemData(GetItemFromIndex(_currentSelectedSlot)); }
@@ -329,7 +329,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    Item GetItemFromIndex(int index)
+    ItemInstance GetItemFromIndex(int index)
     {
         switch (index)
         {
@@ -373,7 +373,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         //swap item between containers
         else if (_lootPanelOpen && _currentSelectedSlot >= 0)
         {
-            Item item = GetItemFromIndex(_currentSelectedSlot);
+            ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
             if (_selectedLoot)
             {
                 bool success = _inventoryContainerController.GetContainer().AddItem(item);
@@ -397,7 +397,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     void StartSelectGear()
     {
         Debug.Log("Gear Select");
-        Item currentGear;
+        ItemInstance currentGear;
         switch (_currentSelectedSlot)
         {
             case -1:            //right gadget
@@ -431,7 +431,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
                 currentGear = _inventory.GetGearSlot(EGearSlot.Primary_Weapon);
                 break;
             default:
-                _selectableGear = new List<Item>();
+                _selectableGear = new List<ItemInstance>();
                 currentGear = null;
                 break;
         }
@@ -446,7 +446,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         }
         string debug = "valid: ";
         foreach (var i in _selectableGear)
-            debug += i.GetItemName() + ", ";
+            debug += i.item.GetItemName() + ", ";
         Debug.Log(debug);
         OpenGearEquipMenu();
     }
@@ -505,7 +505,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         if (_gearSlotHasItem && _selectedGearIndex == 0)
             return;
 
-        Item currentGear = _inventory.GetGearSlot(gearSlot);
+        ItemInstance currentGear = _inventory.GetGearSlot(gearSlot);
         bool success = _inventory.EquipGear(_selectableGear[_selectedGearIndex], gearSlot);
         if (success)
         {
@@ -535,9 +535,9 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             {
                 var gear = _gearSelectEntryTemplate.Instantiate();
                 _gearSelectScrollView.Add(gear);
-                gear.Q<VisualElement>("ItemIcon").style.backgroundImage = new StyleBackground(_selectableGear[i].GetIcon());
-                gear.Q<Label>("ItemName").text = _selectableGear[i].GetItemName() + ((i == 0 && _gearSlotHasItem) ? " (current)" : "");
-                gear.Q<Label>("ItemWeight").text = _selectableGear[i].GetWeight() + "kg";
+                gear.Q<VisualElement>("ItemIcon").style.backgroundImage = new StyleBackground(_selectableGear[i].item.GetIcon());
+                gear.Q<Label>("ItemName").text = _selectableGear[i].item.GetItemName() + ((i == 0 && _gearSlotHasItem) ? " (current)" : "");
+                gear.Q<Label>("ItemWeight").text = _selectableGear[i].item.GetWeight() + "kg";
             }
 
             //first item starts selected

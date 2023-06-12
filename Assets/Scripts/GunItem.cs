@@ -12,4 +12,9 @@ public class GunItem : Item
     public GunStats GetStats() { return stats; }
     public Projectile GetProjectile() { return projectile; }
     public Vector2 GetProjectileSpawn() { return projectileSpawn; }
+
+    public override ItemInstance MakeItemInstance()
+    {
+        return new GunItemInstance(this);
+    }
 }

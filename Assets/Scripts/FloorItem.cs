@@ -8,7 +8,7 @@ public class FloorItem : MonoBehaviour, IInteractable
 
     public void StartInteract()
     {
-        bool pickedUp = FindObjectOfType<Inventory>().GetContainer().AddItem(_item);
+        bool pickedUp = FindObjectOfType<Inventory>().GetContainer().AddItem(_item.MakeItemInstance());
         if (pickedUp)
         {
             Destroy(gameObject);

@@ -16,4 +16,9 @@ public class Item : ScriptableObject
     public string GetDescription() { return description; }
     public Sprite GetIcon() { return icon; }
     public float GetWeight() { return weight; }
+
+    public virtual ItemInstance MakeItemInstance()
+    {
+        return new ItemInstance(this);
+    }
 }

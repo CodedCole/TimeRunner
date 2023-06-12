@@ -131,11 +131,11 @@ public class ItemSlot
     /// Set VisualElements of the item slot to reflect the data from an item
     /// </summary>
     /// <param name="item"></param>
-    public void SetItemData(Item item)
+    public void SetItemData(ItemInstance item)
     {
         if (item != null)
         {
-            _icon.style.backgroundImage = new StyleBackground(item.GetIcon());
+            _icon.style.backgroundImage = new StyleBackground(item.item.GetIcon());
         }
         else
         {

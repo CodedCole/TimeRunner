@@ -10,4 +10,9 @@ public class ArmorItem : Item
 
     public EArmorType GetArmorType() { return armorType; }
     public ArmorStats GetStats() { return stats; }
+
+    public override ItemInstance MakeItemInstance()
+    {
+        return new ArmorItemInstance(this);
+    }
 }

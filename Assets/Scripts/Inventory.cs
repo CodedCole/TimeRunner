@@ -8,12 +8,12 @@ public class Inventory : MonoBehaviour
     [SerializeField] private float _maxWeight;
     [SerializeField] private int _maxItems;
     [SerializeField] private List<Item> _startingItems;
-    public GunItem primaryWeapon { get; private set; }
-    public GunItem secondaryWeapon { get; private set; }
-    public ArmorItem helmet { get; private set; }
-    public ArmorItem bodyArmor { get; private set; }
-    public Item leftGadget { get; private set; }
-    public Item rightGadget { get; private set; }
+    public GunItemInstance primaryWeapon { get; private set; }
+    public GunItemInstance secondaryWeapon { get; private set; }
+    public ArmorItemInstance helmet { get; private set; }
+    public ArmorItemInstance bodyArmor { get; private set; }
+    public ItemInstance leftGadget { get; private set; }
+    public ItemInstance rightGadget { get; private set; }
 
     private Container _container;
     private Action onStart;
@@ -24,7 +24,7 @@ public class Inventory : MonoBehaviour
         _container = new Container(_maxWeight, _maxItems);
         foreach(var i in _startingItems)
         {
-            _container.AddItem(i);
+            _container.AddItem(i.MakeItemInstance());
         }
         if (onStart != null)
             onStart();
@@ -38,7 +38,7 @@ public class Inventory : MonoBehaviour
         return ref _container;
     }
 
-    public Item GetGearSlot(EGearSlot gearSlot)
+    public ItemInstance GetGearSlot(EGearSlot gearSlot)
     {
         switch(gearSlot)
         {
@@ -52,16 +52,16 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-    public bool EquipGear(Item item, EGearSlot gearSlot)
+    public bool EquipGear(ItemInstance item, EGearSlot gearSlot)
     {
         if (gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon)
         {
-            if (item is GunItem)
+            if (item is GunItemInstance)
             {
                 if (gearSlot == EGearSlot.Primary_Weapon)
-                    primaryWeapon = item as GunItem;
+                    primaryWeapon = item as GunItemInstance;
                 else
-                    secondaryWeapon = item as GunItem;
+                    secondaryWeapon = item as GunItemInstance;
                 Debug.Log("Equipped");
                 if (onEquip != null)
                     onEquip();
@@ -73,12 +73,12 @@ public class Inventory : MonoBehaviour
         }
         else if (gearSlot == EGearSlot.Helmet || gearSlot == EGearSlot.Body_Armor)
         {
-            if (item is ArmorItem)
+            if (item is ArmorItemInstance)
             {
-                if (gearSlot == EGearSlot.Helmet && (item as ArmorItem).GetArmorType() == EArmorType.Helmet)
-                    helmet = item as ArmorItem;
+                if (gearSlot == EGearSlot.Helmet && ((item as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Helmet)
+                    helmet = item as ArmorItemInstance;
                 else
-                    bodyArmor = item as ArmorItem;
+                    bodyArmor = item as ArmorItemInstance;
                 Debug.Log("Equipped");
                 if (onEquip != null)
                     onEquip();
@@ -90,7 +90,7 @@ public class Inventory : MonoBehaviour
         }
         else if (gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget)
         {
-            if (item is GunItem || item is ArmorItem)
+            if (item is GunItemInstance || item is ArmorItemInstance)
             {
                 return false;
             }
