@@ -156,4 +156,10 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
             }
         }
     }
+
+    public void OnSwapWeapons(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            _gunController.SwapWeapons();
+    }
 }

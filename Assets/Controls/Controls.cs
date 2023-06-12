@@ -71,6 +71,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapWeapons"",
+                    ""type"": ""Button"",
+                    ""id"": ""3fb7ab29-f648-437a-ab82-9746e85acaa2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -225,6 +234,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40454029-62c5-4c71-a938-8bd8abf9d9d0"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SwapWeapons"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -413,6 +433,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_DuringRun_Fire = m_DuringRun.FindAction("Fire", throwIfNotFound: true);
         m_DuringRun_Inventory = m_DuringRun.FindAction("Inventory", throwIfNotFound: true);
         m_DuringRun_Aim = m_DuringRun.FindAction("Aim", throwIfNotFound: true);
+        m_DuringRun_SwapWeapons = m_DuringRun.FindAction("SwapWeapons", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Navigation = m_Menu.FindAction("Navigation", throwIfNotFound: true);
@@ -484,6 +505,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_DuringRun_Fire;
     private readonly InputAction m_DuringRun_Inventory;
     private readonly InputAction m_DuringRun_Aim;
+    private readonly InputAction m_DuringRun_SwapWeapons;
     public struct DuringRunActions
     {
         private @Controls m_Wrapper;
@@ -493,6 +515,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_DuringRun_Fire;
         public InputAction @Inventory => m_Wrapper.m_DuringRun_Inventory;
         public InputAction @Aim => m_Wrapper.m_DuringRun_Aim;
+        public InputAction @SwapWeapons => m_Wrapper.m_DuringRun_SwapWeapons;
         public InputActionMap Get() { return m_Wrapper.m_DuringRun; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -517,6 +540,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @SwapWeapons.started += instance.OnSwapWeapons;
+            @SwapWeapons.performed += instance.OnSwapWeapons;
+            @SwapWeapons.canceled += instance.OnSwapWeapons;
         }
 
         private void UnregisterCallbacks(IDuringRunActions instance)
@@ -536,6 +562,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @SwapWeapons.started -= instance.OnSwapWeapons;
+            @SwapWeapons.performed -= instance.OnSwapWeapons;
+            @SwapWeapons.canceled -= instance.OnSwapWeapons;
         }
 
         public void RemoveCallbacks(IDuringRunActions instance)
@@ -640,6 +669,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnSwapWeapons(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {
