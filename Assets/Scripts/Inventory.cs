@@ -18,6 +18,7 @@ public class Inventory : MonoBehaviour
     private Container _container;
     private Action onStart;
     private Action onEquip;
+    public Action<GunItemInstance> onEquipWeapon;
 
     private void Start()
     {
@@ -65,6 +66,8 @@ public class Inventory : MonoBehaviour
                 Debug.Log("Equipped");
                 if (onEquip != null)
                     onEquip();
+                if (onEquipWeapon != null)
+                    onEquipWeapon(item as GunItemInstance);
 
                 return true;
             }

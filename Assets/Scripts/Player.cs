@@ -55,6 +55,11 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         }
         else
             _hud.HideInteractBar();
+
+        if (_firing)
+        {
+            _gunController.Fire();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -105,7 +110,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         {
             if (context.control.magnitude > 0.5f && !_firing)
             {
-                GetComponentInChildren<Gun>().Fire();
+                _gunController.Fire();
                 _firing = true;
                 Debug.Log("Firing");
             }

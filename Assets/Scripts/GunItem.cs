@@ -6,10 +6,12 @@ using UnityEngine;
 public class GunItem : Item
 {
     [SerializeField] private GunStats stats;
+    [SerializeField] private Sprite sprite;
     [SerializeField] private Projectile projectile;
     [SerializeField] private Vector2 projectileSpawn;
 
     public GunStats GetStats() { return stats; }
+    public Sprite GetSprite() { return sprite; }
     public Projectile GetProjectile() { return projectile; }
     public Vector2 GetProjectileSpawn() { return projectileSpawn; }
 

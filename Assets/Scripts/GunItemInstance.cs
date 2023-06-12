@@ -5,10 +5,13 @@ using UnityEngine;
 public class GunItemInstance : ItemInstance
 {
     public override Item item { get { return gun; } }
-    private GunItem gun;
+    public GunItem gun { get; private set; }
+
+    public int mag;
 
     public GunItemInstance(GunItem templateItem) : base(templateItem)
     {
         gun = templateItem;
+        mag = templateItem.GetStats().magSize;
     }
 }

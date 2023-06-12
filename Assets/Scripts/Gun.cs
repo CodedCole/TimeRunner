@@ -4,30 +4,52 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] private GunItem gunItem;
+    public GunItemInstance GunInstance 
+    { 
+        get 
+        { 
+            return _gunInstance; 
+        } 
+        set 
+        {
+            if (value != null)
+            {
+                _gunInstance = value;
+                _nextShotTime = Time.time;
+                _reloadedTime = Time.time;
+                spriteRenderer.sprite = value.gun.GetSprite();
+            }
+            else
+            {
+                _gunInstance = null;
+                spriteRenderer.sprite = null;
+            }
+        } 
+    }
 
-    private int _mag;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    private GunItemInstance _gunInstance;
     private float _nextShotTime;
     private float _reloadedTime;
 
     private void Start()
     {
-        _mag = gunItem.GetStats().magSize;
         _reloadedTime = Time.time;
         _nextShotTime = Time.time;
     }
 
     public void Fire()
     {
-        if (_nextShotTime <= Time.time && _mag > 0)
+        if (_gunInstance != null && _nextShotTime <= Time.time && _gunInstance.mag > 0)
         {
-            _nextShotTime = Time.time + (1f / gunItem.GetStats().rateOfFire);
-            _mag--;
+            _nextShotTime = Time.time + (1f / _gunInstance.gun.GetStats().rateOfFire);
+            _gunInstance.mag--;
 
-            Projectile p = Instantiate(gunItem.GetProjectile(), transform.position + (transform.right * gunItem.GetProjectileSpawn().x) + (transform.up * gunItem.GetProjectileSpawn().y), transform.rotation);
-            p.damage = gunItem.GetStats().damage;
-            p.damageType = gunItem.GetStats().damageType;
-            p.GetComponent<Rigidbody2D>().velocity = transform.right * gunItem.GetStats().projectileVelocity;
+            Projectile p = Instantiate(_gunInstance.gun.GetProjectile(), transform.position + (transform.right * _gunInstance.gun.GetProjectileSpawn().x) + (transform.up * _gunInstance.gun.GetProjectileSpawn().y), transform.rotation);
+            p.damage = _gunInstance.gun.GetStats().damage;
+            p.damageType = _gunInstance.gun.GetStats().damageType;
+            p.GetComponent<Rigidbody2D>().velocity = transform.right * _gunInstance.gun.GetStats().projectileVelocity;
         }
     }
 }
