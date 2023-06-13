@@ -19,7 +19,7 @@ MonoBehaviour:
   weight: 2.4
   maxStackSize: 1
   stats:
-    damage: 20
+    damage: 3
     damageType: 0
     rateOfFire: 15
     magSize: 30
