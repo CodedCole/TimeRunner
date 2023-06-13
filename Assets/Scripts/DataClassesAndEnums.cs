@@ -28,3 +28,10 @@ public struct GunStats
     public float reloadTime;
     public float projectileVelocity;
 }
+
+[Serializable]
+struct ItemInitialState
+{
+    public Item item;
+    public int stackSize;
+}

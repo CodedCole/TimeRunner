@@ -17,6 +17,7 @@ public class GunController : MonoBehaviour
         _inventory = GetComponent<Inventory>();
         _gun.GunInstance = _inventory.primaryWeapon;
         _gun.onReloaded += OnReloaded;
+        _gun.canReload = CanReload;
     }
 
     /// <summary>
@@ -89,6 +90,13 @@ public class GunController : MonoBehaviour
     /// </summary>
     private void OnReloaded()
     {
-        _gun.GunInstance.mag = _gun.GunInstance.gun.GetStats().magSize;
+        int absent = _inventory.GetContainer().RemoveItem(_gun.GunInstance.gun.GetAmmo(), _gun.GunInstance.gun.GetStats().magSize - _gun.GunInstance.mag);
+        _gun.GunInstance.mag = _gun.GunInstance.gun.GetStats().magSize - absent;
+        Debug.Log("Reloaded");
+    }
+
+    private bool CanReload()
+    {
+        return _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());
     }
 }

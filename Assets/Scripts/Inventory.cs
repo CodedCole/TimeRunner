@@ -7,7 +7,7 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] private float _maxWeight;
     [SerializeField] private int _maxItems;
-    [SerializeField] private List<Item> _startingItems;
+    [SerializeField] private List<ItemInitialState> _startingItems;
     public GunItemInstance primaryWeapon { get; private set; }
     public GunItemInstance secondaryWeapon { get; private set; }
     public ArmorItemInstance helmet { get; private set; }
@@ -25,7 +25,9 @@ public class Inventory : MonoBehaviour
         _container = new Container(_maxWeight, _maxItems);
         foreach(var i in _startingItems)
         {
-            _container.AddItem(i.MakeItemInstance());
+            ItemInstance ii = i.item.MakeItemInstance();
+            ii.stack = i.stackSize;
+            _container.MoveItemInstance(ii);
         }
         if (onStart != null)
             onStart();

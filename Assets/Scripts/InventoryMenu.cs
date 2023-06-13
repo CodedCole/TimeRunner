@@ -80,6 +80,8 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _inventoryContainerController = new ContainerListController();
         _inventoryContainerController.InitializeList(_inventoryScrollView, _itemSlotTemplate, ref _inventory.GetContainer(), _itemSlotsPerRow);
 
+        Debug.Log("inventory weight: " + _inventoryContainerController.GetContainer().GetWeight());
+
         _lootContainerController = new ContainerListController();
         _lootContainerController.InitializeList(
             _lootPanel.Q<ScrollView>("ItemSlotScrollView"),
@@ -390,6 +392,8 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
 
             UpdateItemDataCard();
         }
+
+        Debug.Log("inventory weight: " + _inventoryContainerController.GetContainer().GetWeight());
     }
 
     /// <summary>
@@ -510,7 +514,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         bool success = _inventory.EquipGear(_selectableGear[_selectedGearIndex], gearSlot);
         if (success)
         {
-            _inventory.GetContainer().RemoveItemAtIndex(_inventory.GetContainer().GetIndexOfItemInstance(_selectableGear[_selectedGearIndex]));
+            _inventory.GetContainer().RemoveItemAtIndex(_inventory.GetContainer().GetIndexOfItemInstance(_selectableGear[_selectedGearIndex]), _selectableGear[_selectedGearIndex].stack);
             if (currentGear != null)
                 _inventory.GetContainer().MoveItemInstance(currentGear);
         }

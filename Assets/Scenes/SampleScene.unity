@@ -3189,13 +3189,12 @@ MonoBehaviour:
   _maxWeight: 20
   _maxItems: 24
   _startingItems:
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
-  - {fileID: 11400000, guid: 985522f997c7d0546a6d7f77b5b0659d, type: 2}
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
+  - item: {fileID: 11400000, guid: 73c948c994e384b4a9c9fbe58dab5c6a, type: 2}
+    stackSize: 60
+  - item: {fileID: 11400000, guid: 73c948c994e384b4a9c9fbe58dab5c6a, type: 2}
+    stackSize: 25
+  - item: {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
+    stackSize: 1
 --- !u!114 &1521103090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3312,9 +3311,12 @@ MonoBehaviour:
   _maxWeight: 20
   _maxItems: 12
   _startingItems:
-  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
-  - {fileID: 11400000, guid: ba9edb048df7b594fbc1f5c37b8ad303, type: 2}
-  - {fileID: 11400000, guid: 54e80a260d3cf1d45ad8f7695a96d3d2, type: 2}
+  - item: {fileID: 11400000, guid: 54e80a260d3cf1d45ad8f7695a96d3d2, type: 2}
+    stackSize: 1
+  - item: {fileID: 11400000, guid: ba9edb048df7b594fbc1f5c37b8ad303, type: 2}
+    stackSize: 1
+  - item: {fileID: 11400000, guid: 985522f997c7d0546a6d7f77b5b0659d, type: 2}
+    stackSize: 1
 --- !u!61 &1582711916
 BoxCollider2D:
   m_ObjectHideFlags: 0

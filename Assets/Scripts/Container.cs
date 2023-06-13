@@ -33,6 +33,9 @@ public class Container
         _items.Add(item);
         _currentWeight += item.item.GetWeight() * item.stack;
 
+        if (onItemAdded != null)
+            onItemAdded();
+
         return true;
     }
 
@@ -130,16 +133,6 @@ public class Container
         return amount - addedCount;
     }
 
-    public ItemInstance GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
-
-    public int GetIndexOfItemInstance(ItemInstance instance)
-    {
-        for (int i = 0; i < _items.Count; i++)
-            if (_items[i] == instance)
-                return i;
-        return -1;
-    }
-
     /// <summary>
     /// Removes the item at the given index
     /// </summary>
@@ -185,6 +178,24 @@ public class Container
             }
         }
         return left;
+    }
+
+    public ItemInstance GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
+
+    public int GetIndexOfItemInstance(ItemInstance instance)
+    {
+        for (int i = 0; i < _items.Count; i++)
+            if (_items[i] == instance)
+                return i;
+        return -1;
+    }
+
+    public bool ContainsItem(Item item)
+    {
+        for (int i = 0; i < _items.Count; i++)
+            if (_items[i].item == item)
+                return true;
+        return false;
     }
 
     public List<ItemInstance> GetItemsList() { return _items; }

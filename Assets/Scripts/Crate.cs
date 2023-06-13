@@ -8,11 +8,10 @@ public class Crate : MonoBehaviour, IInteractable
     [SerializeField] private Sprite _openedSprite;
     [SerializeField] private float _maxWeight;
     [SerializeField] private int _maxItems;
-    [SerializeField] private List<Item> _startingItems;
+    [SerializeField] private List<ItemInitialState> _startingItems;
 
     private Container _container;
 
-    private bool _opened;
     private bool _interacting;
     private float _interactionStartTime;
 
@@ -21,7 +20,9 @@ public class Crate : MonoBehaviour, IInteractable
         _container = new Container(_maxWeight, _maxItems);
         foreach(var i in _startingItems)
         {
-            _container.AddItem(i.MakeItemInstance());
+            ItemInstance ii = i.item.MakeItemInstance();
+            ii.stack = i.stackSize;
+            _container.AddItem(ii);
         }
     }
 
@@ -31,7 +32,6 @@ public class Crate : MonoBehaviour, IInteractable
         {
             if (Time.time - _interactionStartTime >= _unlockTime)
             {
-                _opened = true;
                 GetComponent<SpriteRenderer>().sprite = _openedSprite;
                 _interacting = false;
 

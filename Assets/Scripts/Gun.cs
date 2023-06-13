@@ -42,6 +42,13 @@ public class Gun : MonoBehaviour
     /// </summary>
     public Action onReloaded;
 
+    public delegate bool CanReload();
+
+    /// <summary>
+    /// Delegate that returns a bool which lets the gun initiate a reload
+    /// </summary>
+    public CanReload canReload;
+
     private void Start()
     {
         _reloadedTime = Time.time;
@@ -54,7 +61,9 @@ public class Gun : MonoBehaviour
         {
             if (onReloaded != null)
                 onReloaded();
-            //_gunInstance.mag = _gunInstance.gun.GetStats().magSize;
+            else
+                _gunInstance.mag = _gunInstance.gun.GetStats().magSize;
+
             _reloading = false;
         }
     }
@@ -78,10 +87,11 @@ public class Gun : MonoBehaviour
 
     public void Reload()
     {
-        if (_gunInstance != null)
+        if (_gunInstance != null && _gunInstance.mag < _gunInstance.gun.GetStats().magSize && (canReload == null || canReload()))
         {
             _reloading = true;
             _reloadedTime = Time.time + _gunInstance.gun.GetStats().reloadTime;
+            Debug.Log("Start Reload");
         }
     }
 }
