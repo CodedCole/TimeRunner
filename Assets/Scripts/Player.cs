@@ -24,8 +24,8 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         _inventory = GetComponent<Inventory>();
         _gunController = GetComponent<GunController>();
         _hud = FindObjectOfType<HUD>();
-        _hud.RegisterOnOpenInventory(() => { _inventoryOpened = true; });
-        _hud.RegisterOnCloseInventory(() => { _inventoryOpened = false; });
+        _hud.RegisterOnOpenInventory(() => { _inventoryOpened = true; enabled = false; });
+        _hud.RegisterOnCloseInventory(() => { _inventoryOpened = false; enabled = true; });
         _camera = FindObjectOfType<Camera>();
         _camera.GetComponent<CameraFollow>().SetTarget(transform);
     }

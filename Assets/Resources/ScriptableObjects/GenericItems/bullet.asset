@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0012fb7081850864192eda63849eb621, type: 3}
-  m_Name: key_card
+  m_Name: bullet
   m_EditorClassIdentifier: 
-  itemName: Key Card
-  description: Gets you into high security places
-  icon: {fileID: 21300000, guid: 40d3203816b76554198d4490dd802bd3, type: 3}
-  weight: 0.1
-  maxStackSize: 3
+  itemName: bullet
+  description: flies fast out of a gun.
+  icon: {fileID: 21300000, guid: d60144b07e8fca4419a7663f96897d36, type: 3}
+  weight: 0.01
+  maxStackSize: 60

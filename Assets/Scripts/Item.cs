@@ -10,12 +10,13 @@ public class Item : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private Sprite icon;
     [SerializeField] private float weight;
-    public int maxStackSize { get; private set; }
+    [SerializeField] private int maxStackSize;
 
     public string GetItemName() { return itemName; }
     public string GetDescription() { return description; }
     public Sprite GetIcon() { return icon; }
     public float GetWeight() { return weight; }
+    public int GetMaxStackSize() { return maxStackSize; }
 
     public virtual ItemInstance MakeItemInstance()
     {

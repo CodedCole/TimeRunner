@@ -16,3 +16,4 @@ MonoBehaviour:
   description: For eyes only!
   icon: {fileID: 21300000, guid: 54b79ceeecef232429f76423de661d19, type: 3}
   weight: 0.2
+  maxStackSize: 3

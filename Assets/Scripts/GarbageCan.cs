@@ -41,7 +41,7 @@ public class GarbageCan : MonoBehaviour, IInteractable
     {
         if (_discarding && Time.time - _discardStartTime >= discardTime)
         {
-            FindObjectOfType<Inventory>().GetContainer().RemoveItemAtIndex(0);
+            FindObjectOfType<Inventory>().GetContainer().RemoveItemAtIndex(0, 1);
             EndInteract();
         }
     }

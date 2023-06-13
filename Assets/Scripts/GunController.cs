@@ -16,6 +16,7 @@ public class GunController : MonoBehaviour
         _gun = GetComponentInChildren<Gun>();
         _inventory = GetComponent<Inventory>();
         _gun.GunInstance = _inventory.primaryWeapon;
+        _gun.onReloaded += OnReloaded;
     }
 
     /// <summary>
@@ -81,5 +82,13 @@ public class GunController : MonoBehaviour
             _gun.GunInstance = _inventory.primaryWeapon;
             Debug.Log("Primary");
         }
+    }
+
+    /// <summary>
+    /// Reloads the weapon to the proper amount of ammo
+    /// </summary>
+    private void OnReloaded()
+    {
+        _gun.GunInstance.mag = _gun.GunInstance.gun.GetStats().magSize;
     }
 }

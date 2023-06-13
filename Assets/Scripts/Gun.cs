@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,11 @@ public class Gun : MonoBehaviour
     private float _reloadedTime;
     private bool _reloading;
 
+    /// <summary>
+    /// Action called when reload is finished. Use to put the correct amount of ammo in the gun.
+    /// </summary>
+    public Action onReloaded;
+
     private void Start()
     {
         _reloadedTime = Time.time;
@@ -46,7 +52,9 @@ public class Gun : MonoBehaviour
     {
         if (_reloading && _reloadedTime <= Time.time)
         {
-            _gunInstance.mag = _gunInstance.gun.GetStats().magSize;
+            if (onReloaded != null)
+                onReloaded();
+            //_gunInstance.mag = _gunInstance.gun.GetStats().magSize;
             _reloading = false;
         }
     }
@@ -70,7 +78,10 @@ public class Gun : MonoBehaviour
 
     public void Reload()
     {
-        _reloading = true;
-        _reloadedTime = Time.time + _gunInstance.gun.GetStats().reloadTime;
+        if (_gunInstance != null)
+        {
+            _reloading = true;
+            _reloadedTime = Time.time + _gunInstance.gun.GetStats().reloadTime;
+        }
     }
 }

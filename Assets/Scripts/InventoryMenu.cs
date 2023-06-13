@@ -346,9 +346,12 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             case -1:
                 return _inventory.rightGadget;
             default:
+                Container.ItemStack cis;
                 if (_selectedLoot)
-                    return _lootContainerController.GetContainer().GetItemAtIndex(index);
-                return _inventory.GetContainer().GetItemAtIndex(index);
+                    cis = _lootContainerController.GetContainer().GetItemAtIndex(index);
+                else
+                    cis = _inventory.GetContainer().GetItemAtIndex(index);
+                return (cis != null) ? cis.itemInstance : null;
 
         }
     }
@@ -376,14 +379,14 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
             if (_selectedLoot)
             {
-                bool success = _inventoryContainerController.GetContainer().AddItem(item);
-                if (success)
+                int success = _inventoryContainerController.GetContainer().AddItem(item);
+                if (success == 0)
                     _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
             }
             else
             {
-                bool success = _lootContainerController.GetContainer().AddItem(item);
-                if (success)
+                int success = _lootContainerController.GetContainer().AddItem(item);
+                if (success == 0)
                     _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
             }
 
@@ -576,5 +579,13 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         {
             CloseGearEquipMenu();
         }
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        GetComponent<HUD>().HideInventoryList();
     }
 }

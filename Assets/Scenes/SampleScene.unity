@@ -2194,9 +2194,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.0008628128
     y: 0
-    width: 1
+    width: 0.99763256
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -3191,6 +3191,11 @@ MonoBehaviour:
   _startingItems:
   - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
   - {fileID: 11400000, guid: 985522f997c7d0546a6d7f77b5b0659d, type: 2}
+  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
+  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
+  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
+  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
+  - {fileID: 11400000, guid: ca05b25d17b0ec046a5dfb188b93206b, type: 2}
 --- !u!114 &1521103090
 MonoBehaviour:
   m_ObjectHideFlags: 0

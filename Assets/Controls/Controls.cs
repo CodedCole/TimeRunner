@@ -300,6 +300,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0b343d8-0ac6-41e1-9441-f5f0ec37c87b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -412,6 +421,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""095df53a-1d58-410b-a465-96d3121672cc"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e88f1dd2-18ad-4af9-b5a9-d022d5cd4db2"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -460,6 +491,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Menu_Navigation = m_Menu.FindAction("Navigation", throwIfNotFound: true);
         m_Menu_Select = m_Menu.FindAction("Select", throwIfNotFound: true);
         m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
+        m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -618,6 +650,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Menu_Navigation;
     private readonly InputAction m_Menu_Select;
     private readonly InputAction m_Menu_Back;
+    private readonly InputAction m_Menu_Inventory;
     public struct MenuActions
     {
         private @Controls m_Wrapper;
@@ -625,6 +658,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Navigation => m_Wrapper.m_Menu_Navigation;
         public InputAction @Select => m_Wrapper.m_Menu_Select;
         public InputAction @Back => m_Wrapper.m_Menu_Back;
+        public InputAction @Inventory => m_Wrapper.m_Menu_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -643,6 +677,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Back.started += instance.OnBack;
             @Back.performed += instance.OnBack;
             @Back.canceled += instance.OnBack;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
         }
 
         private void UnregisterCallbacks(IMenuActions instance)
@@ -656,6 +693,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Back.started -= instance.OnBack;
             @Back.performed -= instance.OnBack;
             @Back.canceled -= instance.OnBack;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
         }
 
         public void RemoveCallbacks(IMenuActions instance)
@@ -706,5 +746,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnNavigation(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

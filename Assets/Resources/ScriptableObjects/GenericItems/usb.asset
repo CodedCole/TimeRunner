@@ -16,3 +16,4 @@ MonoBehaviour:
   description: Might store photos, documents, or code.
   icon: {fileID: 21300000, guid: 0fd0e0d278a26ce4286915f693309ca4, type: 3}
   weight: 0.1
+  maxStackSize: 3

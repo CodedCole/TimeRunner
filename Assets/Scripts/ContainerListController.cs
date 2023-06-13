@@ -115,6 +115,7 @@ public class ContainerListController
 public class ItemSlot
 {
     VisualElement _icon;
+    Label _stackSize;
     VisualElement _root;
 
     /// <summary>
@@ -125,21 +126,27 @@ public class ItemSlot
     {
         _root = root;
         _icon = root.Q<VisualElement>("Icon");
+        _stackSize = root.Q<Label>("StackSize");
     }
 
     /// <summary>
     /// Set VisualElements of the item slot to reflect the data from an item
     /// </summary>
     /// <param name="item"></param>
-    public void SetItemData(ItemInstance item)
+    public void SetItemData(Container.ItemStack item)
     {
         if (item != null)
         {
-            _icon.style.backgroundImage = new StyleBackground(item.item.GetIcon());
+            _icon.style.backgroundImage = new StyleBackground(item.itemInstance.item.GetIcon());
+            if (item.count > 1)
+                _stackSize.text = item.count.ToString();
+            else
+                _stackSize.text = "";
         }
         else
         {
             _icon.style.backgroundImage = null;
+            _stackSize.text = "";
         }
     }
 

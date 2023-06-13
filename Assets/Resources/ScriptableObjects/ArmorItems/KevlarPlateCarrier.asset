@@ -16,6 +16,7 @@ MonoBehaviour:
   description: A vest made of kevlar that can hold a variety of armor plates
   icon: {fileID: 21300000, guid: 8ddffd6e36c8bf142bd3756af4c18692, type: 3}
   weight: 1.5
+  maxStackSize: 1
   armorType: 1
   stats:
     kineticResistance: 20

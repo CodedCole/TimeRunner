@@ -26,49 +26,110 @@ public class Container
         _maxItems = maxItems;
     }
 
-    // returns true if the item was able to fit in the container
-    public bool AddItem(ItemInstance item)
+    /// <summary>
+    /// Adds the item to the container
+    /// </summary>
+    /// <param name="item">the item to add</param>
+    /// <param name="amount">the count of the item to add</param>
+    /// <returns>the amount of items not able to be added</returns>
+    public int AddItem(ItemInstance item, int amount = 1)
     {
         //check for space in container
         if (item == null || _currentWeight + item.item.GetWeight() > _maxWeight || _items.Count >= _maxItems)
-            return false;
+            return amount;
+
+        //limit items put in container by weight and space
+        int weightLimit = (int)((_maxWeight - _currentWeight) / item.item.GetWeight());
+        int originalLimit = Mathf.Min(amount, weightLimit);
+        int limit = originalLimit;
+
+        //fill stackable slots
+        for (int i = 0; i < _items.Count && limit > 0; i++)
+        {
+            if (item.item == _items[i].itemInstance.item && _items[i].count < item.item.GetMaxStackSize())
+            {
+                int space = item.item.GetMaxStackSize() - _items[i].count;
+                _items[i].count += limit;
+                if (_items[i].count > item.item.GetMaxStackSize())
+                {
+                    _items[i].count = item.item.GetMaxStackSize();
+                }
+                limit -= space;
+            }
+        }
+
+        if (limit > 0 && _items.Count < _maxItems)
+        {
+            //create new slots
+            for (int i = _items.Count; i < _maxItems && limit > 0; i++)
+            {
+                //create stack
+                ItemStack stack = new ItemStack();
+                stack.itemInstance = item;
+
+                //set the right count on the stack
+                stack.count = limit;
+                if (stack.count > item.item.GetMaxStackSize())
+                {
+                    stack.count = item.item.GetMaxStackSize();
+                }
+                limit -= stack.count;
+
+                //add to items
+                _items.Add(stack);
+            }
+        }
+
+        if (limit < 0)
+            limit = 0;
 
         //add item into container
+        /*
         ItemStack itemStack = new ItemStack();
         itemStack.itemInstance = item;
         itemStack.count = 1;
         _items.Add(itemStack);
         _currentWeight += item.item.GetWeight();
+        /**/
+        int addedCount = originalLimit - limit;
+        _currentWeight += (originalLimit - limit) * item.item.GetWeight();
 
         //trigger event
         if (onItemAdded != null)
             onItemAdded();
 
-        return true;
+        return amount - addedCount;
     }
 
-    public ItemInstance GetItemAtIndex(int index) { return index < _items.Count ? _items[index].itemInstance : null; }
+    public ItemStack GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
 
     /// <summary>
     /// Removes the item at the given index
     /// </summary>
     /// <param name="index">index to remove item from</param>
-    /// <returns>whether the remove was successful</returns>
-    public bool RemoveItemAtIndex(int index)
+    /// <param name="amount">amount of items to remove</param>
+    /// <returns>how many items weren't able to be removed</returns>
+    public int RemoveItemAtIndex(int index, int amount = 1)
     {
         //check that the item exists
         if (index >= _items.Count)
-            return false;
+            return amount;
 
         //remove item from container
-        _currentWeight -= _items[index].itemInstance.item.GetWeight();
-        _items.RemoveAt(index);
+        int remainder = amount - _items[index].count;
+        _items[index].count -= amount;
+        _currentWeight -= _items[index].itemInstance.item.GetWeight() * (amount);
+        if (_items[index].count <= 0)
+        {
+            _currentWeight += _items[index].itemInstance.item.GetWeight() * (-_items[index].count);
+            _items.RemoveAt(index);
+        }
 
         //trigger event
         if (onItemRemoved != null)
             onItemRemoved();
 
-        return true;
+        return Mathf.Max(0, remainder);
     }
 
     /// <summary>
