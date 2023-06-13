@@ -95,6 +95,10 @@ public class GunController : MonoBehaviour
         Debug.Log("Reloaded");
     }
 
+    /// <summary>
+    /// Lets the weapon start the reload sequence
+    /// </summary>
+    /// <returns>whether the weapon can reload</returns>
     private bool CanReload()
     {
         return _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());

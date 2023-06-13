@@ -19,7 +19,7 @@ MonoBehaviour:
   maxStackSize: 1
   armorType: 1
   stats:
-    kineticResistance: 20
-    heatResistance: 2
-    electricResistance: 5
+    kineticResistance: 0.2
+    heatResistance: 0.02
+    electricResistance: 0.05
     gravityResistance: 0

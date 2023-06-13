@@ -2194,9 +2194,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.0008628128
+    x: 0
     y: 0
-    width: 0.99763256
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -3571,9 +3571,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   _armorStats:
-    kineticResistance: 0
-    heatResistance: 0
-    electricResistance: 0
+    kineticResistance: 0.5
+    heatResistance: 0.05
+    electricResistance: 0.2
     gravityResistance: 0
   _damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
   _damageFlashDuration: 0.05

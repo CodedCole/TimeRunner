@@ -14,6 +14,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
     private Controls _controls;
 
     private List<IInteractable> _interactables = new List<IInteractable>();
+    private bool _interacting = false;
     private bool _inventoryOpened = false;
     private bool _firing = false;
 
@@ -43,6 +44,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
     private void OnDisable()
     {
         _controls.DuringRun.Disable();
+        _interacting = false;
     }
 
     // Update is called once per frame
@@ -54,7 +56,10 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
             _hud.SetInteractBarValue(_interactables[0]);
         }
         else
+        {
             _hud.HideInteractBar();
+            _interacting = false;
+        }
 
         if (_firing)
         {
@@ -76,13 +81,16 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         IInteractable i = collision.GetComponentInChildren<IInteractable>();
         if (i != null)
         {
+            if (_interacting && i == _interactables[0])
+                i.EndInteract();
             _interactables.Remove(i);
         }
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        _movement.UpdateMove(context.ReadValue<Vector2>());
+        if (!_interacting)
+            _movement.UpdateMove(context.ReadValue<Vector2>());
     }
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -95,12 +103,15 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         {
             Debug.Log("Started");
             _interactables[0].StartInteract();
+            _movement.UpdateMove(Vector2.zero);
+            _interacting = true;
         }
         // interact finish
         if (context.performed)
         {
             Debug.Log("Interact");
             _interactables[0].EndInteract();
+            _interacting = false;
         }
     }
 

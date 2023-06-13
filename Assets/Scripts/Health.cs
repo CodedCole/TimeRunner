@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class Health : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
     private float _damageFlashTimer;
+
+    private Action onDeath;
 
     // Start is called before the first frame update
     void Start()
@@ -46,15 +49,36 @@ public class Health : MonoBehaviour
         if (_health <= 0)
             return false;
 
-        _health -= amount;
+        switch(damageType)
+        {
+            case EDamageType.Kinetic:
+                _health -= amount * (1.0f - _armorStats.kineticResistance);
+                break;
+            case EDamageType.Heat:
+                _health -= amount * (1.0f - _armorStats.heatResistance);
+                break;
+            case EDamageType.Electric:
+                _health -= amount * (1.0f - _armorStats.electricResistance);
+                break;
+            case EDamageType.Gravity:
+                _health -= amount * (1.0f - _armorStats.gravityResistance);
+                break;
+        }
         _damageFlashTimer = _damageFlashDuration;
 
         if (_health <= 0)
         {
             _spriteRenderer.color = _deathColor;
             enabled = false;
+
+            if (onDeath != null)
+                onDeath();
+
             return true;
         }
         return false;
     }
+
+    public void RegisterOnDeath(Action action) { onDeath += action; }
+    public void UnregisterOnDeath(Action action) { onDeath -= action; }
 }
