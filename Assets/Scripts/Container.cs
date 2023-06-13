@@ -5,16 +5,10 @@ using UnityEngine;
 
 public class Container
 {
-    public class ItemStack
-    {
-        public ItemInstance itemInstance { get; set; }
-        public int count { get; set; }
-    }
-
     private float _maxWeight;
     private int _maxItems;
     
-    private List<ItemStack> _items = new List<ItemStack>();
+    private List<ItemInstance> _items = new List<ItemInstance>();
     private float _currentWeight = 0;
 
     Action onItemAdded;
@@ -46,13 +40,13 @@ public class Container
         //fill stackable slots
         for (int i = 0; i < _items.Count && limit > 0; i++)
         {
-            if (item.item == _items[i].itemInstance.item && _items[i].count < item.item.GetMaxStackSize())
+            if (item.item == _items[i].item && _items[i].stack < item.item.GetMaxStackSize())
             {
-                int space = item.item.GetMaxStackSize() - _items[i].count;
-                _items[i].count += limit;
-                if (_items[i].count > item.item.GetMaxStackSize())
+                int space = item.item.GetMaxStackSize() - _items[i].stack;
+                _items[i].stack += limit;
+                if (_items[i].stack > item.item.GetMaxStackSize())
                 {
-                    _items[i].count = item.item.GetMaxStackSize();
+                    _items[i].stack = item.item.GetMaxStackSize();
                 }
                 limit -= space;
             }
@@ -64,16 +58,15 @@ public class Container
             for (int i = _items.Count; i < _maxItems && limit > 0; i++)
             {
                 //create stack
-                ItemStack stack = new ItemStack();
-                stack.itemInstance = item;
+                ItemInstance stack = item.item.MakeItemInstance();
 
                 //set the right count on the stack
-                stack.count = limit;
-                if (stack.count > item.item.GetMaxStackSize())
+                stack.stack = limit;
+                if (stack.stack > item.item.GetMaxStackSize())
                 {
-                    stack.count = item.item.GetMaxStackSize();
+                    stack.stack = item.item.GetMaxStackSize();
                 }
-                limit -= stack.count;
+                limit -= stack.stack;
 
                 //add to items
                 _items.Add(stack);
@@ -101,7 +94,7 @@ public class Container
         return amount - addedCount;
     }
 
-    public ItemStack GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
+    public ItemInstance GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
 
     /// <summary>
     /// Removes the item at the given index
@@ -116,12 +109,12 @@ public class Container
             return amount;
 
         //remove item from container
-        int remainder = amount - _items[index].count;
-        _items[index].count -= amount;
-        _currentWeight -= _items[index].itemInstance.item.GetWeight() * (amount);
-        if (_items[index].count <= 0)
+        int remainder = amount - _items[index].stack;
+        _items[index].stack -= amount;
+        _currentWeight -= _items[index].item.GetWeight() * (amount);
+        if (_items[index].stack <= 0)
         {
-            _currentWeight += _items[index].itemInstance.item.GetWeight() * (-_items[index].count);
+            _currentWeight += _items[index].item.GetWeight() * (-_items[index].stack);
             _items.RemoveAt(index);
         }
 
@@ -141,7 +134,7 @@ public class Container
     {
         for (int i = _items.Count - 1; i >= 0; i--)
         {
-            if (item == _items[i].itemInstance)
+            if (item == _items[i])
             {
                 RemoveItemAtIndex(i);
                 return true;
@@ -150,7 +143,7 @@ public class Container
         return false;
     }
 
-    public List<ItemStack> GetItemsList() { return _items; }
+    public List<ItemInstance> GetItemsList() { return _items; }
 
     public float GetWeight() { return _currentWeight; }
     public float GetMaxWeight() { return _maxWeight; }
@@ -168,12 +161,12 @@ public class Container
         List<ItemInstance> validItems = new List<ItemInstance>();
         for (int i = 0; i < _items.Count; i++)
         {
-            if ((gearSlot == EGearSlot.Helmet && _items[i].itemInstance is ArmorItemInstance && ((_items[i].itemInstance as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Helmet) ||
-                (gearSlot == EGearSlot.Body_Armor && _items[i].itemInstance is ArmorItemInstance && ((_items[i].itemInstance as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Body_Armor) ||
-                ((gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon) && _items[i].itemInstance is GunItemInstance) ||
-                ((gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget) && !(_items[i].itemInstance is GunItemInstance) && !(_items[i].itemInstance is ArmorItemInstance)))
+            if ((gearSlot == EGearSlot.Helmet && _items[i] is ArmorItemInstance && ((_items[i] as ArmorItemInstance).armor.GetArmorType() == EArmorType.Helmet)) ||
+                (gearSlot == EGearSlot.Body_Armor && _items[i] is ArmorItemInstance && ((_items[i] as ArmorItemInstance).armor.GetArmorType() == EArmorType.Body_Armor)) ||
+                ((gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon) && _items[i] is GunItemInstance) ||
+                ((gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget) && !(_items[i] is GunItemInstance) && !(_items[i] is ArmorItemInstance)))
             {
-                validItems.Add(_items[i].itemInstance);
+                validItems.Add(_items[i]);
             }
         }
         return validItems;

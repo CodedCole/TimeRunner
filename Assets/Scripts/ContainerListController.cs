@@ -133,13 +133,13 @@ public class ItemSlot
     /// Set VisualElements of the item slot to reflect the data from an item
     /// </summary>
     /// <param name="item"></param>
-    public void SetItemData(Container.ItemStack item)
+    public void SetItemData(ItemInstance item)
     {
         if (item != null)
         {
-            _icon.style.backgroundImage = new StyleBackground(item.itemInstance.item.GetIcon());
-            if (item.count > 1)
-                _stackSize.text = item.count.ToString();
+            _icon.style.backgroundImage = new StyleBackground(item.item.GetIcon());
+            if (item.stack > 1)
+                _stackSize.text = item.stack.ToString();
             else
                 _stackSize.text = "";
         }

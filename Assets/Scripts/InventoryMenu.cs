@@ -346,12 +346,9 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             case -1:
                 return _inventory.rightGadget;
             default:
-                Container.ItemStack cis;
                 if (_selectedLoot)
-                    cis = _lootContainerController.GetContainer().GetItemAtIndex(index);
-                else
-                    cis = _inventory.GetContainer().GetItemAtIndex(index);
-                return (cis != null) ? cis.itemInstance : null;
+                    return _lootContainerController.GetContainer().GetItemAtIndex(index);
+                return _inventory.GetContainer().GetItemAtIndex(index);
 
         }
     }
