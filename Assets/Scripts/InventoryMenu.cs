@@ -179,6 +179,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             _currentSelectedSlot = 0;
             SelectIndex(_currentSelectedSlot).AddToClassList(_selectedClass);
         }
+        UpdateItemDataCard();
     }
 
     public void OnNavigation(InputAction.CallbackContext context)
@@ -509,7 +510,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         bool success = _inventory.EquipGear(_selectableGear[_selectedGearIndex], gearSlot);
         if (success)
         {
-            _inventory.GetContainer().RemoveItem(_selectableGear[_selectedGearIndex]);
+            _inventory.GetContainer().RemoveItemAtIndex(_inventory.GetContainer().GetIndexOfItemInstance(_selectableGear[_selectedGearIndex]));
             if (currentGear != null)
                 _inventory.GetContainer().AddItem(currentGear);
         }

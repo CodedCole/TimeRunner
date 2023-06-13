@@ -40,8 +40,10 @@ public class Container
         //fill stackable slots
         for (int i = 0; i < _items.Count && limit > 0; i++)
         {
+            //check for space in stack
             if (item.item == _items[i].item && _items[i].stack < item.item.GetMaxStackSize())
             {
+                //stack
                 int space = item.item.GetMaxStackSize() - _items[i].stack;
                 _items[i].stack += limit;
                 if (_items[i].stack > item.item.GetMaxStackSize())
@@ -73,19 +75,9 @@ public class Container
             }
         }
 
-        if (limit < 0)
-            limit = 0;
-
-        //add item into container
-        /*
-        ItemStack itemStack = new ItemStack();
-        itemStack.itemInstance = item;
-        itemStack.count = 1;
-        _items.Add(itemStack);
-        _currentWeight += item.item.GetWeight();
-        /**/
-        int addedCount = originalLimit - limit;
-        _currentWeight += (originalLimit - limit) * item.item.GetWeight();
+        //update weight
+        int addedCount = originalLimit - Mathf.Max(limit, 0);
+        _currentWeight += addedCount * item.item.GetWeight();
 
         //trigger event
         if (onItemAdded != null)
@@ -95,6 +87,14 @@ public class Container
     }
 
     public ItemInstance GetItemAtIndex(int index) { return index < _items.Count ? _items[index] : null; }
+
+    public int GetIndexOfItemInstance(ItemInstance instance)
+    {
+        for (int i = 0; i < _items.Count; i++)
+            if (_items[i] == instance)
+                return i;
+        return -1;
+    }
 
     /// <summary>
     /// Removes the item at the given index
@@ -129,18 +129,18 @@ public class Container
     /// Removes the last occurance of the item
     /// </summary>
     /// <param name="item">item to remove</param>
-    /// <returns>whether the item was successfully removed</returns>
-    public bool RemoveItem(ItemInstance item)
+    /// <returns>how many items weren't able to be removed</returns>
+    public int RemoveItem(Item item, int amount = 1)
     {
-        for (int i = _items.Count - 1; i >= 0; i--)
+        int left = amount;
+        for (int i = _items.Count - 1; i >= 0 && left > 0; i--)
         {
-            if (item == _items[i])
+            if (item == _items[i].item)
             {
-                RemoveItemAtIndex(i);
-                return true;
+                left = RemoveItemAtIndex(i, left);
             }
         }
-        return false;
+        return left;
     }
 
     public List<ItemInstance> GetItemsList() { return _items; }
