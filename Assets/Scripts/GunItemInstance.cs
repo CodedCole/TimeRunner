@@ -8,10 +8,12 @@ public class GunItemInstance : ItemInstance
     public GunItem gun { get; private set; }
 
     public int mag;
+    public float condition;
 
     public GunItemInstance(GunItem templateItem) : base(templateItem)
     {
         gun = templateItem;
         mag = templateItem.GetStats().magSize;
+        condition = 100.0f;
     }
 }

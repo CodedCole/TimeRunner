@@ -21,6 +21,22 @@ public class Container
     }
 
     /// <summary>
+    /// Moves an ItemInstance without copying the data or trying to stack. Use with non-stackable items like weapons and armor.
+    /// </summary>
+    /// <param name="item">item instance to move</param>
+    /// <returns>whether the item instance was successfully moved</returns>
+    public bool MoveItemInstance(ItemInstance item)
+    {
+        if (item == null || _currentWeight + (item.item.GetWeight() * item.stack) > _maxWeight || _items.Count >= _maxItems)
+            return false;
+
+        _items.Add(item);
+        _currentWeight += item.item.GetWeight() * item.stack;
+
+        return true;
+    }
+
+    /// <summary>
     /// Adds the item to the container
     /// </summary>
     /// <param name="item">the item to add</param>
@@ -59,19 +75,47 @@ public class Container
             //create new slots
             for (int i = _items.Count; i < _maxItems && limit > 0; i++)
             {
-                //create stack
-                ItemInstance stack = item.item.MakeItemInstance();
-
-                //set the right count on the stack
-                stack.stack = limit;
-                if (stack.stack > item.item.GetMaxStackSize())
+                //check if this is a non stackable item
+                if (item.item.GetMaxStackSize() == 1)
                 {
-                    stack.stack = item.item.GetMaxStackSize();
+                    //keep correct instance properties
+                    ItemInstance instance;
+                    if (item is GunItemInstance)
+                    {
+                        GunItemInstance gii = (GunItemInstance)item;
+                        instance = gii.gun.MakeItemInstance();
+                        (instance as GunItemInstance).mag = gii.mag;
+                        (instance as GunItemInstance).condition = gii.condition;
+                    }
+                    else if (item is ArmorItemInstance)
+                    {
+                        ArmorItemInstance aii = (ArmorItemInstance)item;
+                        instance = aii.armor.MakeItemInstance();
+                        (instance as ArmorItemInstance).condition = aii.condition;
+                    }
+                    else
+                    {
+                        instance = item.item.MakeItemInstance();
+                    }
+                    _items.Add(instance);
+                    limit--;
                 }
-                limit -= stack.stack;
+                else
+                {
+                    //create stack
+                    ItemInstance stack = item.item.MakeItemInstance();
 
-                //add to items
-                _items.Add(stack);
+                    //set the right count on the stack
+                    stack.stack = limit;
+                    if (stack.stack > item.item.GetMaxStackSize())
+                    {
+                        stack.stack = item.item.GetMaxStackSize();
+                    }
+                    limit -= stack.stack;
+
+                    //add to items
+                    _items.Add(stack);
+                }
             }
         }
 
@@ -126,7 +170,7 @@ public class Container
     }
 
     /// <summary>
-    /// Removes the last occurance of the item
+    /// Removes the last occurances of the item
     /// </summary>
     /// <param name="item">item to remove</param>
     /// <returns>how many items weren't able to be removed</returns>

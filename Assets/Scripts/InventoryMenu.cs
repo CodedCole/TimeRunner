@@ -512,7 +512,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         {
             _inventory.GetContainer().RemoveItemAtIndex(_inventory.GetContainer().GetIndexOfItemInstance(_selectableGear[_selectedGearIndex]));
             if (currentGear != null)
-                _inventory.GetContainer().AddItem(currentGear);
+                _inventory.GetContainer().MoveItemInstance(currentGear);
         }
     }
 
@@ -562,6 +562,28 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         //reveal inventory and hide gear select
         _gearSelectScrollView.AddToClassList(_hiddenClass);
         _inventoryScrollView.RemoveFromClassList(_hiddenClass);
+    }
+
+    int SwapItems()
+    {
+        ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
+        int left;
+        if (_selectedLoot)
+        {
+            left = _inventoryContainerController.GetContainer().AddItem(item);
+            if (left == 0)
+                _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
+        }
+        else
+        {
+            left = _lootContainerController.GetContainer().AddItem(item);
+            if (left == 0)
+                _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
+        }
+
+        UpdateItemDataCard();
+
+        return left;
     }
 
     public void OnBack(InputAction.CallbackContext context)
