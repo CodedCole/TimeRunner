@@ -377,22 +377,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         else if (_lootPanelOpen && _currentSelectedSlot >= 0)
         {
             SwapItems();
-            /*
-            ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
-            if (_selectedLoot)
-            {
-                int success = _inventoryContainerController.GetContainer().AddItem(item);
-                if (success == 0)
-                    _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
-            }
-            else
-            {
-                int success = _lootContainerController.GetContainer().AddItem(item);
-                if (success == 0)
-                    _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
-            }
-            /**/
-            //UpdateItemDataCard();
         }
 
         Debug.Log("inventory weight: " + _inventoryContainerController.GetContainer().GetWeight());
@@ -577,14 +561,12 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         if (_selectedLoot)
         {
             left = _inventoryContainerController.GetContainer().AddItem(item, amount);
-            //if (left == 0)
-                _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
+            _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
         }
         else
         {
             left = _lootContainerController.GetContainer().AddItem(item, amount);
-            //if (left == 0)
-                _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
+            _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
         }
 
         UpdateItemDataCard();
