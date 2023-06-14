@@ -376,6 +376,8 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         //swap item between containers
         else if (_lootPanelOpen && _currentSelectedSlot >= 0)
         {
+            SwapItems();
+            /*
             ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
             if (_selectedLoot)
             {
@@ -389,8 +391,8 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
                 if (success == 0)
                     _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
             }
-
-            UpdateItemDataCard();
+            /**/
+            //UpdateItemDataCard();
         }
 
         Debug.Log("inventory weight: " + _inventoryContainerController.GetContainer().GetWeight());
@@ -568,21 +570,21 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _inventoryScrollView.RemoveFromClassList(_hiddenClass);
     }
 
-    int SwapItems()
+    int SwapItems(int amount = 1)
     {
         ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
         int left;
         if (_selectedLoot)
         {
-            left = _inventoryContainerController.GetContainer().AddItem(item);
-            if (left == 0)
-                _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
+            left = _inventoryContainerController.GetContainer().AddItem(item, amount);
+            //if (left == 0)
+                _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
         }
         else
         {
-            left = _lootContainerController.GetContainer().AddItem(item);
-            if (left == 0)
-                _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot);
+            left = _lootContainerController.GetContainer().AddItem(item, amount);
+            //if (left == 0)
+                _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
         }
 
         UpdateItemDataCard();
