@@ -35,3 +35,13 @@ struct ItemInitialState
     public Item item;
     public int stackSize;
 }
+
+public enum EDirection { North, East, South, West }
+
+public static class DirectionHelper
+{
+    public static EDirection GetOppositeDirection(this EDirection dir)
+    {
+        return (EDirection)(((int)dir + 2) % 4);
+    }
+}

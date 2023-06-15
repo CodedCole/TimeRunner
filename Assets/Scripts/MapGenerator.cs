@@ -61,9 +61,10 @@ public class MapGenerator : MonoBehaviour
         _grid = GetComponent<Grid>();
         _level = GetComponentInChildren<Tilemap>();
         _level.ClearAllTiles();
+        _level.origin = Vector3Int.zero;
         _level.size = new Vector3Int(size.x + 2, size.y + 2, 2);
         _level.ResizeBounds();
-        /**/
+
         _level.BoxFill(Vector3Int.zero, tileToFill, 0, 0, size.x - 1, size.y - 1);
         for (int i = 0; i < size.x; i++)
         {
@@ -81,8 +82,7 @@ public class MapGenerator : MonoBehaviour
             _level.SetTileFlags((Vector3Int.up * i) + (Vector3Int.right * (size.x - 1)), TileFlags.None);
             _level.SetColor((Vector3Int.up * i) + (Vector3Int.right * (size.x - 1)), east);
         }
-        //_level.RefreshAllTiles();
-        /**/
+
         StartCoroutine(BuildRooms());
     }
 
@@ -231,8 +231,9 @@ public class MapGenerator : MonoBehaviour
                     _level.SetColor(Vector3Int.back + (Vector3Int.right * x) + (Vector3Int.up * y), roomColor);
                 }
             }
+            _level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, -1), null, rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, rooms[i].topRight.x + 1, rooms[i].topRight.y + 1);
         }
-        //_level.RefreshAllTiles();
+
         yield return null;
     }
 }

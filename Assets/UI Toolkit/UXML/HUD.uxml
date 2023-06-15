@@ -6,7 +6,7 @@
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:Instance template="Reticle" name="Reticle" style="width: 100px; height: 100px; bottom: -50px; left: -50px; position: absolute;" />
         <ui:ProgressBar value="0.2" title="Interact" name="InteractBar" high-value="1" class="border" style="position: absolute; left: 45%; top: 45%; right: 45%; bottom: auto; transition-property: all, display; transition-duration: 0s, 1s; transition-timing-function: ease, ease; transition-delay: 0s, 1s; visibility: visible;" />
-        <ui:Instance template="DebugPanel" name="DebugPanel" style="position: absolute; right: 0; width: 200px; height: 200px;" />
+        <ui:Instance template="DebugPanel" name="DebugPanel" style="position: absolute; width: 200px; height: 200px;" />
         <ui:Instance template="Inventory" name="Inventory" class="hidden" style="align-self: stretch; height: 100%;" />
     </ui:VisualElement>
 </ui:UXML>

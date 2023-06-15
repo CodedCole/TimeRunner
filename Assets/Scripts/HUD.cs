@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class HUD : MonoBehaviour
@@ -21,12 +22,16 @@ public class HUD : MonoBehaviour
 
     VisualElement _debugPanel;
     Label _mousePos;
+    Label _playerCellPos;
+    Label _tileData;
 
     ContainerListController _inventoryItemListController;
     ContainerListController _lootItemListController;
 
     Action onOpenInventory;
     Action onCloseInventory;
+
+    Tilemap _tilemap;
 
     // Start is called before the first frame update
     void Start()
@@ -42,8 +47,12 @@ public class HUD : MonoBehaviour
 
         _debugPanel = _hud.rootVisualElement.Q<VisualElement>("DebugPanel");
         _mousePos = _debugPanel.Q<Label>("mouse-position");
+        _playerCellPos = _debugPanel.Q<Label>("player-cell-position");
+        _tileData = _debugPanel.Q<Label>("tile-data");
 
         _inventoryPanel.RegisterCallback<MouseEnterEvent>(EnterInventoryPanel);
+
+        _tilemap = FindObjectOfType<Tilemap>();
     }
 
     void EnterInventoryPanel(MouseEnterEvent ev)
@@ -105,5 +114,15 @@ public class HUD : MonoBehaviour
 
         //debug text
         _mousePos.text = "mouse-pos: (x: " + pos.x + ", y: " + pos.y + ")";
+    }
+
+    public void PlayerCellPosition(Vector3 position)
+    {
+        Vector3Int pos = _tilemap.WorldToCell(position + Vector3.forward);
+        pos.y -= pos.z;
+        pos.x -= pos.z;
+        _playerCellPos.text = "player-cell: (x: " + pos.x + ", y: " + pos.y + ", z: " + pos.z + ")";
+        bool onTile = _tilemap.HasTile(pos);
+        _tileData.text = "on-tile: " + onTile.ToString();
     }
 }

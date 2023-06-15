@@ -1,5 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:Label tabindex="-1" text="mouse-pos: (x, y)" display-tooltip-when-elided="true" name="mouse-position" style="color: rgb(255, 255, 255);" />
+        <ui:Label tabindex="-1" text="player-cell: (x, y, z)" display-tooltip-when-elided="true" name="player-cell-position" style="color: rgb(255, 255, 255);" />
+        <ui:Label tabindex="-1" text="on-tile: " display-tooltip-when-elided="true" name="tile-data" style="color: rgb(255, 255, 255);" />
     </ui:VisualElement>
 </ui:UXML>

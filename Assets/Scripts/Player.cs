@@ -65,6 +65,8 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         {
             _gunController.Fire();
         }
+
+        _hud.PlayerCellPosition(transform.position);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
