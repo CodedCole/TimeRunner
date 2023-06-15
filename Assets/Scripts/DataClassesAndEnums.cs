@@ -44,4 +44,21 @@ public static class DirectionHelper
     {
         return (EDirection)(((int)dir + 2) % 4);
     }
+
+    public static Vector2Int GetDirectionVector(this EDirection dir)
+    {
+        switch(dir)
+        {
+            case EDirection.North:
+                return new Vector2Int(0, 1);
+            case EDirection.East:
+                return new Vector2Int(1, 0);
+            case EDirection.South:
+                return new Vector2Int(0, -1);
+            case EDirection.West:
+                return new Vector2Int(-1, 0);
+            default:
+                return new Vector2Int(0, 0);
+        }
+    }
 }

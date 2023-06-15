@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -22,65 +23,93 @@ namespace WaveFunctionCollapse
 
         public TileWFC(Tilemap input, Tilemap output)
         {
+            Debug.Log(input.ToString());
             _input = input;
             _output = output;
+
+            CreateTileDataFromInput();
         }
 
         public void CreateTileDataFromInput()
         {
+            _input.CompressBounds();
             Vector3Int min = _input.cellBounds.min;
             Vector3Int max = _input.cellBounds.max;
-
+            Debug.Log("min: " + min.ToString() + " max: " + max.ToString());
             for (int x = min.x; x < max.x; x++)
             {
                 for (int y = min.y; y < max.y; y++)
                 {
-                    TileBase tile = _input.GetTile(new Vector3Int(x, y, min.z));
+                    Vector3Int pos = new Vector3Int(x, y, min.z);
+                    TileBase tile = _input.GetTile(pos);
                     if (tile != null)
                     {
-                        if (!_tileToIndex.ContainsKey(tile))
-                        {
-                            _tileToIndex.Add(tile, _tileToIndex.Count);
-
-                            WFCTileData tileData = new WFCTileData();
-                            tileData.tile = tile;
-                            for (int i = 0; i < tileData.neighbors.Length; i++)
-                                tileData.neighbors[i] = new HashSet<int>();
-
-                            _tileData.Add(tileData);
-                        }
-                        WFCTileData data = _tileData[_tileToIndex[tile]];
+                        WFCTileData data = _tileData[GetTileIndex(tile)];
 
                         //North
-                        TileBase neighbor = _input.GetTile(new Vector3Int(x, y + 1, min.z));
-                        int index = -1;
-                        if (neighbor != null)
-                            index = _tileToIndex[neighbor];
-                        data.neighbors[(int)EDirection.North].Add(index);
+                        AddTileInDirection(data, pos, EDirection.North);
 
                         //East
-                        neighbor = _input.GetTile(new Vector3Int(x + 1, y, min.z));
-                        index = -1;
-                        if (neighbor != null)
-                            index = _tileToIndex[neighbor];
-                        data.neighbors[(int)EDirection.East].Add(index);
+                        AddTileInDirection(data, pos, EDirection.East);
 
                         //South
-                        neighbor = _input.GetTile(new Vector3Int(x, y - 1, min.z));
-                        index = -1;
-                        if (neighbor != null)
-                            index = _tileToIndex[neighbor];
-                        data.neighbors[(int)EDirection.South].Add(index);
+                        AddTileInDirection(data, pos, EDirection.South);
 
                         //West
-                        neighbor = _input.GetTile(new Vector3Int(x - 1, y, min.z));
-                        index = -1;
-                        if (neighbor != null)
-                            index = _tileToIndex[neighbor];
-                        data.neighbors[(int)EDirection.West].Add(index);
+                        AddTileInDirection(data, pos, EDirection.West);
                     }
                 }
             }
+        }
+    
+        void AddTileInDirection(WFCTileData data, Vector3Int pos, EDirection dir)
+        {
+            TileBase neighbor = _input.GetTile(pos + (Vector3Int)dir.GetDirectionVector());
+            int index = -1;
+            if (neighbor != null)
+                index = GetTileIndex(neighbor);
+            data.neighbors[(int)dir].Add(index);
+        }
+
+        int GetTileIndex(TileBase tile)
+        {
+            if (_tileToIndex.ContainsKey(tile))
+            {
+                return _tileToIndex[tile];
+            }
+            else
+            {
+                WFCTileData tileData = new WFCTileData();
+                tileData.tile = tile;
+                for (int i = 0; i < tileData.neighbors.Length; i++)
+                    tileData.neighbors[i] = new HashSet<int>();
+                _tileData.Add(tileData);
+                _tileToIndex.Add(tile, _tileToIndex.Count);
+                return _tileToIndex.Count - 1;
+            }
+        }
+
+        public void LogTileData()
+        {
+            foreach (var t in _tileData)
+            {
+                string output = _tileToIndex[t.tile] + " - " + t.tile.ToString() + "\n" 
+                    + "N: " + HashSetToString(t.neighbors[(int)EDirection.North]) + "\n"
+                    + "E: " + HashSetToString(t.neighbors[(int)EDirection.East]) + "\n"
+                    + "S: " + HashSetToString(t.neighbors[(int)EDirection.South]) + "\n"
+                    + "W: " + HashSetToString(t.neighbors[(int)EDirection.West])+ "\n";
+                Debug.Log(output);
+            }
+        }
+
+        string HashSetToString(HashSet<int> set)
+        {
+            string output = "";
+            foreach (var element in set)
+            {
+                output += element.ToString() + ", ";
+            }
+            return output;
         }
     }
 }

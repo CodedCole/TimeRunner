@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using WaveFunctionCollapse;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -52,12 +53,17 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Gradient _roomColors;
     [SerializeField] private int _tryCount = 10;
 
+    [Header("Tilemaps")]
+    [SerializeField] private Tilemap _level;
     private Grid _grid;
-    private Tilemap _level;
 
     // Start is called before the first frame update
     void Start()
     {
+        //_level = GetComponentInChildren<Tilemap>();
+        TileWFC tileWFC = new TileWFC(_level, _level);
+        tileWFC.LogTileData();
+        /*
         _grid = GetComponent<Grid>();
         _level = GetComponentInChildren<Tilemap>();
         _level.ClearAllTiles();
@@ -84,6 +90,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         StartCoroutine(BuildRooms());
+        */
     }
 
     IEnumerator BuildRooms()

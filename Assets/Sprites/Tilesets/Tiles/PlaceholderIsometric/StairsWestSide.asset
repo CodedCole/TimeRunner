@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: IsometricTileSetPlaceholder_5
+  m_Name: StairsWestSide
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 1554486695, guid: 9b01aec8273f7044195ab6d9e375a496, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
