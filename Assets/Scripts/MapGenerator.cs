@@ -63,6 +63,9 @@ public class MapGenerator : MonoBehaviour
         //_level = GetComponentInChildren<Tilemap>();
         TileWFC tileWFC = new TileWFC(_level, _level);
         tileWFC.LogTileData();
+        _level.size = (Vector3Int)size + Vector3Int.forward;
+        _level.ResizeBounds();
+        StartCoroutine(tileWFC.GenerateCoroutine());
         /*
         _grid = GetComponent<Grid>();
         _level = GetComponentInChildren<Tilemap>();
