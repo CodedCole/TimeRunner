@@ -23,9 +23,11 @@ namespace WaveFunctionCollapse
         private List<WFCTileData> _tileData = new List<WFCTileData>();
 
         private HashSet<int>[] _cells;
+        private HashSet<int> EMPTY = null;
         private Vector2Int _size;
 
         private PriorityQueue<Vector2Int, int> _collapseQueue;
+        private int _recurseDepth;
 
         public TileWFC(Tilemap input, Tilemap output)
         {
@@ -43,28 +45,27 @@ namespace WaveFunctionCollapse
             Vector3Int min = _input.cellBounds.min;
             Vector3Int max = _input.cellBounds.max;
             Debug.Log("min: " + min.ToString() + " max: " + max.ToString());
+            GetTileIndex(null);     //adds the empty tile to the list
             for (int x = min.x; x < max.x; x++)
             {
                 for (int y = min.y; y < max.y; y++)
                 {
                     Vector3Int pos = new Vector3Int(x, y, min.z);
                     TileBase tile = _input.GetTile(pos);
-                    if (tile != null)
-                    {
-                        WFCTileData data = _tileData[GetTileIndex(tile)];
 
-                        //North
-                        AddTileInDirection(data, pos, EDirection.North);
+                    WFCTileData data = _tileData[GetTileIndex(tile)];
 
-                        //East
-                        AddTileInDirection(data, pos, EDirection.East);
+                    //North
+                    AddTileInDirection(data, pos, EDirection.North);
 
-                        //South
-                        AddTileInDirection(data, pos, EDirection.South);
+                    //East
+                    AddTileInDirection(data, pos, EDirection.East);
 
-                        //West
-                        AddTileInDirection(data, pos, EDirection.West);
-                    }
+                    //South
+                    AddTileInDirection(data, pos, EDirection.South);
+
+                    //West
+                    AddTileInDirection(data, pos, EDirection.West);
                 }
             }
         }
@@ -72,7 +73,7 @@ namespace WaveFunctionCollapse
         void AddTileInDirection(WFCTileData data, Vector3Int pos, EDirection dir)
         {
             TileBase neighbor = _input.GetTile(pos + (Vector3Int)dir.GetDirectionVector());
-            int index = -1;
+            int index = 0;
             if (neighbor != null)
                 index = GetTileIndex(neighbor);
             data.neighbors[(int)dir].Add(index);
@@ -80,19 +81,26 @@ namespace WaveFunctionCollapse
 
         int GetTileIndex(TileBase tile)
         {
-            if (_tileToIndex.ContainsKey(tile))
+            if (tile != null && _tileToIndex.ContainsKey(tile))
             {
                 return _tileToIndex[tile];
             }
+            else if (tile == null && _tileData.Count != 0)
+            {
+                Debug.Log("empty tile");
+                return 0;
+            }
             else
             {
+                Debug.Log("make tile");
                 WFCTileData tileData = new WFCTileData();
                 tileData.tile = tile;
                 for (int i = 0; i < tileData.neighbors.Length; i++)
                     tileData.neighbors[i] = new HashSet<int>();
                 _tileData.Add(tileData);
-                _tileToIndex.Add(tile, _tileToIndex.Count);
-                return _tileToIndex.Count - 1;
+                if(tile != null)
+                    _tileToIndex.Add(tile, _tileData.Count - 1);
+                return _tileData.Count - 1;
             }
         }
 
@@ -123,22 +131,15 @@ namespace WaveFunctionCollapse
             Vector2Int startPos = new Vector2Int(Random.Range(0, _size.x), Random.Range(0, _size.y));
             _collapseQueue.Push(new KeyValuePair<Vector2Int, int>(startPos, 1));
             _collapseQueue.LogHeap();
-            while(!_collapseQueue.Empty())
+            Vector2Int collapsePos = startPos;
+            while (!_collapseQueue.Empty())
             {
-                Vector2Int collapsePos = _collapseQueue.Pop();
+                if (collapsePos == -Vector2Int.one)
+                    break;
+
                 CollapseCell(collapsePos);
 
-                EDirection dir = EDirection.North;
-                for (int i = 0; i < 4; i++)
-                {
-                    HashSet<int> neighbor = GetCellAtPosition(collapsePos + dir.GetDirectionVector());
-                    if (neighbor != null && neighbor.Count > 1)
-                    {
-                        Debug.Log("adding new cell to collapse");
-                        _collapseQueue.Push(new KeyValuePair<Vector2Int, int>(collapsePos + dir.GetDirectionVector(), neighbor.Count));
-                    }
-                    dir++;
-                }
+                collapsePos = FindNextCellToCollapse();
 
                 //DEBUG
                 _collapseQueue.LogHeap();
@@ -149,9 +150,28 @@ namespace WaveFunctionCollapse
             BuildOutputTilemap();
         }
 
+        Vector2Int FindNextCellToCollapse()
+        {
+            Vector2Int cellToCollapse = -Vector2Int.one;
+            int cellEntropy = 0;
+            for (int x = 0; x < _size.x; x++)
+            {
+                for (int y = 0; y < _size.y; y++)
+                {
+                    HashSet<int> cell = GetCellAtPosition(new Vector2Int(x, y));
+                    if (cell.Count > 1 && (cell.Count < cellEntropy || cellToCollapse == -Vector2Int.one))
+                    {
+                        cellToCollapse = new Vector2Int(x, y);
+                        cellEntropy = cell.Count;
+                    }
+                }
+            }
+            return cellToCollapse;
+        }
+
         void CollapseCell(Vector2Int pos)
         {
-            HashSet<int> cell = GetCellAtPosition(pos);
+            ref HashSet<int> cell = ref GetCellAtPosition(pos);
             if (cell == null)
             {
                 throw new System.Exception("cell at " + pos.ToString() + " is null");
@@ -165,6 +185,9 @@ namespace WaveFunctionCollapse
             cell.Clear();
             cell.Add(collapsedValue);
 
+            _recurseDepth = 0;
+            Propagate(pos);
+            /*
             EDirection dir = EDirection.North;
             for (int i = 0; i < 4; i++)
             {
@@ -176,19 +199,83 @@ namespace WaveFunctionCollapse
                 }
                 dir++;
             }
+            //*/
         }
 
-        HashSet<int> GetCellAtPosition(Vector2Int pos)
+        /// <summary>
+        /// Propagates the WFC rules starting from 'pos'
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        void Propagate(Vector2Int pos)
+        {
+
+            ///*
+            _recurseDepth++;
+            if (_recurseDepth == 10)
+            {
+                _recurseDepth--;
+                return;
+            }
+            Queue<Vector2Int> cellsToPropagate = new Queue<Vector2Int>();
+            HashSet<Vector2Int> cellsAlreadyPropped = new HashSet<Vector2Int>();
+            cellsToPropagate.Enqueue(pos);
+            while (cellsToPropagate.Count > 0 && cellsToPropagate.Count < 100)
+            {
+                Vector2Int cellPos = cellsToPropagate.Dequeue();
+                cellsAlreadyPropped.Add(cellPos);
+                HashSet<int> cell = GetCellAtPosition(cellPos);
+                EDirection dir = EDirection.North;
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2Int neighborPos = cellPos + dir.GetDirectionVector();
+                    if (cellsAlreadyPropped.Contains(neighborPos))
+                        continue;
+
+                    ref HashSet<int> neighbor = ref GetCellAtPosition(neighborPos);
+                    if (neighbor != null)
+                    {
+                        HashSet<int> newSet = GetPossibleTilesInDirection(cell, dir);
+                        newSet.IntersectWith(neighbor);
+                        if (newSet != neighbor)
+                        {
+                            neighbor = newSet;
+                            cellsToPropagate.Enqueue(neighborPos);
+                            if (newSet.Count == 0)
+                            {
+                                BuildOutputTilemap();
+                                throw new System.Exception("no possible tiles at " + neighborPos.ToString());
+                            }
+                        }
+                    }
+                    dir++;
+                }
+            }
+            _recurseDepth--;
+            //*/
+        }
+
+        ref HashSet<int> GetCellAtPosition(Vector2Int pos)
         {
             //Debug.Log("pos: " + pos.ToString() + " size: " + _size.ToString());
             if (pos.x >= _size.x || pos.x < 0 || pos.y >= _size.y || pos.y < 0)
             {
                 //Debug.Log("doesn't exist");
-                return null;
+                return ref EMPTY;
             }
             //Debug.Log("exists");
             int index = pos.x + (pos.y * _size.x);
-            return _cells[index];
+            return ref _cells[index];
+        }
+
+        HashSet<int> GetPossibleTilesInDirection(HashSet<int> cell, EDirection dir)
+        {
+            HashSet<int> result = new HashSet<int>();
+            foreach(int tile in cell)
+            {
+                result.UnionWith(_tileData[tile].neighbors[(int)dir]);
+            }
+            return result;
         }
 
         //OUTPUT FUNCTIONS
@@ -200,14 +287,25 @@ namespace WaveFunctionCollapse
                 {
                     Vector2Int pos = new Vector2Int(x, y);
 
-                    if (GetCellAtPosition(pos).Count == 1)
+                    ref HashSet<int> cell = ref GetCellAtPosition(pos);
+                    if (cell.Count == 1)
                     {
-                        int tile = GetCellAtPosition(pos).ElementAt(0);
-                        _output.SetTile((Vector3Int)pos, (tile == -1 ? null : _tileData[tile].tile));
+                        int tile = cell.ElementAt(0);
+                        _output.SetTile((Vector3Int)pos, _tileData[tile].tile);
+                        _output.SetTileFlags((Vector3Int)pos, TileFlags.None);
+                        _output.SetColor((Vector3Int)pos, Color.white);
+                    }
+                    else if (cell.Count == 0)
+                    {
+                        _output.SetTile((Vector3Int)pos, _tileData[1].tile);
+                        _output.SetTileFlags((Vector3Int)pos, TileFlags.None);
+                        _output.SetColor((Vector3Int)pos, Color.green);
                     }
                     else
                     {
-                        _output.SetTile((Vector3Int)pos, null);
+                        _output.SetTile((Vector3Int)pos, _tileData[1].tile);
+                        _output.SetTileFlags((Vector3Int)pos, TileFlags.None);
+                        _output.SetColor((Vector3Int)pos, Color.Lerp(Color.blue, Color.red, (float)cell.Count / _tileData.Count));
                     }
                 }
             }
@@ -218,7 +316,7 @@ namespace WaveFunctionCollapse
         {
             foreach (var t in _tileData)
             {
-                string output = _tileToIndex[t.tile] + " - " + t.tile.ToString() + "\n" 
+                string output = GetTileIndex(t.tile) + " - " + t.tile + "\n" 
                     + "N: " + HashSetToString(t.neighbors[(int)EDirection.North]) + "\n"
                     + "E: " + HashSetToString(t.neighbors[(int)EDirection.East]) + "\n"
                     + "S: " + HashSetToString(t.neighbors[(int)EDirection.South]) + "\n"
