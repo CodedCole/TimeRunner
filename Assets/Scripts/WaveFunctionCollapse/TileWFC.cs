@@ -25,6 +25,7 @@ namespace WaveFunctionCollapse
         private HashSet<int>[] _cells;
         private HashSet<int> EMPTY = null;
         private Vector2Int _size;
+        private bool _restart = false;
 
         private PriorityQueue<Vector2Int, int> _collapseQueue;
         private int _recurseDepth;
@@ -107,9 +108,37 @@ namespace WaveFunctionCollapse
         //COLLAPSE FUNCTIONS
         public IEnumerator GenerateCoroutine()
         {
-            _output.ClearAllTiles();
+            RestartWFC();
 
-            yield return new WaitForSeconds(0.1f);
+            //Collapse
+            Vector2Int collapsePos = new Vector2Int(Random.Range(0, _size.x), Random.Range(0, _size.y));
+            while (true)
+            {
+                if (collapsePos == -Vector2Int.one)
+                    break;
+
+                CollapseCell(collapsePos);
+                if (_restart)
+                {
+                    _restart = false;
+                    yield return new WaitForSeconds(5);
+                    RestartWFC();
+                }
+
+
+                collapsePos = FindNextCellToCollapse();
+
+                //DEBUG
+                BuildOutputTilemap();
+                yield return new WaitForSeconds(0.25f);
+            }
+
+            BuildOutputTilemap();
+        }
+
+        void RestartWFC()
+        {
+            _output.ClearAllTiles();
 
             _size = Vector2Int.one * 8; //new Vector2Int(_output.cellBounds.xMax - _output.cellBounds.xMin, _output.cellBounds.yMax - _output.cellBounds.yMin) + Vector2Int.one;
             //_size.x = _output.cellBounds.xMax - _output.cellBounds.xMin;
@@ -125,29 +154,6 @@ namespace WaveFunctionCollapse
                     _cells[i].Add(j);
                 }
             }
-
-            //Collapse
-            _collapseQueue = new PriorityQueue<Vector2Int, int>(_size.x * _size.y * 4);
-            Vector2Int startPos = new Vector2Int(Random.Range(0, _size.x), Random.Range(0, _size.y));
-            _collapseQueue.Push(new KeyValuePair<Vector2Int, int>(startPos, 1));
-            _collapseQueue.LogHeap();
-            Vector2Int collapsePos = startPos;
-            while (!_collapseQueue.Empty())
-            {
-                if (collapsePos == -Vector2Int.one)
-                    break;
-
-                CollapseCell(collapsePos);
-
-                collapsePos = FindNextCellToCollapse();
-
-                //DEBUG
-                _collapseQueue.LogHeap();
-                BuildOutputTilemap();
-                yield return new WaitForSeconds(0.5f);
-            }
-
-            BuildOutputTilemap();
         }
 
         Vector2Int FindNextCellToCollapse()
@@ -178,7 +184,8 @@ namespace WaveFunctionCollapse
             }
             if (cell.Count <= 0)
             {
-                cell.Add(-1);
+                _restart = true;
+                return;
             }
             int collapsedValue = cell.ElementAt(Random.Range(0, cell.Count));
             
@@ -244,7 +251,10 @@ namespace WaveFunctionCollapse
                             if (newSet.Count == 0)
                             {
                                 BuildOutputTilemap();
-                                throw new System.Exception("no possible tiles at " + neighborPos.ToString());
+                                _restart = true;
+                                //throw new System.Exception("no possible tiles at " + neighborPos.ToString());
+                                Debug.LogWarning("no possible tiles at " + neighborPos.ToString() + " - restarting");
+                                return;
                             }
                         }
                     }
