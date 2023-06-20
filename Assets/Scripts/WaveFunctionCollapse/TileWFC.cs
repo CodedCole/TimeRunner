@@ -127,7 +127,7 @@ namespace WaveFunctionCollapse
                 if (_restart)
                 {
                     if (_debug)
-                        yield return new WaitForSeconds(5);
+                        yield return null;
 
                     _restart = false;
                     RestartWFC();
@@ -140,7 +140,7 @@ namespace WaveFunctionCollapse
                 if (_debug)
                 {
                     BuildOutputTilemap();
-                    yield return new WaitForSeconds(0.25f);
+                    yield return null;
                 }
             }
 
@@ -180,7 +180,7 @@ namespace WaveFunctionCollapse
         Vector2Int FindCellWithLeastEntropy()
         {
             //prepare for finding the smallest
-            Vector2Int leastEntropyCell = -Vector2Int.one;
+            List<Vector2Int> leastEntropyCells = new List<Vector2Int>();
             int cellEntropy = 0;
             for (int x = 0; x < _size.x; x++)
             {
@@ -188,16 +188,20 @@ namespace WaveFunctionCollapse
                 {
                     //check if cell has least entropy or is first valid cell
                     HashSet<int> cell = GetCellAtPosition(new Vector2Int(x, y));
-                    if (cell.Count > 1 && (cell.Count < cellEntropy || leastEntropyCell == -Vector2Int.one))
+                    if (cell.Count > 1 && (cell.Count <= cellEntropy || leastEntropyCells.Count == 0))
                     {
                         //set cell as the cell with the least entropy
-                        leastEntropyCell = new Vector2Int(x, y);
-                        cellEntropy = cell.Count;
+                        if (cell.Count < cellEntropy || leastEntropyCells.Count == 0)
+                        {
+                            cellEntropy = cell.Count;
+                            leastEntropyCells.Clear();
+                        }
+                        leastEntropyCells.Add(new Vector2Int(x, y));
                     }
                 }
             }
             //return the cell with least entropy
-            return leastEntropyCell;
+            return (leastEntropyCells.Count == 0 ? -Vector2Int.one : leastEntropyCells[Random.Range(0, leastEntropyCells.Count)]);
         }
 
         /// <summary>
@@ -257,8 +261,8 @@ namespace WaveFunctionCollapse
                     Vector2Int neighborPos = cellPos + dir.GetDirectionVector();
 
                     //check if the neighbor was already propagated
-                    if (cellsAlreadyPropped.Contains(neighborPos))
-                        continue;
+                    //if (cellsAlreadyPropped.Contains(neighborPos))
+                    //    continue;
 
                     //get neighbor in direction
                     ref HashSet<int> neighbor = ref GetCellAtPosition(neighborPos);
@@ -271,13 +275,14 @@ namespace WaveFunctionCollapse
                         newSet.IntersectWith(neighbor);
 
                         //if the neighbor's possibilities and the intersected possibilities match, propagation is not needed on this neighbor
-                        if (newSet != neighbor)
+                        if (!neighbor.SetEquals(newSet))
                         {
                             //apply the intersection to the neighbor
                             neighbor = newSet;
 
                             //put neighbor in propagation queue
-                            cellsToPropagate.Enqueue(neighborPos);
+                            if (!cellsToPropagate.Contains(neighborPos))
+                                cellsToPropagate.Enqueue(neighborPos);
 
                             //if the possibility count is 0, then a collision has occured and the '_restart' flag is set
                             if (newSet.Count == 0)
