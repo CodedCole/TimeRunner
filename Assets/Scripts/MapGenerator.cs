@@ -57,11 +57,14 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Tilemap _level;
     private Grid _grid;
 
+    [Header("WFC")]
+    [SerializeField] private bool _debug;
+
     // Start is called before the first frame update
     void Start()
     {
         //_level = GetComponentInChildren<Tilemap>();
-        TileWFC tileWFC = new TileWFC(_level, _level);
+        TileWFC tileWFC = new TileWFC(_level, _level, _debug);
         tileWFC.LogTileData();
         _level.size = (Vector3Int)size + Vector3Int.forward;
         _level.ResizeBounds();

@@ -27,16 +27,19 @@ namespace WaveFunctionCollapse
         private Vector2Int _size;
         private bool _restart = false;
 
+        private bool _debug;
+
         private PriorityQueue<Vector2Int, int> _collapseQueue;
         private int _recurseDepth;
 
-        public TileWFC(Tilemap input, Tilemap output)
+        public TileWFC(Tilemap input, Tilemap output, bool debug = false)
         {
             Debug.Log(input.ToString());
             _input = input;
             _output = output;
 
             CreateTileDataFromInput();
+            _debug = debug;
         }
 
         //INPUT FUNCTIONS
@@ -88,12 +91,10 @@ namespace WaveFunctionCollapse
             }
             else if (tile == null && _tileData.Count != 0)
             {
-                Debug.Log("empty tile");
                 return 0;
             }
             else
             {
-                Debug.Log("make tile");
                 WFCTileData tileData = new WFCTileData();
                 tileData.tile = tile;
                 for (int i = 0; i < tileData.neighbors.Length; i++)
@@ -106,8 +107,13 @@ namespace WaveFunctionCollapse
         }
 
         //COLLAPSE FUNCTIONS
+        /// <summary>
+        /// Generates the WFC tilemap
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator GenerateCoroutine()
         {
+            //Start
             RestartWFC();
 
             //Collapse
@@ -120,26 +126,37 @@ namespace WaveFunctionCollapse
                 CollapseCell(collapsePos);
                 if (_restart)
                 {
+                    if (_debug)
+                        yield return new WaitForSeconds(5);
+
                     _restart = false;
-                    yield return new WaitForSeconds(5);
                     RestartWFC();
                 }
 
 
-                collapsePos = FindNextCellToCollapse();
+                collapsePos = FindCellWithLeastEntropy();
 
                 //DEBUG
-                BuildOutputTilemap();
-                yield return new WaitForSeconds(0.25f);
+                if (_debug)
+                {
+                    BuildOutputTilemap();
+                    yield return new WaitForSeconds(0.25f);
+                }
             }
 
+            //Output
             BuildOutputTilemap();
         }
 
+        /// <summary>
+        /// Prepares WFC to start or restart
+        /// </summary>
         void RestartWFC()
         {
+            //clear the output of tiles
             _output.ClearAllTiles();
 
+            //find the correct size
             _size = Vector2Int.one * 8; //new Vector2Int(_output.cellBounds.xMax - _output.cellBounds.xMin, _output.cellBounds.yMax - _output.cellBounds.yMin) + Vector2Int.one;
             //_size.x = _output.cellBounds.xMax - _output.cellBounds.xMin;
             //_size.y = _output.cellBounds.yMax - _output.cellBounds.yMin;
@@ -156,130 +173,153 @@ namespace WaveFunctionCollapse
             }
         }
 
-        Vector2Int FindNextCellToCollapse()
+        /// <summary>
+        /// Finds the cell with the least entropy
+        /// </summary>
+        /// <returns>grid position of cell with lowest entropy. -Vector2Int.one is returned when all cells are collapsed.</returns>
+        Vector2Int FindCellWithLeastEntropy()
         {
-            Vector2Int cellToCollapse = -Vector2Int.one;
+            //prepare for finding the smallest
+            Vector2Int leastEntropyCell = -Vector2Int.one;
             int cellEntropy = 0;
             for (int x = 0; x < _size.x; x++)
             {
                 for (int y = 0; y < _size.y; y++)
                 {
+                    //check if cell has least entropy or is first valid cell
                     HashSet<int> cell = GetCellAtPosition(new Vector2Int(x, y));
-                    if (cell.Count > 1 && (cell.Count < cellEntropy || cellToCollapse == -Vector2Int.one))
+                    if (cell.Count > 1 && (cell.Count < cellEntropy || leastEntropyCell == -Vector2Int.one))
                     {
-                        cellToCollapse = new Vector2Int(x, y);
+                        //set cell as the cell with the least entropy
+                        leastEntropyCell = new Vector2Int(x, y);
                         cellEntropy = cell.Count;
                     }
                 }
             }
-            return cellToCollapse;
+            //return the cell with least entropy
+            return leastEntropyCell;
         }
 
+        /// <summary>
+        /// Forces a cell to collapse and become a specific tile
+        /// </summary>
+        /// <param name="pos">position of the cell</param>
         void CollapseCell(Vector2Int pos)
         {
+            //get cell at 'pos' and check that it exists
             ref HashSet<int> cell = ref GetCellAtPosition(pos);
             if (cell == null)
             {
                 throw new System.Exception("cell at " + pos.ToString() + " is null");
             }
+
+            //check that the cell is not a collision
             if (cell.Count <= 0)
             {
                 _restart = true;
                 return;
             }
+
+            //collapse cell to a single value
             int collapsedValue = cell.ElementAt(Random.Range(0, cell.Count));
-            
             cell.Clear();
             cell.Add(collapsedValue);
 
-            _recurseDepth = 0;
+            //propagate this change to the neighbors
             Propagate(pos);
-            /*
-            EDirection dir = EDirection.North;
-            for (int i = 0; i < 4; i++)
-            {
-                HashSet<int> neighbor = GetCellAtPosition(pos + dir.GetDirectionVector());
-                if (neighbor != null)
-                {
-
-                    neighbor.IntersectWith(_tileData[cell.ElementAt(0)].neighbors[(int)dir]);
-                }
-                dir++;
-            }
-            //*/
         }
 
         /// <summary>
-        /// Propagates the WFC rules starting from 'pos'
+        /// Propagates the WFC rules starting from 'pos'. This could cause an unsolvable tile, which will make the '_restart' flag true
         /// </summary>
-        /// <param name="pos"></param>
-        /// <returns></returns>
+        /// <param name="pos">starting position of propagation</param>
         void Propagate(Vector2Int pos)
         {
-
-            ///*
-            _recurseDepth++;
-            if (_recurseDepth == 10)
-            {
-                _recurseDepth--;
-                return;
-            }
+            //queue and set to track which cells need to be propagated and which already have
             Queue<Vector2Int> cellsToPropagate = new Queue<Vector2Int>();
             HashSet<Vector2Int> cellsAlreadyPropped = new HashSet<Vector2Int>();
+
+            //start at pos
             cellsToPropagate.Enqueue(pos);
-            while (cellsToPropagate.Count > 0 && cellsToPropagate.Count < 100)
+            while (cellsToPropagate.Count > 0)
             {
+                //get the next cell and add it to the completed set
                 Vector2Int cellPos = cellsToPropagate.Dequeue();
                 cellsAlreadyPropped.Add(cellPos);
+
+                //get the cell's possibilities
                 HashSet<int> cell = GetCellAtPosition(cellPos);
+
+                //propagate each of the directions
                 EDirection dir = EDirection.North;
                 for (int i = 0; i < 4; i++)
                 {
                     Vector2Int neighborPos = cellPos + dir.GetDirectionVector();
+
+                    //check if the neighbor was already propagated
                     if (cellsAlreadyPropped.Contains(neighborPos))
                         continue;
 
+                    //get neighbor in direction
                     ref HashSet<int> neighbor = ref GetCellAtPosition(neighborPos);
                     if (neighbor != null)
                     {
+                        //find the possible tiles in the direction 'dir' from the cell
                         HashSet<int> newSet = GetPossibleTilesInDirection(cell, dir);
+
+                        //intersect the possible tiles with the neighbor's existing possibilities
                         newSet.IntersectWith(neighbor);
+
+                        //if the neighbor's possibilities and the intersected possibilities match, propagation is not needed on this neighbor
                         if (newSet != neighbor)
                         {
+                            //apply the intersection to the neighbor
                             neighbor = newSet;
+
+                            //put neighbor in propagation queue
                             cellsToPropagate.Enqueue(neighborPos);
+
+                            //if the possibility count is 0, then a collision has occured and the '_restart' flag is set
                             if (newSet.Count == 0)
                             {
                                 BuildOutputTilemap();
-                                _restart = true;
-                                //throw new System.Exception("no possible tiles at " + neighborPos.ToString());
                                 Debug.LogWarning("no possible tiles at " + neighborPos.ToString() + " - restarting");
+                                _restart = true;
                                 return;
                             }
                         }
                     }
+
+                    //next direction (N -> E -> S -> W)
                     dir++;
                 }
             }
-            _recurseDepth--;
-            //*/
         }
 
+        /// <summary>
+        /// Gets the set of possible tiles for a cell at 'pos'
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns>HashSet of the indexes for each possible tile</returns>
         ref HashSet<int> GetCellAtPosition(Vector2Int pos)
         {
-            //Debug.Log("pos: " + pos.ToString() + " size: " + _size.ToString());
+            //check that 'pos' is inside '_size', else return the empty set
             if (pos.x >= _size.x || pos.x < 0 || pos.y >= _size.y || pos.y < 0)
-            {
-                //Debug.Log("doesn't exist");
                 return ref EMPTY;
-            }
-            //Debug.Log("exists");
-            int index = pos.x + (pos.y * _size.x);
-            return ref _cells[index];
+
+            //return the cell possibility set at 'pos'
+            return ref _cells[pos.x + (pos.y * _size.x)];
         }
 
+        /// <summary>
+        /// Finds the set of pssible tiles that could be at a neighbor of 'cell' in direction 'dir'
+        /// </summary>
+        /// <param name="cell">set of possible tiles, which is used to find the neighbor's possible tiles</param>
+        /// <param name="dir">direction from 'cell' to find the possible tiles</param>
+        /// <returns>HashSet of the possible tiles in direction 'dir'</returns>
         HashSet<int> GetPossibleTilesInDirection(HashSet<int> cell, EDirection dir)
         {
+            //union neighbors in 'dir' direction of all possible tiles at 'cell'
             HashSet<int> result = new HashSet<int>();
             foreach(int tile in cell)
             {
