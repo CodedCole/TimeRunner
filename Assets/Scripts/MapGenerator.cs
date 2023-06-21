@@ -28,10 +28,12 @@ public class MapGenerator : MonoBehaviour
         public bool Overlaps(Vector2Int BL, Vector2Int TR)
         {
             //overlap on the x axis
-            if ((TR.y >= bottomLeft.y && TR.y <= topRight.y) || (BL.y >= bottomLeft.y && BL.y <= topRight.y))
+            if ((TR.y >= bottomLeft.y && TR.y <= topRight.y) || (BL.y >= bottomLeft.y && BL.y <= topRight.y) 
+                || (bottomLeft.y >= BL.y && bottomLeft.y <= TR.y) || (topRight.y >= BL.y && topRight.y <= TR.y))
             {
                 //overlap on the y axis
-                if ((TR.x >= bottomLeft.x && TR.x <= topRight.x) || (BL.x >= bottomLeft.x && BL.x <= topRight.x))
+                if ((TR.x >= bottomLeft.x && TR.x <= topRight.x) || (BL.x >= bottomLeft.x && BL.x <= topRight.x)
+                    || (bottomLeft.x >= BL.x && bottomLeft.x <= TR.x) || (topRight.x >= BL.x && topRight.x <= TR.x))
                 {
                     return true;
                 }
@@ -54,49 +56,46 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int _tryCount = 10;
 
     [Header("Tilemaps")]
+    [SerializeField] private Tilemap _sample;
     [SerializeField] private Tilemap _level;
     private Grid _grid;
 
     [Header("WFC")]
+    [SerializeField] private Vector2Int _startPos;
+    [SerializeField] private Vector2Int _size;
     [SerializeField] private bool _debug;
+
+    [Header("Generation")]
+    [SerializeField] private bool reseed;
+    [SerializeField] private int seed;
 
     // Start is called before the first frame update
     void Start()
     {
-        //_level = GetComponentInChildren<Tilemap>();
-        TileWFC tileWFC = new TileWFC(_level, _level, _debug);
-        tileWFC.LogTileData();
-        _level.size = (Vector3Int)size + Vector3Int.forward;
-        _level.ResizeBounds();
-        StartCoroutine(tileWFC.GenerateCoroutine());
-        /*
-        _grid = GetComponent<Grid>();
-        _level = GetComponentInChildren<Tilemap>();
-        _level.ClearAllTiles();
+        if (reseed)
+        {
+            seed = Random.Range(int.MinValue, int.MaxValue);
+            Debug.Log("seed: " + seed);
+        }
+        Random.InitState(seed);
+        //TileWFC tileWFC = new TileWFC(_sample, _level, _startPos, _size, _debug);
+        //tileWFC.LogTileData();
         _level.origin = Vector3Int.zero;
-        _level.size = new Vector3Int(size.x + 2, size.y + 2, 2);
+        _level.size = (Vector3Int)size + Vector3Int.one;
         _level.ResizeBounds();
-
-        _level.BoxFill(Vector3Int.zero, tileToFill, 0, 0, size.x - 1, size.y - 1);
+        _sample.gameObject.SetActive(false);
+        //StartCoroutine(tileWFC.GenerateCoroutine());
         for (int i = 0; i < size.x; i++)
         {
-            _level.SetTileFlags(Vector3Int.right * i, TileFlags.None);
-            _level.SetColor(Vector3Int.right * i, south);
-
-            _level.SetTileFlags((Vector3Int.right * i) + (Vector3Int.up * (size.y - 1)), TileFlags.None);
-            _level.SetColor((Vector3Int.right * i) + (Vector3Int.up * (size.y - 1)), north);
+            for (int j = 0; j < size.y; j++)
+            {
+                Vector3Int pos = new Vector3Int(i - 2, j - 2, 1);
+                _level.SetTile(pos, tileToFill);
+                _level.SetTileFlags(pos, TileFlags.None);
+                _level.SetColor(pos, Color.grey);
+            }
         }
-        for (int i = 1; i < size.y - 1; i++)
-        {
-            _level.SetTileFlags(Vector3Int.up * i, TileFlags.None);
-            _level.SetColor(Vector3Int.up * i, west);
-
-            _level.SetTileFlags((Vector3Int.up * i) + (Vector3Int.right * (size.x - 1)), TileFlags.None);
-            _level.SetColor((Vector3Int.up * i) + (Vector3Int.right * (size.x - 1)), east);
-        }
-
         StartCoroutine(BuildRooms());
-        */
     }
 
     IEnumerator BuildRooms()
@@ -211,12 +210,15 @@ public class MapGenerator : MonoBehaviour
                     else
                     {
                         //check border and room overlap
-                        if (rooms[i].bottomLeft.x + 1 < size.x && !OverlapsWithOtherRooms(rooms[i].bottomLeft, rooms[i].topRight + Vector2Int.right, i))
+                        if (rooms[i].topRight.x + 1 < size.x && !OverlapsWithOtherRooms(rooms[i].bottomLeft, rooms[i].topRight + Vector2Int.right, i))
                             rooms[i].topRight += Vector2Int.right;
                         else
                             rooms[i].canExpandRight = false;
                     }
                 }
+
+                BuildRooms(rooms);
+                yield return null;
             }
         }
 
@@ -235,18 +237,42 @@ public class MapGenerator : MonoBehaviour
         for (int i = 0; i < _count; i++)
         {
             Color roomColor = _roomColors.Evaluate(((float)i)/_count);
-            _level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x + 2, rooms[i].bottomLeft.y + 2, -1), tileToFill, rooms[i].bottomLeft.x + 2, rooms[i].bottomLeft.y + 2 , rooms[i].topRight.x + 2, rooms[i].topRight.y + 2);
-            for (int x = rooms[i].bottomLeft.x + 2; x <= rooms[i].topRight.x + 2; x++)
+            _level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x, rooms[i].bottomLeft.y), tileToFill, rooms[i].bottomLeft.x, rooms[i].bottomLeft.y, rooms[i].topRight.x, rooms[i].topRight.y);
+            if ((rooms[i].topRight - rooms[i].bottomLeft).x > 1 && (rooms[i].topRight - rooms[i].bottomLeft).y > 1)
             {
-                for (int y = rooms[i].bottomLeft.y + 2; y <= rooms[i].topRight.y + 2; y++)
+                TileWFC roomWFC = new TileWFC(_sample, _level, rooms[i].bottomLeft + Vector2Int.one, (rooms[i].topRight - rooms[i].bottomLeft) - Vector2Int.one, _debug);
+                yield return StartCoroutine(roomWFC.GenerateCoroutine());
+            }
+            //_level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, -1), null, rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, rooms[i].topRight.x + 1, rooms[i].topRight.y + 1);
+            for (int x = rooms[i].bottomLeft.x; x <= rooms[i].topRight.x; x++)
+            {
+                for (int y = rooms[i].bottomLeft.y; y <= rooms[i].topRight.y; y++)
                 {
-                    _level.SetTileFlags(Vector3Int.back + (Vector3Int.right * x) + (Vector3Int.up * y), TileFlags.None);
-                    _level.SetColor(Vector3Int.back + (Vector3Int.right * x) + (Vector3Int.up * y), roomColor);
+                    _level.SetTileFlags((Vector3Int.right * x) + (Vector3Int.up * y), TileFlags.None);
+                    _level.SetColor((Vector3Int.right * x) + (Vector3Int.up * y), roomColor);
                 }
             }
-            _level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, -1), null, rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, rooms[i].topRight.x + 1, rooms[i].topRight.y + 1);
         }
 
         yield return null;
+    }
+
+    void BuildRooms(Room[] rooms)
+    {
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            Vector2Int roomSize = (rooms[i].topRight - rooms[i].bottomLeft) + Vector2Int.one;
+            Color roomColor = _roomColors.Evaluate(((float)i) / _count);
+            for (int x = 0; x < roomSize.x; x++)
+            {
+                for (int y = 0; y < roomSize.y; y++)
+                {
+                    Vector3Int pos = (Vector3Int)rooms[i].bottomLeft + new Vector3Int(x, y);
+                    _level.SetTile(pos, tileToFill);
+                    _level.SetTileFlags(pos, TileFlags.None);
+                    _level.SetColor(pos, roomColor);
+                }
+            }
+        }
     }
 }

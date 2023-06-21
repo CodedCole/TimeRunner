@@ -24,15 +24,13 @@ namespace WaveFunctionCollapse
 
         private HashSet<int>[] _cells;
         private HashSet<int> EMPTY = null;
+        private Vector2Int _offset;
         private Vector2Int _size;
         private bool _restart = false;
 
         private bool _debug;
 
-        private PriorityQueue<Vector2Int, int> _collapseQueue;
-        private int _recurseDepth;
-
-        public TileWFC(Tilemap input, Tilemap output, bool debug = false)
+        public TileWFC(Tilemap input, Tilemap output, Vector2Int offset, Vector2Int size, bool debug = false)
         {
             Debug.Log(input.ToString());
             _input = input;
@@ -40,6 +38,8 @@ namespace WaveFunctionCollapse
 
             CreateTileDataFromInput();
             _debug = debug;
+            _offset = offset;
+            _size = size;
         }
 
         //INPUT FUNCTIONS
@@ -146,6 +146,7 @@ namespace WaveFunctionCollapse
 
             //Output
             BuildOutputTilemap();
+            _cells = null;
         }
 
         /// <summary>
@@ -154,12 +155,14 @@ namespace WaveFunctionCollapse
         void RestartWFC()
         {
             //clear the output of tiles
-            _output.ClearAllTiles();
+            _output.SetTilesBlock(new BoundsInt((Vector3Int)_offset, (Vector3Int)_size), null);
 
             //find the correct size
-            _size = Vector2Int.one * 8; //new Vector2Int(_output.cellBounds.xMax - _output.cellBounds.xMin, _output.cellBounds.yMax - _output.cellBounds.yMin) + Vector2Int.one;
+            //_size = Vector2Int.one * 8; //new Vector2Int(_output.cellBounds.xMax - _output.cellBounds.xMin, _output.cellBounds.yMax - _output.cellBounds.yMin) + Vector2Int.one;
             //_size.x = _output.cellBounds.xMax - _output.cellBounds.xMin;
             //_size.y = _output.cellBounds.yMax - _output.cellBounds.yMin;
+
+            //Debug.Log(new Vector2Int(_output.cellBounds.size.x, _output.cellBounds.size.y));
 
             //starting cells can have all values
             _cells = new HashSet<int>[_size.x * _size.y];
@@ -346,21 +349,21 @@ namespace WaveFunctionCollapse
                     if (cell.Count == 1)
                     {
                         int tile = cell.ElementAt(0);
-                        _output.SetTile((Vector3Int)pos, _tileData[tile].tile);
-                        _output.SetTileFlags((Vector3Int)pos, TileFlags.None);
-                        _output.SetColor((Vector3Int)pos, Color.white);
+                        _output.SetTile((Vector3Int)(pos + _offset), _tileData[tile].tile);
+                        _output.SetTileFlags((Vector3Int)(pos + _offset), TileFlags.None);
+                        _output.SetColor((Vector3Int)(pos + _offset), Color.white);
                     }
                     else if (cell.Count == 0)
                     {
-                        _output.SetTile((Vector3Int)pos, _tileData[1].tile);
-                        _output.SetTileFlags((Vector3Int)pos, TileFlags.None);
-                        _output.SetColor((Vector3Int)pos, Color.green);
+                        _output.SetTile((Vector3Int)(pos + _offset), _tileData[1].tile);
+                        _output.SetTileFlags((Vector3Int)(pos + _offset), TileFlags.None);
+                        _output.SetColor((Vector3Int)(pos + _offset), Color.green);
                     }
                     else
                     {
-                        _output.SetTile((Vector3Int)pos, _tileData[1].tile);
-                        _output.SetTileFlags((Vector3Int)pos, TileFlags.None);
-                        _output.SetColor((Vector3Int)pos, Color.Lerp(Color.blue, Color.red, (float)cell.Count / _tileData.Count));
+                        _output.SetTile((Vector3Int)(pos + _offset), _tileData[1].tile);
+                        _output.SetTileFlags((Vector3Int)(pos + _offset), TileFlags.None);
+                        _output.SetColor((Vector3Int)(pos + _offset), Color.Lerp(Color.blue, Color.red, (float)cell.Count / _tileData.Count));
                     }
                 }
             }
