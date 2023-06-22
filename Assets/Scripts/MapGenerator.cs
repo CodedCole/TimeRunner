@@ -78,13 +78,11 @@ public class MapGenerator : MonoBehaviour
             Debug.Log("seed: " + seed);
         }
         Random.InitState(seed);
-        //TileWFC tileWFC = new TileWFC(_sample, _level, _startPos, _size, _debug);
-        //tileWFC.LogTileData();
+
         _level.origin = Vector3Int.zero;
         _level.size = (Vector3Int)size + Vector3Int.one;
         _level.ResizeBounds();
         _sample.gameObject.SetActive(false);
-        //StartCoroutine(tileWFC.GenerateCoroutine());
         for (int i = 0; i < size.x; i++)
         {
             for (int j = 0; j < size.y; j++)
@@ -141,6 +139,7 @@ public class MapGenerator : MonoBehaviour
             //do one expand iteration of each room
             for (int i = 0; i < _count; i++)
             {
+                bool changed = false;
                 //try expanding up
                 if (rooms[i].canExpandUp)
                 {
@@ -154,7 +153,10 @@ public class MapGenerator : MonoBehaviour
                     {
                         //check border and room overlap
                         if (rooms[i].topRight.y + 1 < size.y && !OverlapsWithOtherRooms(rooms[i].bottomLeft, rooms[i].topRight + Vector2Int.up, i))
+                        {
                             rooms[i].topRight += Vector2Int.up;
+                            changed = true;
+                        }
                         else
                             rooms[i].canExpandUp = false;
                     }
@@ -173,7 +175,10 @@ public class MapGenerator : MonoBehaviour
                     {
                         //check border and room overlap
                         if (rooms[i].bottomLeft.y - 1 >= 0 && !OverlapsWithOtherRooms(rooms[i].bottomLeft + Vector2Int.down, rooms[i].topRight, i))
+                        {
                             rooms[i].bottomLeft += Vector2Int.down;
+                            changed = true;
+                        }
                         else
                             rooms[i].canExpandDown = false;
                     }
@@ -192,7 +197,10 @@ public class MapGenerator : MonoBehaviour
                     {
                         //check border and room overlap
                         if (rooms[i].bottomLeft.x - 1 >= 0 && !OverlapsWithOtherRooms(rooms[i].bottomLeft + Vector2Int.left, rooms[i].topRight, i))
+                        {
                             rooms[i].bottomLeft += Vector2Int.left;
+                            changed = true;
+                        }
                         else
                             rooms[i].canExpandLeft = false;
                     }
@@ -211,14 +219,20 @@ public class MapGenerator : MonoBehaviour
                     {
                         //check border and room overlap
                         if (rooms[i].topRight.x + 1 < size.x && !OverlapsWithOtherRooms(rooms[i].bottomLeft, rooms[i].topRight + Vector2Int.right, i))
+                        {
                             rooms[i].topRight += Vector2Int.right;
+                            changed = true;
+                        }
                         else
                             rooms[i].canExpandRight = false;
                     }
                 }
 
-                BuildRooms(rooms);
-                yield return null;
+                if (_debug && changed)
+                {
+                    BuildRooms(rooms);
+                    yield return null;
+                }
             }
         }
 

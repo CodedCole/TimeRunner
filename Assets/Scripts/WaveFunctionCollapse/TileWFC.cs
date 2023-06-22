@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEditor.PlayerSettings;
 
 namespace WaveFunctionCollapse
 {
@@ -32,14 +31,13 @@ namespace WaveFunctionCollapse
 
         public TileWFC(Tilemap input, Tilemap output, Vector2Int offset, Vector2Int size, bool debug = false)
         {
-            Debug.Log(input.ToString());
             _input = input;
             _output = output;
-
-            CreateTileDataFromInput();
-            _debug = debug;
             _offset = offset;
             _size = size;
+            _debug = debug;
+
+            CreateTileDataFromInput();
         }
 
         //INPUT FUNCTIONS
@@ -73,7 +71,7 @@ namespace WaveFunctionCollapse
                 }
             }
         }
-    
+        
         void AddTileInDirection(WFCTileData data, Vector3Int pos, EDirection dir)
         {
             TileBase neighbor = _input.GetTile(pos + (Vector3Int)dir.GetDirectionVector());
@@ -156,13 +154,6 @@ namespace WaveFunctionCollapse
         {
             //clear the output of tiles
             _output.SetTilesBlock(new BoundsInt((Vector3Int)_offset, (Vector3Int)_size), null);
-
-            //find the correct size
-            //_size = Vector2Int.one * 8; //new Vector2Int(_output.cellBounds.xMax - _output.cellBounds.xMin, _output.cellBounds.yMax - _output.cellBounds.yMin) + Vector2Int.one;
-            //_size.x = _output.cellBounds.xMax - _output.cellBounds.xMin;
-            //_size.y = _output.cellBounds.yMax - _output.cellBounds.yMin;
-
-            //Debug.Log(new Vector2Int(_output.cellBounds.size.x, _output.cellBounds.size.y));
 
             //starting cells can have all values
             _cells = new HashSet<int>[_size.x * _size.y];
