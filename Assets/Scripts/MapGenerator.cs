@@ -25,6 +25,12 @@ public class MapGenerator : MonoBehaviour
             return (pos.x >= bottomLeft.x && pos.x <= topRight.x) && (pos.y >= bottomLeft.y && pos.y <= topRight.y);
         }
 
+        /// <summary>
+        /// Checks if the room overlaps the rectangle defined by BL and TR.
+        /// </summary>
+        /// <param name="BL">The bottom left of the compared rectangle</param>
+        /// <param name="TR">The top right of the compared rectangle</param>
+        /// <returns>Whether the rectangle overlaps the room</returns>
         public bool Overlaps(Vector2Int BL, Vector2Int TR)
         {
             //overlap on the x axis
@@ -257,7 +263,8 @@ public class MapGenerator : MonoBehaviour
                 TileWFC roomWFC = new TileWFC(_sample, _level, rooms[i].bottomLeft + Vector2Int.one, (rooms[i].topRight - rooms[i].bottomLeft) - Vector2Int.one, _debug);
                 yield return StartCoroutine(roomWFC.GenerateCoroutine());
             }
-            //_level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, -1), null, rooms[i].bottomLeft.x + 3, rooms[i].bottomLeft.y + 3, rooms[i].topRight.x + 1, rooms[i].topRight.y + 1);
+
+            //recolor room
             for (int x = rooms[i].bottomLeft.x; x <= rooms[i].topRight.x; x++)
             {
                 for (int y = rooms[i].bottomLeft.y; y <= rooms[i].topRight.y; y++)
