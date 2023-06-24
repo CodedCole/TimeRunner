@@ -1214,20 +1214,25 @@ MonoBehaviour:
     name: 
     subtitle: 
     color: {r: 0, g: 0, b: 0, a: 0}
+    generator: 
   - index: 1
     name: The Perimeter
     subtitle: 
     color: {r: 0, g: 0, b: 0, a: 0}
+    generator: 
   - index: 2
     name: Zone 2
     subtitle: Placeholder Subtitle
     color: {r: 0, g: 0, b: 0, a: 0}
+    generator: 01000000
   - index: 3
     name: Main Road
     subtitle: 
     color: {r: 0, g: 0, b: 0, a: 0}
+    generator: 
   _zoneTilemap: {fileID: 1682705109}
   _tile: {fileID: 11400000, guid: 5b1fc91f00582c14a9c07b60ff71f4e1, type: 2}
+  _wall: {fileID: 11400000, guid: 95d4c49fe5e8d8a4b8fece27db0e6acd, type: 2}
 --- !u!1 &379897336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,9 +1756,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.0011363636
+    x: 0
     y: 0
-    width: 0.9975369
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000

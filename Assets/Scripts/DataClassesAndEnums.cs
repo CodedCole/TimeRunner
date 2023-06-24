@@ -62,3 +62,21 @@ public static class DirectionHelper
         }
     }
 }
+
+public enum EGeneratorType { None, Border }
+
+public static class GeneratorHelper
+{
+    public static ITilemapGenerator GetGenerator(this EGeneratorType gen)
+    {
+        switch(gen)
+        {
+            case EGeneratorType.None:
+                return null;
+            case EGeneratorType.Border:
+                return new BorderGenerator();
+            default:
+                return null;
+        }
+    }
+}

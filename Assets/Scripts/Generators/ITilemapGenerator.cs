@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ITilemapGenerator
 {
-    public void PrepGenerator(Vector3Int start, int zoneIndex, ZoneGenerator zoneGenerator);
+    public void PrepGenerator(int zoneIndex, ZoneGenerator zoneGenerator);
 
     public IEnumerator Generate();
 }
