@@ -25,13 +25,11 @@ public class HUD : MonoBehaviour
     Label _playerCellPos;
     Label _tileData;
 
-    ContainerListController _inventoryItemListController;
-    ContainerListController _lootItemListController;
-
     Action onOpenInventory;
     Action onCloseInventory;
 
     Tilemap _tilemap;
+    ZoneGenerator _zoneGenerator;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +51,7 @@ public class HUD : MonoBehaviour
         _inventoryPanel.RegisterCallback<MouseEnterEvent>(EnterInventoryPanel);
 
         _tilemap = FindObjectOfType<Tilemap>();
+        _zoneGenerator = FindObjectOfType<ZoneGenerator>();
     }
 
     void EnterInventoryPanel(MouseEnterEvent ev)
@@ -124,5 +123,8 @@ public class HUD : MonoBehaviour
         _playerCellPos.text = "player-cell: (x: " + pos.x + ", y: " + pos.y + ", z: " + pos.z + ")";
         bool onTile = _tilemap.HasTile(pos);
         _tileData.text = "on-tile: " + onTile.ToString();
+        Zone zone = _zoneGenerator.GetZoneAtTile(pos);
+        if (zone != null)
+            _tileData.text += "\nZone:\n" + zone.name;
     }
 }
