@@ -1232,7 +1232,7 @@ MonoBehaviour:
     generator: 
   _zoneTilemap: {fileID: 1682705109}
   _tile: {fileID: 11400000, guid: caaec0dd467ff2f44b0507c797a5d8b5, type: 2}
-  _wall: {fileID: 11400000, guid: 95d4c49fe5e8d8a4b8fece27db0e6acd, type: 2}
+  _wall: {fileID: 11400000, guid: 85e3c901e1c77464ba6af4bccde772d1, type: 2}
 --- !u!1 &379897336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,10 +1756,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.0009363296
+    x: 0
     y: 0
-    width: 0.99795204
-    height: 1
+    width: 0
+    height: 0
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
