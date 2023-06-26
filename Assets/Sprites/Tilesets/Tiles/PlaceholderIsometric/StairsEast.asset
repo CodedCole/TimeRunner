@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: IsometricTileSetPlaceholder_3
+  m_Name: StairsEast
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 1782990834, guid: 9b01aec8273f7044195ab6d9e375a496, type: 3}
+  m_Sprite: {fileID: 1253290822, guid: 1534b7086679d2d4480490eb46cc09c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

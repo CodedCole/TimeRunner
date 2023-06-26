@@ -18,7 +18,6 @@ public class BorderGenerator : ITilemapGenerator
         Zone zone = _zoneGenerator.GetZoneAtIndex(_zoneIndex);
 
         List<Vector3Int> border = new List<Vector3Int>();
-        BoundsInt bounds = zone.GetBoundingBox();
         foreach (var point in zone.tilesInZone)
         {
             EDirection dir = EDirection.North;
@@ -26,7 +25,7 @@ public class BorderGenerator : ITilemapGenerator
             {
                 if (!zone.tilesInZone.Contains(point + (Vector3Int)dir.GetDirectionVector()))
                 {
-                    border.Add(point);
+                    border.Add(new Vector3Int(point.x + 1, point.y + 1, -1));
                     break;
                 }
                 dir++;

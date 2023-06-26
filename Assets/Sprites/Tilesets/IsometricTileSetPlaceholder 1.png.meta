@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9b01aec8273f7044195ab6d9e375a496
+guid: 1534b7086679d2d4480490eb46cc09c3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -45,12 +45,12 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_0
+      name: FullBlock
       rect:
         serializedVersion: 2
         x: 0
@@ -128,14 +128,14 @@ TextureImporter:
         - {x: 0, y: 0}
       tessellationDetail: 0
       bones: []
-      spriteID: 4626ee904dfa94643816f7c462b9000d
-      internalID: -65928511
+      spriteID: 87f4e533cd82e0b41999ea90ad568f29
+      internalID: -67844997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_1
+      name: HalfBlock
       rect:
         serializedVersion: 2
         x: 64
@@ -149,14 +149,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b771ba95aa4b9f489dede17d4ac165f
-      internalID: 790690977
+      spriteID: 095f87cbba4b4354dab7db7a4f338458
+      internalID: 916746142
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_2
+      name: RampWest
       rect:
         serializedVersion: 2
         x: 128
@@ -170,14 +170,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0bb1f7d429874624b978d5e2959833b1
-      internalID: 2133204532
+      spriteID: a3e630bb904b85b4d9205c5e47e4bf2f
+      internalID: -1553258674
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_3
+      name: RampSouth
       rect:
         serializedVersion: 2
         x: 192
@@ -191,14 +191,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ef91dc1e3b00c144a916cfa4dbbeda00
-      internalID: 1782990834
+      spriteID: 7e1575e034a0d0142b4cf968942d5485
+      internalID: -683596565
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_4
+      name: StairsNorth
       rect:
         serializedVersion: 2
         x: 0
@@ -212,14 +212,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b537cf32523fb7e48992ee94bce7045f
-      internalID: 1913983913
+      spriteID: b4474b093f4a1b640b1ad5886ed0e9d9
+      internalID: -1701290262
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_5
+      name: StairsEast
       rect:
         serializedVersion: 2
         x: 64
@@ -233,14 +233,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf44c583761a30348bf218e27699e03d
-      internalID: 1554486695
+      spriteID: a220e47bc642d1340b5108b08c16bfc6
+      internalID: 1253290822
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_6
+      name: RampNorth
       rect:
         serializedVersion: 2
         x: 128
@@ -254,14 +254,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 950b236a9b4b91946b729d5280d50018
-      internalID: -1966234886
+      spriteID: 4e90e22df0dee8846a4edd9eb9f99f81
+      internalID: 1813450430
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_7
+      name: RampEast
       rect:
         serializedVersion: 2
         x: 192
@@ -275,14 +275,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ba71983ba3813ff42afd579a1a31d10a
-      internalID: 383051190
+      spriteID: 0cd748571e022c84f90678ac8ac5f034
+      internalID: -2015698526
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_8
+      name: LeftWall
       rect:
         serializedVersion: 2
         x: 0
@@ -293,21 +293,17 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -32, y: -16}
-        - {x: -16, y: -24}
-        - {x: 16, y: -8}
-        - {x: 0, y: -1}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5678e6c4eabc5e44882dde53b9e6bcb9
-      internalID: 1896061268
+      spriteID: 124dd939f2636f541a75cc08e5b69e01
+      internalID: -862677087
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_9
+      name: LowLeftWall
       rect:
         serializedVersion: 2
         x: 64
@@ -321,14 +317,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ddfd583fb63c94d40b9c8fa709d6049a
-      internalID: -2060299326
+      spriteID: bc6832d930fe76e489c6987dcde0227b
+      internalID: -1321205720
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_10
+      name: CornerWall
       rect:
         serializedVersion: 2
         x: 128
@@ -342,14 +338,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 092a5afc60f709c4497848608c851313
-      internalID: 357139850
+      spriteID: 012bd4cc4deb94b4889695032583ca5c
+      internalID: -991839522
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_11
+      name: Grate
       rect:
         serializedVersion: 2
         x: 192
@@ -363,14 +359,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d02eda51f652c6e4fb07ca5fa8eeb426
-      internalID: -1189391241
+      spriteID: d3b4a7eb77feedd49bda131a3b68ce6c
+      internalID: 813284304
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_12
+      name: RightWall
       rect:
         serializedVersion: 2
         x: 0
@@ -384,14 +380,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1ccac0d2700414d4fb3686d652fd13a3
-      internalID: 162179324
+      spriteID: 35f9171ba8f3d4f439b5010ea9709b58
+      internalID: -773235944
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_13
+      name: LowRightWall
       rect:
         serializedVersion: 2
         x: 64
@@ -405,14 +401,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d601ecd0b29443c4090b1229d634e077
-      internalID: -1033304497
+      spriteID: 4f1e9e3e4615bc6408f191581a2d3179
+      internalID: -1495817951
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_14
+      name: LowCornerWall
       rect:
         serializedVersion: 2
         x: 128
@@ -426,14 +422,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 10d3bfff120ed284ab6ea4f869a97ca9
-      internalID: 35750360
+      spriteID: 133027d7894e8b44e97b77a77476dd4b
+      internalID: 740486644
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IsometricTileSetPlaceholder_15
+      name: Floor
       rect:
         serializedVersion: 2
         x: 192
@@ -447,8 +443,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 997acb7676d764841ae49147a71f465d
-      internalID: -1405695579
+      spriteID: ed848ca352f7c8449b8a81cf75588229
+      internalID: 1946595697
       vertices: []
       indices: 
       edges: []
@@ -464,22 +460,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      IsometricTileSetPlaceholder_0: -65928511
-      IsometricTileSetPlaceholder_1: 790690977
-      IsometricTileSetPlaceholder_10: 357139850
-      IsometricTileSetPlaceholder_11: -1189391241
-      IsometricTileSetPlaceholder_12: 162179324
-      IsometricTileSetPlaceholder_13: -1033304497
-      IsometricTileSetPlaceholder_14: 35750360
-      IsometricTileSetPlaceholder_15: -1405695579
-      IsometricTileSetPlaceholder_2: 2133204532
-      IsometricTileSetPlaceholder_3: 1782990834
-      IsometricTileSetPlaceholder_4: 1913983913
-      IsometricTileSetPlaceholder_5: 1554486695
-      IsometricTileSetPlaceholder_6: -1966234886
-      IsometricTileSetPlaceholder_7: 383051190
-      IsometricTileSetPlaceholder_8: 1896061268
-      IsometricTileSetPlaceholder_9: -2060299326
+      CornerWall: -991839522
+      Floor: 1946595697
+      FullBlock: -67844997
+      Grate: 813284304
+      HalfBlock: 916746142
+      LeftWall: -862677087
+      LowCornerWall: 740486644
+      LowLeftWall: -1321205720
+      LowRightWall: -1495817951
+      RampEast: -2015698526
+      RampNorth: 1813450430
+      RampSouth: -683596565
+      RampWest: -1553258674
+      RightWall: -773235944
+      StairsEast: 1253290822
+      StairsNorth: -1701290262
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

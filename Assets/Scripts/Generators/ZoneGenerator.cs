@@ -70,6 +70,7 @@ public class ZoneGenerator : MonoBehaviour
                     newZone.index = _colorToZoneIndex.Count;
                     newZone.name = "Zone " + _colorToZoneIndex.Count.ToString();
                     newZone.subtitle = "Placeholder Subtitle";
+                    newZone.generator = new EGeneratorType[1] { EGeneratorType.Border };
                     _zones.Add(newZone);
                 }
                 _zones[_colorToZoneIndex.Count].tilesInZone = new HashSet<Vector3Int>();
@@ -87,7 +88,7 @@ public class ZoneGenerator : MonoBehaviour
         {
             for (int j = 0; j < _zoneMap.height; j++)
             {
-                Vector3Int pos = new Vector3Int(i, j);
+                Vector3Int pos = new Vector3Int(i, j, 0);
                 int zIndex = _colorToZoneIndex[_pixels[pos.x + (pos.y * _zoneMap.width)]];
                 _zones[zIndex].tilesInZone.Add(pos);
 

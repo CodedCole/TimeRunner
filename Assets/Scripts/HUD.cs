@@ -117,9 +117,9 @@ public class HUD : MonoBehaviour
 
     public void PlayerCellPosition(Vector3 position)
     {
-        Vector3Int pos = _tilemap.WorldToCell(position);
-        //pos.y -= pos.z;
-        //pos.x -= pos.z;
+        Vector3Int pos = _tilemap.WorldToCell(new Vector3(position.x, position.y));
+        //pos.y += pos.z;
+        //pos.x += pos.z;
         _playerCellPos.text = "player-cell: (x: " + pos.x + ", y: " + pos.y + ", z: " + pos.z + ")";
         bool onTile = _tilemap.HasTile(pos);
         _tileData.text = "on-tile: " + onTile.ToString();
