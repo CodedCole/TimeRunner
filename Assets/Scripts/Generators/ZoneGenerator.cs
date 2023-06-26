@@ -95,6 +95,7 @@ public class ZoneGenerator : MonoBehaviour
                 _zoneTilemap.SetTile(pos, _tile);
                 _zoneTilemap.SetTileFlags(pos, TileFlags.None);
                 _zoneTilemap.SetColor(pos, _zones[zIndex].color);
+                _zoneTilemap.SetTileFlags(pos, TileFlags.LockColor);
             }
         }
 

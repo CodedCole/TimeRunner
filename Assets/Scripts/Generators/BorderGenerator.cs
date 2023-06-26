@@ -18,7 +18,7 @@ public class BorderGenerator : ITilemapGenerator
         Zone zone = _zoneGenerator.GetZoneAtIndex(_zoneIndex);
 
         List<Vector3Int> border = new List<Vector3Int>();
-        bool found = false;
+        bool found;
         foreach (var point in zone.tilesInZone)
         {
             found = false;
@@ -26,7 +26,7 @@ public class BorderGenerator : ITilemapGenerator
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    if (!zone.tilesInZone.Contains(point + new Vector3Int(i, j)))
+                    if (!zone.tilesInZone.Contains(point + new Vector3Int(i, j)) && i != -j)
                     {
                         border.Add(new Vector3Int(point.x + 1, point.y + 1, -1));
                         found = true;
@@ -35,6 +35,18 @@ public class BorderGenerator : ITilemapGenerator
                 }
                 if (found)
                     break;
+            }
+            if (!zone.tilesInZone.Contains(point + new Vector3Int(-1, 1)) 
+                && zone.tilesInZone.Contains(point + new Vector3Int(-1, 0)) 
+                && zone.tilesInZone.Contains(point + new Vector3Int(0, 1)))
+            {
+                border.Add(new Vector3Int(point.x, point.y + 2, -1));
+            }
+            if (!zone.tilesInZone.Contains(point + new Vector3Int(1, -1))
+                && zone.tilesInZone.Contains(point + new Vector3Int(1, 0))
+                && zone.tilesInZone.Contains(point + new Vector3Int(0, -1)))
+            {
+                border.Add(new Vector3Int(point.x + 2, point.y, -1));
             }
         }
 
