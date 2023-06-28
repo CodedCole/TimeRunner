@@ -79,5 +79,11 @@ namespace WaveFunctionCollapse
                 return _tiles.Count - 1;
             }
         }
+    
+        
+        void FindNeighbors(Pattern pattern)
+        {
+
+        }
     }
 }
