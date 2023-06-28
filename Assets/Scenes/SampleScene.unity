@@ -1220,16 +1220,16 @@ MonoBehaviour:
     subtitle: 
     color: {r: 0, g: 0, b: 0, a: 0}
     generator: 
-  - index: 2
-    name: Zone 2
-    subtitle: Placeholder Subtitle
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 01000000
   - index: 3
     name: Main Road
     subtitle: 
     color: {r: 0, g: 0, b: 0, a: 0}
     generator: 
+  - index: 10
+    name: Tower
+    subtitle: A Ride to the Other Levels
+    color: {r: 0, g: 0, b: 0, a: 0}
+    generator: 0100000002000000
   _zoneTilemap: {fileID: 1682705109}
   _tile: {fileID: 11400000, guid: caaec0dd467ff2f44b0507c797a5d8b5, type: 2}
   _wall: {fileID: 11400000, guid: 85e3c901e1c77464ba6af4bccde772d1, type: 2}

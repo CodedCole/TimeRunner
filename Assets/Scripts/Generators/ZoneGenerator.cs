@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -15,6 +16,7 @@ public class Zone
     public EGeneratorType[] generator = new EGeneratorType[0];
 
     public HashSet<Vector3Int> tilesInZone;
+    public HashSet<Vector3Int> border;
     private BoundsInt boundingBox;
 
     public void GenerateBoundingBox()
@@ -57,8 +59,35 @@ public class ZoneGenerator : MonoBehaviour
     private Dictionary<Color, int> _colorToZoneIndex = new Dictionary<Color, int>();
     private Color[] _pixels;
 
+    public Tilemap Map { get { return _zoneTilemap; } }
+
     private void Start()
     {
+        //put the serialized zones into the proper place in the zone list
+        Zone[] zones = new Zone[_zones.Count];
+        _zones.CopyTo(zones);
+        _zones.Clear();
+        foreach (var zone in zones)
+        {
+            if (zone.index > _zones.Count)
+            {
+                while (_zones.Count < zone.index)
+                {
+                    CreateZone();
+                }
+            }
+            
+            if (zone.index == _zones.Count)
+            {
+                _zones.Add(zone);
+            }
+            else
+            {
+                _zones[zone.index] = zone;
+            }
+        }
+
+        //find zones in zone map
         _pixels = _zoneMap.GetPixels();
         for (int i = 0; i < _pixels.Length; i++)
         {
@@ -66,12 +95,7 @@ public class ZoneGenerator : MonoBehaviour
             {
                 if (_colorToZoneIndex.Count >= _zones.Count)
                 {
-                    Zone newZone = new Zone();
-                    newZone.index = _colorToZoneIndex.Count;
-                    newZone.name = "Zone " + _colorToZoneIndex.Count.ToString();
-                    newZone.subtitle = "Placeholder Subtitle";
-                    newZone.generator = new EGeneratorType[1] { EGeneratorType.Border };
-                    _zones.Add(newZone);
+                    CreateZone();
                 }
                 _zones[_colorToZoneIndex.Count].tilesInZone = new HashSet<Vector3Int>();
                 _colorToZoneIndex.Add(_pixels[i], _colorToZoneIndex.Count);
@@ -79,11 +103,13 @@ public class ZoneGenerator : MonoBehaviour
             }
         }
 
+        //apply zone colors for debugging
         for (int i = 0; i < _zones.Count; i++)
         {
             _zones[i].color = _zoneColors.Evaluate(((float)i)/_zones.Count);
         }
 
+        //build zones with debug colors
         for (int i = 0; i < _zoneMap.width; i++)
         {
             for (int j = 0; j < _zoneMap.height; j++)
@@ -99,6 +125,12 @@ public class ZoneGenerator : MonoBehaviour
             }
         }
 
+        //generate zones
+        StartCoroutine(Generate());
+    }
+
+    private IEnumerator Generate()
+    {
         foreach (var z in _zones)
         {
             z.GenerateBoundingBox();
@@ -108,10 +140,21 @@ public class ZoneGenerator : MonoBehaviour
                 if (gen != null)
                 {
                     gen.PrepGenerator(z.index, this);
-                    StartCoroutine(gen.Generate());
+                    yield return StartCoroutine(gen.Generate());
                 }
             }
         }
+    }
+
+    private Zone CreateZone()
+    {
+        Zone newZone = new Zone();
+        newZone.index = _zones.Count;
+        newZone.name = "Zone " + _zones.Count.ToString();
+        newZone.subtitle = "Placeholder Subtitle";
+        newZone.generator = new EGeneratorType[2] { EGeneratorType.Border, EGeneratorType.Doors };
+        _zones.Add(newZone);
+        return newZone;
     }
 
     public Zone GetZoneAtTile(Vector3Int pos)
@@ -136,5 +179,13 @@ public class ZoneGenerator : MonoBehaviour
         for (int i = 0; i < positions.Length; i++)
             walls[i] = _wall;
         _zoneTilemap.SetTiles(positions, walls);
+    }
+
+    public void MakeEmptySpace(Vector3Int[] positions)
+    {
+        TileBase[] emptySpaces = new TileBase[positions.Length];
+        for (int i = 0; i < positions.Length; i++)
+            emptySpaces[i] = null;
+        _zoneTilemap.SetTiles(positions, emptySpaces);
     }
 }

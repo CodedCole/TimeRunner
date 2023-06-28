@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BorderGenerator : ITilemapGenerator
@@ -50,6 +51,7 @@ public class BorderGenerator : ITilemapGenerator
             }
         }
 
+        zone.border = border.ToHashSet();
         _zoneGenerator.BuildWalls(border.ToArray());
         yield return null;
     }
