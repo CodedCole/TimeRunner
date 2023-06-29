@@ -10,7 +10,7 @@ namespace WaveFunctionCollapse
     public class WFCTileData
     {
         public TileBase tile;
-        public HashSet<int>[] neighbors = new HashSet<int>[4];
+        public HashSet<ulong>[] neighbors = new HashSet<ulong>[4];
     }
 
     public class TileWFC
@@ -18,11 +18,11 @@ namespace WaveFunctionCollapse
         private Tilemap _input;
         private Tilemap _output;
 
-        private Dictionary<TileBase, int> _tileToIndex = new Dictionary<TileBase, int>();
+        private Dictionary<TileBase, ulong> _tileToIndex = new Dictionary<TileBase, ulong>();
         private List<WFCTileData> _tileData = new List<WFCTileData>();
 
-        private Dictionary<Vector3Int, HashSet<int>> _cells;
-        private HashSet<int> EMPTY = null;
+        private Dictionary<Vector3Int, HashSet<ulong>> _cells;
+        private HashSet<ulong> EMPTY = null;
         private Vector2Int _offset;
         private Vector2Int _size;
         private bool _restart = false;
@@ -39,12 +39,12 @@ namespace WaveFunctionCollapse
             _size = size;
             _debug = debug;
 
-            _cells = new Dictionary<Vector3Int, HashSet<int>>();
+            _cells = new Dictionary<Vector3Int, HashSet<ulong>>();
             for (int x = 0; x < size.x; x++)
             {
                 for (int y = 0; y < size.y; y++)
                 {
-                    _cells.Add((Vector3Int)offset + new Vector3Int(x, y), new HashSet<int>());
+                    _cells.Add((Vector3Int)offset + new Vector3Int(x, y), new HashSet<ulong>());
                 }
             }
 
@@ -56,10 +56,10 @@ namespace WaveFunctionCollapse
             _template = template;
             _debug = debug;
 
-            _cells = new Dictionary<Vector3Int, HashSet<int>>();
+            _cells = new Dictionary<Vector3Int, HashSet<ulong>>();
             foreach(var point in target)
             {
-                _cells.Add(point, new HashSet<int>());
+                _cells.Add(point, new HashSet<ulong>());
             }
         }
 
@@ -78,7 +78,7 @@ namespace WaveFunctionCollapse
                     Vector3Int pos = new Vector3Int(x, y, min.z);
                     TileBase tile = _input.GetTile(pos);
 
-                    WFCTileData data = _tileData[GetTileIndex(tile)];
+                    WFCTileData data = _tileData[(int)GetTileIndex(tile)];
 
                     //North
                     AddTileInDirection(data, pos, EDirection.North);
@@ -98,13 +98,13 @@ namespace WaveFunctionCollapse
         void AddTileInDirection(WFCTileData data, Vector3Int pos, EDirection dir)
         {
             TileBase neighbor = _input.GetTile(pos + (Vector3Int)dir.GetDirectionVector());
-            int index = 0;
+            ulong index = 0;
             if (neighbor != null)
                 index = GetTileIndex(neighbor);
             data.neighbors[(int)dir].Add(index);
         }
 
-        int GetTileIndex(TileBase tile)
+        ulong GetTileIndex(TileBase tile)
         {
             if (tile != null && _tileToIndex.ContainsKey(tile))
             {
@@ -119,11 +119,11 @@ namespace WaveFunctionCollapse
                 WFCTileData tileData = new WFCTileData();
                 tileData.tile = tile;
                 for (int i = 0; i < tileData.neighbors.Length; i++)
-                    tileData.neighbors[i] = new HashSet<int>();
+                    tileData.neighbors[i] = new HashSet<ulong>();
                 _tileData.Add(tileData);
                 if(tile != null)
-                    _tileToIndex.Add(tile, _tileData.Count - 1);
-                return _tileData.Count - 1;
+                    _tileToIndex.Add(tile, (ulong)_tileData.Count - 1);
+                return (ulong)_tileData.Count - 1;
             }
         }
 
@@ -138,7 +138,7 @@ namespace WaveFunctionCollapse
             RestartWFC();
 
             //Collapse
-            Vector3Int collapsePos = new Vector3Int(Random.Range(0, _size.x), Random.Range(0, _size.y));
+            Vector3Int collapsePos = _cells.Keys.ElementAt(Random.Range(0, _cells.Count));
             while (true)
             {
                 if (collapsePos == -Vector3Int.one)
@@ -160,13 +160,19 @@ namespace WaveFunctionCollapse
                 //DEBUG
                 if (_debug)
                 {
-                    BuildOutputTilemap();
+                    if (_template != null)
+                        _template.Build(_output, _cells);
+                    else
+                        BuildOutputTilemap();
                     yield return null;
                 }
             }
 
             //Output
-            BuildOutputTilemap();
+            if (_template != null)
+                _template.Build(_output, _cells);
+            else
+                BuildOutputTilemap();
             _cells = null;
         }
 
@@ -198,7 +204,7 @@ namespace WaveFunctionCollapse
             foreach (var point in _cells.Keys)
             {
                     //check if cell has least entropy or is first valid cell
-                    HashSet<int> cell = GetCellAtPosition(point);
+                    HashSet<ulong> cell = GetCellAtPosition(point);
                     if (cell.Count > 1 && (cell.Count <= cellEntropy || leastEntropyCells.Count == 0))
                     {
                         //set cell as the cell with the least entropy
@@ -221,7 +227,7 @@ namespace WaveFunctionCollapse
         void CollapseCell(Vector3Int pos)
         {
             //get cell at 'pos' and check that it exists
-            HashSet<int> cell = GetCellAtPosition(pos);
+            HashSet<ulong> cell = GetCellAtPosition(pos);
             if (cell == null)
             {
                 throw new System.Exception("cell at " + pos.ToString() + " is null");
@@ -235,7 +241,7 @@ namespace WaveFunctionCollapse
             }
 
             //collapse cell to a single value
-            int collapsedValue = cell.ElementAt(Random.Range(0, cell.Count));
+            ulong collapsedValue = cell.ElementAt(Random.Range(0, cell.Count));
             cell.Clear();
             cell.Add(collapsedValue);
 
@@ -262,7 +268,7 @@ namespace WaveFunctionCollapse
                 cellsAlreadyPropped.Add(cellPos);
 
                 //get the cell's possibilities
-                HashSet<int> cell = GetCellAtPosition(cellPos);
+                HashSet<ulong> cell = GetCellAtPosition(cellPos);
 
                 //propagate each of the directions
                 EDirection dir = EDirection.North;
@@ -275,11 +281,11 @@ namespace WaveFunctionCollapse
                     //    continue;
 
                     //get neighbor in direction
-                    HashSet<int> neighbor = GetCellAtPosition(neighborPos);
+                    HashSet<ulong> neighbor = GetCellAtPosition(neighborPos);
                     if (neighbor != null)
                     {
                         //find the possible tiles in the direction 'dir' from the cell
-                        HashSet<int> newSet = GetPossibleTilesInDirection(cell, dir);
+                        HashSet<ulong> newSet = GetPossibleTilesInDirection(cell, dir);
 
                         //intersect the possible tiles with the neighbor's existing possibilities
                         newSet.IntersectWith(neighbor);
@@ -316,7 +322,7 @@ namespace WaveFunctionCollapse
         /// </summary>
         /// <param name="pos"></param>
         /// <returns>HashSet of the indexes for each possible tile</returns>
-        HashSet<int> GetCellAtPosition(Vector3Int pos)
+        HashSet<ulong> GetCellAtPosition(Vector3Int pos)
         {
             //check that 'pos' is inside '_size', else return the empty set
             if (pos.x >= _size.x || pos.x < 0 || pos.y >= _size.y || pos.y < 0)
@@ -332,13 +338,16 @@ namespace WaveFunctionCollapse
         /// <param name="cell">set of possible tiles, which is used to find the neighbor's possible tiles</param>
         /// <param name="dir">direction from 'cell' to find the possible tiles</param>
         /// <returns>HashSet of the possible tiles in direction 'dir'</returns>
-        HashSet<int> GetPossibleTilesInDirection(HashSet<int> cell, EDirection dir)
+        HashSet<ulong> GetPossibleTilesInDirection(HashSet<ulong> cell, EDirection dir)
         {
             //union neighbors in 'dir' direction of all possible tiles at 'cell'
-            HashSet<int> result = new HashSet<int>();
-            foreach(int tile in cell)
+            HashSet<ulong> result = new HashSet<ulong>();
+            foreach(ulong tile in cell)
             {
-                result.UnionWith(_tileData[tile].neighbors[(int)dir]);
+                if (_template != null)
+                    result.UnionWith(_template.IDtoPattern[tile].GetNeighborsInDirection(dir));
+                else
+                    result.UnionWith(_tileData[(int)tile].neighbors[(int)dir]);
             }
             return result;
         }
@@ -348,11 +357,11 @@ namespace WaveFunctionCollapse
         {
             foreach (var point in _cells.Keys)
             {
-                    HashSet<int> cell = GetCellAtPosition(point);
+                    HashSet<ulong> cell = GetCellAtPosition(point);
                     if (cell.Count == 1)
                     {
-                        int tile = cell.ElementAt(0);
-                        _output.SetTile(point + (Vector3Int)_offset, _tileData[tile].tile);
+                        ulong tile = cell.ElementAt(0);
+                        _output.SetTile(point + (Vector3Int)_offset, _tileData[(int)tile].tile);
                         _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
                         _output.SetColor(point + (Vector3Int)_offset, Color.white);
                     }
@@ -385,7 +394,7 @@ namespace WaveFunctionCollapse
             }
         }
 
-        string HashSetToString(HashSet<int> set)
+        string HashSetToString(HashSet<ulong> set)
         {
             string output = "";
             foreach (var element in set)

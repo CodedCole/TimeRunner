@@ -117,6 +117,16 @@ namespace WaveFunctionCollapse
             }
         }
     
+        public void Build(Tilemap map, Dictionary<Vector3Int, HashSet<ulong>> cells)
+        {
+            map.SetTiles(cells.Keys.ToArray(), null);
+            foreach (var c in cells)
+            {
+                Pattern p = _idToPattern[c.Value.ElementAt(0)];
+                map.SetTile(c.Key, _tiles[p.Tiles[0]]);
+            }
+        }
+
         //DEBUG
         void Log()
         {
