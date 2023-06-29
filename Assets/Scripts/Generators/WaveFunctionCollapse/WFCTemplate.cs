@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -35,13 +36,18 @@ namespace WaveFunctionCollapse
             _idToPattern.Clear();
 
             //adds the empty tile at index 0
-            GetTileIndex(null);
+            _tiles.Add(null);
 
             //bake
             _source.CompressBounds();
             FindAllPatterns();
+            FindNeighbors();
+
+            //DEBUG
+            Log();
         }
 
+        //patterns
         void FindAllPatterns()
         {
             BoundsInt bounds = _source.cellBounds;
@@ -51,6 +57,7 @@ namespace WaveFunctionCollapse
                 if (!_idToPattern.ContainsKey(p.PatternID))
                 {
                     _idToPattern.Add(p.PatternID, p);
+                    Debug.Log("new pattern: " + p.PatternID.ToString());
                 }
             }
         }
@@ -70,7 +77,9 @@ namespace WaveFunctionCollapse
 
         int GetTileIndex(TileBase tile)
         {
-            if (_tileToIndex.ContainsKey(tile))
+            if (tile == null)
+                return 0;
+            else if (_tileToIndex.ContainsKey(tile))
                 return _tileToIndex[tile];
             else
             {
@@ -80,10 +89,39 @@ namespace WaveFunctionCollapse
             }
         }
     
-        
-        void FindNeighbors(Pattern pattern)
+        //neighbors
+        void FindNeighbors()
         {
+            foreach(var p in _idToPattern.Values)
+            {
+                FindNeighborsOfPattern(p);
+            }
+        }
 
+        void FindNeighborsOfPattern(Pattern pattern)
+        {
+            EDirection dir = EDirection.North;
+            for (int i = 0; i < 4; i++)
+            {
+                int[] overlap = pattern.GetOverlapInDirection(dir);
+                foreach (var p in _idToPattern.Values)
+                {
+                    if (overlap.SequenceEqual(p.GetOverlapInDirection(dir.GetOppositeDirection())))
+                    {
+                        pattern.GetNeighborsInDirection(dir).Add(p.PatternID);
+                    }
+                }
+                dir++;
+            }
+        }
+    
+        //DEBUG
+        void Log()
+        {
+            foreach(var p in _idToPattern)
+            {
+                Debug.Log(p.Value.ToString());
+            }
         }
     }
 }

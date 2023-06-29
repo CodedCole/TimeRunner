@@ -1,5 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Label tabindex="-1" text="Custom Editor for WFC Templates" display-tooltip-when-elided="true" />
+    <uie:PropertyField name="pattern-size" binding-path="_patternSize" label="Pattern Size" />
+    <uie:PropertyField name="wrap-tiles-toggle" binding-path="_wrapTiles" label="Wrap Tiles" />
     <uie:ObjectField label="Source" type="UnityEngine.Tilemaps.Tilemap, UnityEngine.TilemapModule" binding-path="_input" name="source" />
     <ui:Button text="Generate Template" display-tooltip-when-elided="true" name="generate-button" />
 </ui:UXML>

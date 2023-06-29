@@ -11,7 +11,7 @@ namespace WaveFunctionCollapse
 
         private int[] _tiles;                   //tiles used in the pattern from bottom left to top right
         private int _size;                      //width and height of the pattern in tiles
-        private HashSet<int>[] _neighbors;      //patterns that overlap this pattern in each of the four cardinal directions
+        private HashSet<ulong>[] _neighbors;      //patterns that overlap this pattern in each of the four cardinal directions
 
         public ulong PatternID
         {
@@ -30,10 +30,42 @@ namespace WaveFunctionCollapse
         {
             _tiles = tiles;
             _size = size;
-            _neighbors = new HashSet<int>[4];
+            _neighbors = new HashSet<ulong>[4];
+            for (int i = 0; i < 4; i++)
+                _neighbors[i] = new HashSet<ulong>();
         }
 
-        public HashSet<int> GetNeighborsInDirection(EDirection dir) { return _neighbors[(int)dir]; }
+        public HashSet<ulong> GetNeighborsInDirection(EDirection dir) { return _neighbors[(int)dir]; }
+
+        public int[] GetOverlapInDirection(EDirection dir)
+        {
+            List<int> overlap = new List<int>();
+            for (int y = 0; y < _size; y++)
+            {
+                for (int x = 0; x < _size; x++)
+                {
+                    Vector2Int p = new Vector2Int(x, y) + dir.GetDirectionVector();
+                    if (p.x < _size && p.x >= 0 && p.y < _size && p.y >= 0)
+                        overlap.Add(_tiles[p.x + (p.y * _size)]);
+                }
+            }
+            return overlap.ToArray();
+        }
+
+        public override string ToString()
+        {
+            string result = "PID:" + PatternID.ToString();
+            for(int i = 0; i < 4; i++)
+            {
+                result += "\n" + ((EDirection)i).ToString() + ": ";
+                foreach(var neighbor in _neighbors[i])
+                {
+                    result += neighbor.ToString() + ", ";
+                }
+
+            }
+            return result;
+        }
     }
 
     public class PatternWFC
