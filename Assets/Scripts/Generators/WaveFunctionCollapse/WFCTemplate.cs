@@ -21,6 +21,8 @@ namespace WaveFunctionCollapse
         [SerializeField] private List<TileBase> _tiles = new List<TileBase>();
         [SerializeField] private Dictionary<ulong, Pattern> _idToPattern = new Dictionary<ulong, Pattern>();
 
+        public Dictionary<ulong, Pattern> IDtoPattern { get { return _idToPattern; } }
+
         public void GenerateTemplate(Tilemap source)
         {
             if (source == null)

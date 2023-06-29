@@ -21,13 +21,15 @@ namespace WaveFunctionCollapse
         private Dictionary<TileBase, int> _tileToIndex = new Dictionary<TileBase, int>();
         private List<WFCTileData> _tileData = new List<WFCTileData>();
 
-        private HashSet<int>[] _cells;
+        private Dictionary<Vector3Int, HashSet<int>> _cells;
         private HashSet<int> EMPTY = null;
         private Vector2Int _offset;
         private Vector2Int _size;
         private bool _restart = false;
 
         private bool _debug;
+
+        private WFCTemplate _template;
 
         public TileWFC(Tilemap input, Tilemap output, Vector2Int offset, Vector2Int size, bool debug = false)
         {
@@ -37,7 +39,28 @@ namespace WaveFunctionCollapse
             _size = size;
             _debug = debug;
 
+            _cells = new Dictionary<Vector3Int, HashSet<int>>();
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    _cells.Add((Vector3Int)offset + new Vector3Int(x, y), new HashSet<int>());
+                }
+            }
+
             CreateTileDataFromInput();
+        }
+
+        public TileWFC(WFCTemplate template, Vector3Int[] target, bool debug = false)
+        {
+            _template = template;
+            _debug = debug;
+
+            _cells = new Dictionary<Vector3Int, HashSet<int>>();
+            foreach(var point in target)
+            {
+                _cells.Add(point, new HashSet<int>());
+            }
         }
 
         //INPUT FUNCTIONS
@@ -115,10 +138,10 @@ namespace WaveFunctionCollapse
             RestartWFC();
 
             //Collapse
-            Vector2Int collapsePos = new Vector2Int(Random.Range(0, _size.x), Random.Range(0, _size.y));
+            Vector3Int collapsePos = new Vector3Int(Random.Range(0, _size.x), Random.Range(0, _size.y));
             while (true)
             {
-                if (collapsePos == -Vector2Int.one)
+                if (collapsePos == -Vector3Int.one)
                     break;
 
                 CollapseCell(collapsePos);
@@ -153,17 +176,13 @@ namespace WaveFunctionCollapse
         void RestartWFC()
         {
             //clear the output of tiles
-            _output.SetTilesBlock(new BoundsInt((Vector3Int)_offset, (Vector3Int)_size), null);
+            _output.SetTiles(_cells.Keys.ToArray(), null);
 
             //starting cells can have all values
-            _cells = new HashSet<int>[_size.x * _size.y];
-            for (int i = 0; i < _cells.Length; i++)
+            foreach (var cell in _cells)
             {
-                _cells[i] = new HashSet<int>();
-                for (int j = 0; j < _tileData.Count; j++)
-                {
-                    _cells[i].Add(j);
-                }
+                cell.Value.Clear();
+
             }
         }
 
@@ -171,17 +190,15 @@ namespace WaveFunctionCollapse
         /// Finds the cell with the least entropy
         /// </summary>
         /// <returns>grid position of cell with lowest entropy. -Vector2Int.one is returned when all cells are collapsed.</returns>
-        Vector2Int FindCellWithLeastEntropy()
+        Vector3Int FindCellWithLeastEntropy()
         {
             //prepare for finding the smallest
-            List<Vector2Int> leastEntropyCells = new List<Vector2Int>();
+            List<Vector3Int> leastEntropyCells = new List<Vector3Int>();
             int cellEntropy = 0;
-            for (int x = 0; x < _size.x; x++)
+            foreach (var point in _cells.Keys)
             {
-                for (int y = 0; y < _size.y; y++)
-                {
                     //check if cell has least entropy or is first valid cell
-                    HashSet<int> cell = GetCellAtPosition(new Vector2Int(x, y));
+                    HashSet<int> cell = GetCellAtPosition(point);
                     if (cell.Count > 1 && (cell.Count <= cellEntropy || leastEntropyCells.Count == 0))
                     {
                         //set cell as the cell with the least entropy
@@ -190,22 +207,21 @@ namespace WaveFunctionCollapse
                             cellEntropy = cell.Count;
                             leastEntropyCells.Clear();
                         }
-                        leastEntropyCells.Add(new Vector2Int(x, y));
+                        leastEntropyCells.Add(point);
                     }
-                }
             }
             //return the cell with least entropy
-            return (leastEntropyCells.Count == 0 ? -Vector2Int.one : leastEntropyCells[Random.Range(0, leastEntropyCells.Count)]);
+            return (leastEntropyCells.Count == 0 ? -Vector3Int.one : leastEntropyCells[Random.Range(0, leastEntropyCells.Count)]);
         }
 
         /// <summary>
         /// Forces a cell to collapse and become a specific tile
         /// </summary>
         /// <param name="pos">position of the cell</param>
-        void CollapseCell(Vector2Int pos)
+        void CollapseCell(Vector3Int pos)
         {
             //get cell at 'pos' and check that it exists
-            ref HashSet<int> cell = ref GetCellAtPosition(pos);
+            HashSet<int> cell = GetCellAtPosition(pos);
             if (cell == null)
             {
                 throw new System.Exception("cell at " + pos.ToString() + " is null");
@@ -231,18 +247,18 @@ namespace WaveFunctionCollapse
         /// Propagates the WFC rules starting from 'pos'. This could cause an unsolvable tile, which will make the '_restart' flag true
         /// </summary>
         /// <param name="pos">starting position of propagation</param>
-        void Propagate(Vector2Int pos)
+        void Propagate(Vector3Int pos)
         {
             //queue and set to track which cells need to be propagated and which already have
-            Queue<Vector2Int> cellsToPropagate = new Queue<Vector2Int>();
-            HashSet<Vector2Int> cellsAlreadyPropped = new HashSet<Vector2Int>();
+            Queue<Vector3Int> cellsToPropagate = new Queue<Vector3Int>();
+            HashSet<Vector3Int> cellsAlreadyPropped = new HashSet<Vector3Int>();
 
             //start at pos
             cellsToPropagate.Enqueue(pos);
             while (cellsToPropagate.Count > 0)
             {
                 //get the next cell and add it to the completed set
-                Vector2Int cellPos = cellsToPropagate.Dequeue();
+                Vector3Int cellPos = cellsToPropagate.Dequeue();
                 cellsAlreadyPropped.Add(cellPos);
 
                 //get the cell's possibilities
@@ -252,14 +268,14 @@ namespace WaveFunctionCollapse
                 EDirection dir = EDirection.North;
                 for (int i = 0; i < 4; i++)
                 {
-                    Vector2Int neighborPos = cellPos + dir.GetDirectionVector();
+                    Vector3Int neighborPos = cellPos + (Vector3Int)dir.GetDirectionVector();
 
                     //check if the neighbor was already propagated
                     //if (cellsAlreadyPropped.Contains(neighborPos))
                     //    continue;
 
                     //get neighbor in direction
-                    ref HashSet<int> neighbor = ref GetCellAtPosition(neighborPos);
+                    HashSet<int> neighbor = GetCellAtPosition(neighborPos);
                     if (neighbor != null)
                     {
                         //find the possible tiles in the direction 'dir' from the cell
@@ -300,14 +316,14 @@ namespace WaveFunctionCollapse
         /// </summary>
         /// <param name="pos"></param>
         /// <returns>HashSet of the indexes for each possible tile</returns>
-        ref HashSet<int> GetCellAtPosition(Vector2Int pos)
+        HashSet<int> GetCellAtPosition(Vector3Int pos)
         {
             //check that 'pos' is inside '_size', else return the empty set
             if (pos.x >= _size.x || pos.x < 0 || pos.y >= _size.y || pos.y < 0)
-                return ref EMPTY;
+                return EMPTY;
 
             //return the cell possibility set at 'pos'
-            return ref _cells[pos.x + (pos.y * _size.x)];
+            return _cells[pos];
         }
 
         /// <summary>
@@ -330,33 +346,28 @@ namespace WaveFunctionCollapse
         //OUTPUT FUNCTIONS
         void BuildOutputTilemap()
         {
-            for (int x = 0; x < _size.x; x++)
+            foreach (var point in _cells.Keys)
             {
-                for (int y = 0; y < _size.y; y++)
-                {
-                    Vector2Int pos = new Vector2Int(x, y);
-
-                    ref HashSet<int> cell = ref GetCellAtPosition(pos);
+                    HashSet<int> cell = GetCellAtPosition(point);
                     if (cell.Count == 1)
                     {
                         int tile = cell.ElementAt(0);
-                        _output.SetTile((Vector3Int)(pos + _offset), _tileData[tile].tile);
-                        _output.SetTileFlags((Vector3Int)(pos + _offset), TileFlags.None);
-                        _output.SetColor((Vector3Int)(pos + _offset), Color.white);
+                        _output.SetTile(point + (Vector3Int)_offset, _tileData[tile].tile);
+                        _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
+                        _output.SetColor(point + (Vector3Int)_offset, Color.white);
                     }
                     else if (cell.Count == 0)
                     {
-                        _output.SetTile((Vector3Int)(pos + _offset), _tileData[1].tile);
-                        _output.SetTileFlags((Vector3Int)(pos + _offset), TileFlags.None);
-                        _output.SetColor((Vector3Int)(pos + _offset), Color.green);
+                        _output.SetTile(point + (Vector3Int)_offset, _tileData[1].tile);
+                        _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
+                        _output.SetColor(point + (Vector3Int)_offset, Color.green);
                     }
                     else
                     {
-                        _output.SetTile((Vector3Int)(pos + _offset), _tileData[1].tile);
-                        _output.SetTileFlags((Vector3Int)(pos + _offset), TileFlags.None);
-                        _output.SetColor((Vector3Int)(pos + _offset), Color.Lerp(Color.blue, Color.red, (float)cell.Count / _tileData.Count));
+                        _output.SetTile(point + (Vector3Int)_offset, _tileData[1].tile);
+                        _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
+                        _output.SetColor(point + (Vector3Int)_offset, Color.Lerp(Color.blue, Color.red, (float)cell.Count / _tileData.Count));
                     }
-                }
             }
         }
         

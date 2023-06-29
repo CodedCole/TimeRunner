@@ -11,7 +11,7 @@ namespace WaveFunctionCollapse
 
         private int[] _tiles;                   //tiles used in the pattern from bottom left to top right
         private int _size;                      //width and height of the pattern in tiles
-        private HashSet<ulong>[] _neighbors;      //patterns that overlap this pattern in each of the four cardinal directions
+        private HashSet<ulong>[] _neighbors;    //patterns that overlap this pattern in each of the four cardinal directions
 
         public ulong PatternID
         {
