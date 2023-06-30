@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace WaveFunctionCollapse
 {
-    public class Pattern
+    [Serializable]
+    public class Pattern : ISerializationCallbackReceiver
     {
         private const int TILE_COUNT_IN_TILESET = 25;
 
@@ -13,6 +16,16 @@ namespace WaveFunctionCollapse
         private int _size;                      //width and height of the pattern in tiles
         private HashSet<ulong>[] _neighbors;    //patterns that overlap this pattern in each of the four cardinal directions
 
+        //Serialized data
+        [Serializable]
+        public class Neighbors
+        {
+            public List<ulong> neighbors = new List<ulong>();
+        }
+
+        [SerializeField] private List<Neighbors> s_neighbors = new List<Neighbors>();
+
+        //properties for external use
         public int[] Tiles { get { return _tiles; } }
 
         public ulong PatternID
@@ -67,6 +80,33 @@ namespace WaveFunctionCollapse
 
             }
             return result;
+        }
+
+        public void OnBeforeSerialize()
+        {
+            s_neighbors.Clear();
+            foreach(var direction in _neighbors)
+            {
+                Neighbors n = new Neighbors();
+                foreach (var neighbor in direction)
+                {
+                    n.neighbors.Add(neighbor);
+                }
+                s_neighbors.Add(n);
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            _neighbors = new HashSet<ulong>[s_neighbors.Count];
+            for (int i = 0; i < s_neighbors.Count; i++)
+            {
+                _neighbors[i] = new HashSet<ulong>();
+                foreach (var neighbor in s_neighbors[i].neighbors)
+                {
+                    _neighbors[i].Add(neighbor);
+                }
+            }
         }
     }
 

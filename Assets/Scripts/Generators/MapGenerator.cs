@@ -15,6 +15,8 @@ public class MapGenerator : MonoBehaviour
         public bool canExpandLeft;
         public bool canExpandRight;
 
+        public Vector2Int RoomSize { get { return (topRight - bottomLeft) + Vector2Int.one; } }
+
         /// <summary>
         /// Checks if the position 'pos' is within or on the bounds of the room.
         /// </summary>
@@ -46,6 +48,19 @@ public class MapGenerator : MonoBehaviour
             }
             return false;
         }
+
+        public Vector3Int[] AllPositionsWithin()
+        {
+            Vector3Int[] result = new Vector3Int[RoomSize.x * RoomSize.y];
+            for (int y = 0; y < RoomSize.y; y++)
+            {
+                for (int x = 0; x < RoomSize.x; x++)
+                {
+                    result[x + (y * RoomSize.x)] = (Vector3Int)bottomLeft + new Vector3Int(x, y);
+                }
+            }
+            return result;
+        }
     }
 
     [SerializeField] private Color north = Color.red;
@@ -64,6 +79,7 @@ public class MapGenerator : MonoBehaviour
     [Header("Tilemaps")]
     [SerializeField] private Tilemap _sample;
     [SerializeField] private Tilemap _level;
+    [SerializeField] private WFCTemplate _template;
     private Grid _grid;
 
     [Header("WFC")]
@@ -260,7 +276,14 @@ public class MapGenerator : MonoBehaviour
             _level.BoxFill(new Vector3Int(rooms[i].bottomLeft.x, rooms[i].bottomLeft.y), tileToFill, rooms[i].bottomLeft.x, rooms[i].bottomLeft.y, rooms[i].topRight.x, rooms[i].topRight.y);
             if ((rooms[i].topRight - rooms[i].bottomLeft).x > 1 && (rooms[i].topRight - rooms[i].bottomLeft).y > 1)
             {
-                TileWFC roomWFC = new TileWFC(_sample, _level, rooms[i].bottomLeft + Vector2Int.one, (rooms[i].topRight - rooms[i].bottomLeft) - Vector2Int.one, _debug);
+                TileWFC roomWFC;
+                if (_template != null)
+                {
+                    //_template.Log();
+                    roomWFC = new TileWFC(_level, _template, rooms[i].AllPositionsWithin(), _debug);
+                }
+                else
+                    roomWFC = new TileWFC(_sample, _level, rooms[i].bottomLeft + Vector2Int.one, (rooms[i].topRight - rooms[i].bottomLeft) - Vector2Int.one, _debug);
                 yield return StartCoroutine(roomWFC.GenerateCoroutine());
             }
 

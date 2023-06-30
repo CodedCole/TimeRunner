@@ -51,8 +51,9 @@ namespace WaveFunctionCollapse
             CreateTileDataFromInput();
         }
 
-        public TileWFC(WFCTemplate template, Vector3Int[] target, bool debug = false)
+        public TileWFC(Tilemap output, WFCTemplate template, Vector3Int[] target, bool debug = false)
         {
+            _output = output;
             _template = template;
             _debug = debug;
 
@@ -160,19 +161,13 @@ namespace WaveFunctionCollapse
                 //DEBUG
                 if (_debug)
                 {
-                    if (_template != null)
-                        _template.Build(_output, _cells);
-                    else
-                        BuildOutputTilemap();
+                    BuildOutputTilemap();
                     yield return null;
                 }
             }
 
             //Output
-            if (_template != null)
-                _template.Build(_output, _cells);
-            else
-                BuildOutputTilemap();
+            BuildOutputTilemap();
             _cells = null;
         }
 
@@ -188,7 +183,20 @@ namespace WaveFunctionCollapse
             foreach (var cell in _cells)
             {
                 cell.Value.Clear();
-
+                if (_template != null)
+                {
+                    foreach(var p in _template.IDtoPattern)
+                    {
+                        cell.Value.Add(p.Key);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _tileData.Count; i++)
+                    {
+                        cell.Value.Add((ulong)i);
+                    }
+                }
             }
         }
 
@@ -201,22 +209,23 @@ namespace WaveFunctionCollapse
             //prepare for finding the smallest
             List<Vector3Int> leastEntropyCells = new List<Vector3Int>();
             int cellEntropy = 0;
-            foreach (var point in _cells.Keys)
+            foreach (var cell in _cells)
             {
-                    //check if cell has least entropy or is first valid cell
-                    HashSet<ulong> cell = GetCellAtPosition(point);
-                    if (cell.Count > 1 && (cell.Count <= cellEntropy || leastEntropyCells.Count == 0))
+                //check if cell has least entropy or is first valid cell
+                if (cell.Value.Count > 1 && (cell.Value.Count <= cellEntropy || leastEntropyCells.Count == 0))
+                {
+                    //set cell as the cell with the least entropy
+                    if (cell.Value.Count < cellEntropy || leastEntropyCells.Count == 0)
                     {
-                        //set cell as the cell with the least entropy
-                        if (cell.Count < cellEntropy || leastEntropyCells.Count == 0)
-                        {
-                            cellEntropy = cell.Count;
-                            leastEntropyCells.Clear();
-                        }
-                        leastEntropyCells.Add(point);
+                        cellEntropy = cell.Value.Count;
+                        leastEntropyCells.Clear();
                     }
+                    leastEntropyCells.Add(cell.Key);
+                }
             }
             //return the cell with least entropy
+            if (leastEntropyCells.Count == 0)
+                Debug.Log("fully collapsed");
             return (leastEntropyCells.Count == 0 ? -Vector3Int.one : leastEntropyCells[Random.Range(0, leastEntropyCells.Count)]);
         }
 
@@ -281,20 +290,19 @@ namespace WaveFunctionCollapse
                     //    continue;
 
                     //get neighbor in direction
-                    HashSet<ulong> neighbor = GetCellAtPosition(neighborPos);
-                    if (neighbor != null)
+                    if (_cells.ContainsKey(neighborPos))
                     {
                         //find the possible tiles in the direction 'dir' from the cell
                         HashSet<ulong> newSet = GetPossibleTilesInDirection(cell, dir);
 
                         //intersect the possible tiles with the neighbor's existing possibilities
-                        newSet.IntersectWith(neighbor);
+                        newSet.IntersectWith(_cells[neighborPos]);
 
                         //if the neighbor's possibilities and the intersected possibilities match, propagation is not needed on this neighbor
-                        if (!neighbor.SetEquals(newSet))
+                        if (!_cells[neighborPos].SetEquals(newSet))
                         {
                             //apply the intersection to the neighbor
-                            neighbor = newSet;
+                            _cells[neighborPos] = newSet;
 
                             //put neighbor in propagation queue
                             if (!cellsToPropagate.Contains(neighborPos))
@@ -303,8 +311,8 @@ namespace WaveFunctionCollapse
                             //if the possibility count is 0, then a collision has occured and the '_restart' flag is set
                             if (newSet.Count == 0)
                             {
-                                BuildOutputTilemap();
                                 Debug.LogWarning("no possible tiles at " + neighborPos.ToString() + " - restarting");
+                                BuildOutputTilemap();
                                 _restart = true;
                                 return;
                             }
@@ -325,7 +333,7 @@ namespace WaveFunctionCollapse
         HashSet<ulong> GetCellAtPosition(Vector3Int pos)
         {
             //check that 'pos' is inside '_size', else return the empty set
-            if (pos.x >= _size.x || pos.x < 0 || pos.y >= _size.y || pos.y < 0)
+            if (!_cells.ContainsKey(pos))
                 return EMPTY;
 
             //return the cell possibility set at 'pos'
@@ -355,28 +363,33 @@ namespace WaveFunctionCollapse
         //OUTPUT FUNCTIONS
         void BuildOutputTilemap()
         {
-            foreach (var point in _cells.Keys)
+            if (_template != null)
             {
-                    HashSet<ulong> cell = GetCellAtPosition(point);
-                    if (cell.Count == 1)
-                    {
-                        ulong tile = cell.ElementAt(0);
-                        _output.SetTile(point + (Vector3Int)_offset, _tileData[(int)tile].tile);
-                        _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
-                        _output.SetColor(point + (Vector3Int)_offset, Color.white);
-                    }
-                    else if (cell.Count == 0)
-                    {
-                        _output.SetTile(point + (Vector3Int)_offset, _tileData[1].tile);
-                        _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
-                        _output.SetColor(point + (Vector3Int)_offset, Color.green);
-                    }
-                    else
-                    {
-                        _output.SetTile(point + (Vector3Int)_offset, _tileData[1].tile);
-                        _output.SetTileFlags(point + (Vector3Int)_offset, TileFlags.None);
-                        _output.SetColor(point + (Vector3Int)_offset, Color.Lerp(Color.blue, Color.red, (float)cell.Count / _tileData.Count));
-                    }
+                _template.Build(_output, _cells);
+                return;
+            }
+
+            foreach (var cell in _cells)
+            {
+                if (cell.Value.Count == 1)
+                {
+                    ulong tile = cell.Value.ElementAt(0);
+                    _output.SetTile(cell.Key, _tileData[(int)tile].tile);
+                    _output.SetTileFlags(cell.Key, TileFlags.None);
+                    _output.SetColor(cell.Key, Color.white);
+                }
+                else if (cell.Value.Count == 0)
+                {
+                    _output.SetTile(cell.Key, _tileData[1].tile);
+                    _output.SetTileFlags(cell.Key, TileFlags.None);
+                    _output.SetColor(cell.Key, Color.green);
+                }
+                else
+                {
+                    _output.SetTile(cell.Key, _tileData[1].tile);
+                    _output.SetTileFlags(cell.Key, TileFlags.None);
+                    _output.SetColor(cell.Key, Color.Lerp(Color.blue, Color.red, (float)cell.Value.Count / _tileData.Count));
+                }
             }
         }
         

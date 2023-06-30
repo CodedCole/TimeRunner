@@ -24,6 +24,9 @@ public class WFCTemplateEditor : Editor
         _sourceField = _inspector.Q<ObjectField>("source");
         _inspector.Q<Button>("generate-button").clicked += GenerateTemplate;
 
+        VisualElement defaultInspector = _inspector.Q<VisualElement>("default-inspector");
+        InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
+
         return _inspector;
     }
 

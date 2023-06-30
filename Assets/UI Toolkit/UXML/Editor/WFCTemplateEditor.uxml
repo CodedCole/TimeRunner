@@ -4,4 +4,5 @@
     <uie:PropertyField name="wrap-tiles-toggle" binding-path="_wrapTiles" label="Wrap Tiles" />
     <uie:ObjectField label="Source" type="UnityEngine.Tilemaps.Tilemap, UnityEngine.TilemapModule" binding-path="_input" name="source" />
     <ui:Button text="Generate Template" display-tooltip-when-elided="true" name="generate-button" />
+    <ui:Foldout text="Default Inspector" name="default-inspector" />
 </ui:UXML>

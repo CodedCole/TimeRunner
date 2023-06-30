@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +8,27 @@ using UnityEngine.Tilemaps;
 namespace WaveFunctionCollapse
 {
     [CreateAssetMenu(fileName = "NewWFCTemplate", menuName = "WFC Template")]
-    public class WFCTemplate : ScriptableObject
+    public class WFCTemplate : ScriptableObject, ISerializationCallbackReceiver
     {
-
         //Set in inspector for baking
         [SerializeField] private int _patternSize;
         [SerializeField] private bool _wrapTiles;
+        [SerializeField] private TileBase _debugTile;
         
         private Tilemap _source;
 
         //baked data
-        [SerializeField] private Dictionary<TileBase, int> _tileToIndex = new Dictionary<TileBase, int>();
         [SerializeField] private List<TileBase> _tiles = new List<TileBase>();
-        [SerializeField] private Dictionary<ulong, Pattern> _idToPattern = new Dictionary<ulong, Pattern>();
+        private Dictionary<TileBase, int> _tileToIndex = new Dictionary<TileBase, int>();
+        private Dictionary<ulong, Pattern> _idToPattern = new Dictionary<ulong, Pattern>();
 
+        //serialized data
+        [SerializeField] private List<ulong> s_id = new List<ulong>();
+        [SerializeField] private List<Pattern> s_pattern = new List<Pattern>();
+
+        //property for external use
         public Dictionary<ulong, Pattern> IDtoPattern { get { return _idToPattern; } }
+        public List<TileBase> Tiles { get { return _tiles; } }
 
         public void GenerateTemplate(Tilemap source)
         {
@@ -53,6 +60,7 @@ namespace WaveFunctionCollapse
         void FindAllPatterns()
         {
             BoundsInt bounds = _source.cellBounds;
+            bounds.min -= new Vector3Int(_patternSize, _patternSize);
             foreach (var point in bounds.allPositionsWithin)
             {
                 Pattern p = BuildPattern(point);
@@ -122,17 +130,55 @@ namespace WaveFunctionCollapse
             map.SetTiles(cells.Keys.ToArray(), null);
             foreach (var c in cells)
             {
-                Pattern p = _idToPattern[c.Value.ElementAt(0)];
-                map.SetTile(c.Key, _tiles[p.Tiles[0]]);
+                if (c.Value.Count == 1)
+                {
+                    Pattern p = _idToPattern[c.Value.ElementAt(0)];
+                    map.SetTile(c.Key, _tiles[p.Tiles[0]]);
+                }
+                else if (c.Value.Count == 0)
+                {
+                    map.SetTile(c.Key, _debugTile);
+                    map.SetTileFlags(c.Key, TileFlags.None);
+                    map.SetColor(c.Key, Color.green);
+                }
+                else
+                {
+                    map.SetTile(c.Key, _debugTile);
+                    map.SetTileFlags(c.Key, TileFlags.None);
+                    map.SetColor(c.Key, Color.Lerp(Color.blue, Color.red, (float)(c.Value.Count - 1) / _idToPattern.Count));
+                }
             }
         }
 
         //DEBUG
-        void Log()
+        public void Log()
         {
+            if (_idToPattern.Count == 0)
+                Debug.LogWarning("no patterns in template");
             foreach(var p in _idToPattern)
             {
                 Debug.Log(p.Value.ToString());
+            }
+        }
+
+        //Serialize
+        public void OnBeforeSerialize()
+        {
+            s_id.Clear();
+            s_pattern.Clear();
+            foreach (var p in _idToPattern)
+            {
+                s_id.Add(p.Key);
+                s_pattern.Add(p.Value);
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            _idToPattern = new Dictionary<ulong, Pattern>();
+            for(int i = 0; i < s_id.Count; i++)
+            {
+                _idToPattern.Add(s_id[i], s_pattern[i]);
             }
         }
     }
