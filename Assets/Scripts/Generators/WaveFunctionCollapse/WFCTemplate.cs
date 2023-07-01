@@ -61,14 +61,22 @@ namespace WaveFunctionCollapse
         void FindAllPatterns()
         {
             BoundsInt bounds = _source.cellBounds;
-            bounds.min -= new Vector3Int(_patternSize, _patternSize);
+            bounds.min -= new Vector3Int(1, 1);
+            //bounds.max -= new Vector3Int(1, 1);
             foreach (var point in bounds.allPositionsWithin)
             {
                 Pattern p = BuildPattern(point);
-                if (!_idToPattern.ContainsKey(p.PatternID))
+                if (p.Tiles[0] != 0 || p.Tiles[1] != 0 || p.Tiles[_patternSize] != 0 || p.Tiles[_patternSize + 1] != 0)
                 {
-                    _idToPattern.Add(p.PatternID, p);
-                    Debug.Log("new pattern: " + p.PatternID.ToString());
+                    if (!_idToPattern.ContainsKey(p.PatternID))
+                    {
+                        _idToPattern.Add(p.PatternID, p);
+                        Debug.Log("new pattern: " + p.PatternID.ToString());
+                    }
+                }
+                else
+                {
+                    Debug.Log("invalid pattern: " + p.PatternID.ToString());
                 }
             }
         }
@@ -146,7 +154,7 @@ namespace WaveFunctionCollapse
                 {
                     map.SetTile(c.Key, _debugTile);
                     map.SetTileFlags(c.Key, TileFlags.None);
-                    map.SetColor(c.Key, Color.Lerp(Color.blue, Color.red, (float)(c.Value.Count - 1) / _idToPattern.Count));
+                    map.SetColor(c.Key, Color.Lerp(Color.red, Color.blue, (float)(c.Value.Count - 1) / _idToPattern.Count));
                 }
             }
         }

@@ -149,6 +149,9 @@ namespace WaveFunctionCollapse
             //Start
             RestartWFC();
 
+            BuildOutputTilemap();
+            yield return null;
+
             //Collapse
             Vector3Int collapsePos = _cells.Keys.ElementAt(Random.Range(0, _cells.Count));
             while (true)
@@ -164,6 +167,9 @@ namespace WaveFunctionCollapse
 
                     _restart = false;
                     RestartWFC();
+
+                    BuildOutputTilemap();
+                    yield return null;
                 }
 
 
@@ -226,7 +232,8 @@ namespace WaveFunctionCollapse
                                 if (_cells.ContainsKey(restriction.Key + offset))
                                 {
                                     targetCell = restriction.Key + offset;
-                                    tileIndexInPattern = x + (y * _template.PatternSize);
+                                    tileIndexInPattern = ((_template.PatternSize * _template.PatternSize) - 1) - (x + (y * _template.PatternSize));
+                                    Debug.Log("Found alternate cell for " + restriction.Key.ToString() + " at " + targetCell.ToString() + " with pattern index at " + tileIndexInPattern.ToString());
                                     break;
                                 }
                             }
@@ -324,9 +331,10 @@ namespace WaveFunctionCollapse
         /// <param name="pos">starting position of propagation</param>
         void Propagate(Vector3Int pos)
         {
+            int propTimes = 0;
             //queue and set to track which cells need to be propagated and which already have
             Queue<Vector3Int> cellsToPropagate = new Queue<Vector3Int>();
-            HashSet<Vector3Int> cellsAlreadyPropped = new HashSet<Vector3Int>();
+            //HashSet<Vector3Int> cellsAlreadyPropped = new HashSet<Vector3Int>();
 
             //start at pos
             cellsToPropagate.Enqueue(pos);
@@ -334,7 +342,7 @@ namespace WaveFunctionCollapse
             {
                 //get the next cell and add it to the completed set
                 Vector3Int cellPos = cellsToPropagate.Dequeue();
-                cellsAlreadyPropped.Add(cellPos);
+                //cellsAlreadyPropped.Add(cellPos);
 
                 //get the cell's possibilities
                 HashSet<ulong> cell = GetCellAtPosition(cellPos);
@@ -352,6 +360,7 @@ namespace WaveFunctionCollapse
                     //get neighbor in direction
                     if (_cells.ContainsKey(neighborPos))
                     {
+                        propTimes++;
                         //find the possible tiles in the direction 'dir' from the cell
                         HashSet<ulong> newSet = GetPossibleTilesInDirection(cell, dir);
 
@@ -383,6 +392,7 @@ namespace WaveFunctionCollapse
                     dir++;
                 }
             }
+            Debug.Log(propTimes);
         }
 
         /// <summary>

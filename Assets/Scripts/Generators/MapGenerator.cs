@@ -61,6 +61,24 @@ public class MapGenerator : MonoBehaviour
             }
             return result;
         }
+
+        public Vector3Int[] Border()
+        {
+            Vector3Int[] result = new Vector3Int[(RoomSize.x + RoomSize.y) * 2];
+            int index = 0;
+            for (int x = 0; x <= RoomSize.x; x++)
+            {
+                for (int y = 0; y <= RoomSize.y; y++)
+                {
+                    if (y == 0 || y == RoomSize.y || x == 0 || x == RoomSize.x)
+                    {
+                        result[index] = (Vector3Int)bottomLeft + new Vector3Int(x, y);
+                        index++;
+                    }
+                }
+            }
+            return result;
+        }
     }
 
     [SerializeField] private Color north = Color.red;
@@ -281,6 +299,14 @@ public class MapGenerator : MonoBehaviour
                 {
                     //_template.Log();
                     roomWFC = new TileWFC(_level, _template, rooms[i].AllPositionsWithin(), _debug);
+                    Dictionary<Vector3Int, HashSet<int>> tileRestrictions = new Dictionary<Vector3Int, HashSet<int>>();
+                    foreach (var b in rooms[i].Border())
+                    {
+                        HashSet<int> restriction = new HashSet<int>{ 0 };
+                        tileRestrictions.Add(b, restriction);
+                    }
+                    //tileRestrictions.Add((Vector3Int)rooms[i].bottomLeft + new Vector3Int(2, 2), new HashSet<int> { 1, 6 });
+                    roomWFC.SetTileRestrictions(tileRestrictions);
                 }
                 else
                     roomWFC = new TileWFC(_sample, _level, rooms[i].bottomLeft + Vector2Int.one, (rooms[i].topRight - rooms[i].bottomLeft) - Vector2Int.one, _debug);
