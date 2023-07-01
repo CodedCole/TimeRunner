@@ -12,7 +12,7 @@ namespace WaveFunctionCollapse
     {
         private const int TILE_COUNT_IN_TILESET = 25;
 
-        private int[] _tiles;                   //tiles used in the pattern from bottom left to top right
+        private int[] _tiles;                   //index of tiles used in the pattern from bottom left to top right
         private int _size;                      //width and height of the pattern in tiles
         private HashSet<ulong>[] _neighbors;    //patterns that overlap this pattern in each of the four cardinal directions
 

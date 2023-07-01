@@ -23,9 +23,9 @@ namespace WaveFunctionCollapse
 
         private Dictionary<Vector3Int, HashSet<ulong>> _cells;
         private HashSet<ulong> EMPTY = null;
-        private Vector2Int _offset;
-        private Vector2Int _size;
         private bool _restart = false;
+
+        private Dictionary<Vector3Int, HashSet<int>> _tileRestrictions;
 
         private bool _debug;
 
@@ -35,8 +35,6 @@ namespace WaveFunctionCollapse
         {
             _input = input;
             _output = output;
-            _offset = offset;
-            _size = size;
             _debug = debug;
 
             _cells = new Dictionary<Vector3Int, HashSet<ulong>>();
@@ -47,6 +45,8 @@ namespace WaveFunctionCollapse
                     _cells.Add((Vector3Int)offset + new Vector3Int(x, y), new HashSet<ulong>());
                 }
             }
+
+            _tileRestrictions = null;
 
             CreateTileDataFromInput();
         }
@@ -62,10 +62,12 @@ namespace WaveFunctionCollapse
             {
                 _cells.Add(point, new HashSet<ulong>());
             }
+
+            _tileRestrictions = null;
         }
 
         //INPUT FUNCTIONS
-        public void CreateTileDataFromInput()
+        void CreateTileDataFromInput()
         {
             _input.CompressBounds();
             Vector3Int min = _input.cellBounds.min;
@@ -126,6 +128,15 @@ namespace WaveFunctionCollapse
                     _tileToIndex.Add(tile, (ulong)_tileData.Count - 1);
                 return (ulong)_tileData.Count - 1;
             }
+        }
+
+        /// <summary>
+        /// Sets the what a tile at a cell is allowed to be
+        /// </summary>
+        /// <param name="restrictions">a dictionary of cell coordinates to sets of tile indexes</param>
+        public void SetTileRestrictions(Dictionary<Vector3Int, HashSet<int>> restrictions)
+        {
+            _tileRestrictions = restrictions;
         }
 
         //COLLAPSE FUNCTIONS
@@ -195,6 +206,55 @@ namespace WaveFunctionCollapse
                     for (int i = 0; i < _tileData.Count; i++)
                     {
                         cell.Value.Add((ulong)i);
+                    }
+                }
+            }
+            if (_tileRestrictions != null)
+            {
+                foreach (var restriction in _tileRestrictions)
+                {
+                    int tileIndexInPattern = 0;
+                    Vector3Int targetCell = restriction.Key;
+                    if (!_cells.ContainsKey(restriction.Key))
+                    {
+                        Vector3Int offset;
+                        for (int x = 0; x < _template.PatternSize; x++)
+                        {
+                            for (int y = 0; y < _template.PatternSize; y++)
+                            {
+                                offset = new Vector3Int(x - (_template.PatternSize - 1), y - (_template.PatternSize - 1));
+                                if (_cells.ContainsKey(restriction.Key + offset))
+                                {
+                                    targetCell = restriction.Key + offset;
+                                    tileIndexInPattern = x + (y * _template.PatternSize);
+                                    break;
+                                }
+                            }
+
+                            if (targetCell != restriction.Key)
+                                break;
+                        }
+                        if (targetCell == restriction.Key)
+                        {
+                            Debug.LogWarning("restriction at " + restriction.Key.ToString() + " could not be resolved");
+                            continue;
+                        }
+                    }
+
+                    HashSet<ulong> validWithRestriction = new HashSet<ulong>();
+                    foreach (var pattern in _template.IDtoPattern)
+                    {
+                        if (restriction.Value.Contains(pattern.Value.Tiles[tileIndexInPattern]))
+                        {
+                            validWithRestriction.Add(pattern.Key);
+                        }
+                    }
+
+                    validWithRestriction.IntersectWith(_cells[targetCell]);
+                    if (!validWithRestriction.SetEquals(_cells[targetCell]))
+                    {
+                        _cells[targetCell] = validWithRestriction;
+                        Propagate(targetCell);
                     }
                 }
             }

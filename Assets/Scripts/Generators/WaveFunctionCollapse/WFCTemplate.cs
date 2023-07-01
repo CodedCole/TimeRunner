@@ -27,6 +27,7 @@ namespace WaveFunctionCollapse
         [SerializeField] private List<Pattern> s_pattern = new List<Pattern>();
 
         //property for external use
+        public int PatternSize { get { return _patternSize; } }
         public Dictionary<ulong, Pattern> IDtoPattern { get { return _idToPattern; } }
         public List<TileBase> Tiles { get { return _tiles; } }
 
