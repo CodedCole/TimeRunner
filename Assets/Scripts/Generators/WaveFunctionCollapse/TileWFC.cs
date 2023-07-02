@@ -144,10 +144,10 @@ namespace WaveFunctionCollapse
         /// Generates the WFC tilemap
         /// </summary>
         /// <returns></returns>
-        public IEnumerator GenerateCoroutine()
+        public IEnumerator GenerateCoroutine(MonoBehaviour caller)
         {
             //Start
-            RestartWFC();
+            yield return caller.StartCoroutine(RestartWFC());
 
             BuildOutputTilemap();
             yield return null;
@@ -166,7 +166,7 @@ namespace WaveFunctionCollapse
                         yield return null;
 
                     _restart = false;
-                    RestartWFC();
+                    yield return caller.StartCoroutine(RestartWFC());
 
                     BuildOutputTilemap();
                     yield return null;
@@ -191,7 +191,7 @@ namespace WaveFunctionCollapse
         /// <summary>
         /// Prepares WFC to start or restart
         /// </summary>
-        void RestartWFC()
+        IEnumerator RestartWFC()
         {
             //clear the output of tiles
             _output.SetTiles(_cells.Keys.ToArray(), null);
@@ -217,23 +217,27 @@ namespace WaveFunctionCollapse
             }
             if (_tileRestrictions != null)
             {
+                List<Vector3Int> cellsRestricted = new List<Vector3Int>();
                 foreach (var restriction in _tileRestrictions)
                 {
                     int tileIndexInPattern = 0;
                     Vector3Int targetCell = restriction.Key;
+
+                    //if the restriction isn't within the cells, find the first cell that the restriction influences
                     if (!_cells.ContainsKey(restriction.Key))
                     {
                         Vector3Int offset;
+
+                        //check for cells that contian the restriction as a tile
                         for (int x = 0; x < _template.PatternSize; x++)
                         {
                             for (int y = 0; y < _template.PatternSize; y++)
                             {
-                                offset = new Vector3Int(x - (_template.PatternSize - 1), y - (_template.PatternSize - 1));
+                                offset = new Vector3Int(-x, -y);
                                 if (_cells.ContainsKey(restriction.Key + offset))
                                 {
                                     targetCell = restriction.Key + offset;
-                                    tileIndexInPattern = ((_template.PatternSize * _template.PatternSize) - 1) - (x + (y * _template.PatternSize));
-                                    Debug.Log("Found alternate cell for " + restriction.Key.ToString() + " at " + targetCell.ToString() + " with pattern index at " + tileIndexInPattern.ToString());
+                                    tileIndexInPattern = (x + (y * _template.PatternSize));
                                     break;
                                 }
                             }
@@ -241,13 +245,41 @@ namespace WaveFunctionCollapse
                             if (targetCell != restriction.Key)
                                 break;
                         }
+
+                        //if a cell still isn't found...
                         if (targetCell == restriction.Key)
                         {
+                            //...then find a neighboring cell that would be influenced if the restriction was actually a cell
+                            offset = new Vector3Int(1, 0);
+                            if (!_cells.ContainsKey(restriction.Key + offset))
+                            {
+                                offset = new Vector3Int(0, 1);
+                                if (_cells.ContainsKey(restriction.Key + offset))
+                                {
+                                    targetCell = restriction.Key + offset;
+                                }
+                            }
+                            else
+                            {
+                                targetCell = restriction.Key + offset;
+                            }
+                        }
+
+                        //if a cell still isn't found...
+                        if (targetCell == restriction.Key)
+                        {
+                            //...then skip this restriction since it cannot be enforced
                             Debug.LogWarning("restriction at " + restriction.Key.ToString() + " could not be resolved");
                             continue;
                         }
+
+                        Debug.Log("Found alternate cell for " + restriction.Key.ToString() + " at " + targetCell.ToString() + " with pattern index at " + tileIndexInPattern.ToString());
                     }
 
+
+                    //pretend the restriction is a real cell and "collapse" and propagate to neighbors
+
+                    //find all valid patterns with the restriction
                     HashSet<ulong> validWithRestriction = new HashSet<ulong>();
                     foreach (var pattern in _template.IDtoPattern)
                     {
@@ -257,12 +289,47 @@ namespace WaveFunctionCollapse
                         }
                     }
 
+                    //if the target is a cell that doesn't contain the restriction in its pattern,
+                    //then get the possible neighbors to the restriction's "cell"
+                    if (targetCell == restriction.Key + Vector3Int.right)
+                    {
+                        validWithRestriction = GetPossibleTilesInDirection(validWithRestriction, EDirection.West);
+                    }
+                    else if (targetCell == restriction.Key + Vector3Int.up)
+                    {
+                        validWithRestriction = GetPossibleTilesInDirection(validWithRestriction, EDirection.North);
+                    }
+
+                    //apply restriction and propagate
                     validWithRestriction.IntersectWith(_cells[targetCell]);
-                    if (!validWithRestriction.SetEquals(_cells[targetCell]))
+                    if (validWithRestriction.Count == 0)
+                    {
+                        Debug.LogWarning("no possible patterns with restriction at " + restriction.Key.ToString());
+                        if (_debug)
+                        {
+                            _cells[targetCell] = validWithRestriction;
+                            BuildOutputTilemap();
+                            yield return null;
+                        }
+                        continue;
+                    }
+                    else if (!validWithRestriction.SetEquals(_cells[targetCell]))
                     {
                         _cells[targetCell] = validWithRestriction;
-                        Propagate(targetCell);
+                        //Propagate(targetCell);
+                        if (_debug)
+                        {
+                            BuildOutputTilemap();
+                            yield return null;
+                        }
                     }
+                    if (!cellsRestricted.Contains(targetCell))
+                        cellsRestricted.Add(targetCell);
+                }
+                foreach (var c in cellsRestricted)
+                {
+                    Propagate(c);
+                    yield return null;
                 }
             }
         }
@@ -334,7 +401,6 @@ namespace WaveFunctionCollapse
             int propTimes = 0;
             //queue and set to track which cells need to be propagated and which already have
             Queue<Vector3Int> cellsToPropagate = new Queue<Vector3Int>();
-            //HashSet<Vector3Int> cellsAlreadyPropped = new HashSet<Vector3Int>();
 
             //start at pos
             cellsToPropagate.Enqueue(pos);
@@ -342,7 +408,6 @@ namespace WaveFunctionCollapse
             {
                 //get the next cell and add it to the completed set
                 Vector3Int cellPos = cellsToPropagate.Dequeue();
-                //cellsAlreadyPropped.Add(cellPos);
 
                 //get the cell's possibilities
                 HashSet<ulong> cell = GetCellAtPosition(cellPos);
@@ -352,10 +417,6 @@ namespace WaveFunctionCollapse
                 for (int i = 0; i < 4; i++)
                 {
                     Vector3Int neighborPos = cellPos + (Vector3Int)dir.GetDirectionVector();
-
-                    //check if the neighbor was already propagated
-                    //if (cellsAlreadyPropped.Contains(neighborPos))
-                    //    continue;
 
                     //get neighbor in direction
                     if (_cells.ContainsKey(neighborPos))

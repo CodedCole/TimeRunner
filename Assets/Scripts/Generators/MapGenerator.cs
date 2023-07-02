@@ -64,13 +64,17 @@ public class MapGenerator : MonoBehaviour
 
         public Vector3Int[] Border()
         {
-            Vector3Int[] result = new Vector3Int[(RoomSize.x + RoomSize.y) * 2];
+            const int MIN = -1;
+            const int MAX = 0;
+
+            Vector3Int[] result = new Vector3Int[(RoomSize.x + RoomSize.y + ((Mathf.Abs(MIN) + Mathf.Abs(MAX)) * 2)) * 2];
             int index = 0;
-            for (int x = 0; x <= RoomSize.x; x++)
+
+            for (int x = MIN; x <= RoomSize.x + MAX; x++)
             {
-                for (int y = 0; y <= RoomSize.y; y++)
+                for (int y = MIN; y <= RoomSize.y + MAX; y++)
                 {
-                    if (y == 0 || y == RoomSize.y || x == 0 || x == RoomSize.x)
+                    if (y == MIN || y == RoomSize.y + MAX || x == MIN || x == RoomSize.x + MAX)
                     {
                         result[index] = (Vector3Int)bottomLeft + new Vector3Int(x, y);
                         index++;
@@ -127,7 +131,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int j = 0; j < size.y; j++)
             {
-                Vector3Int pos = new Vector3Int(i - 2, j - 2, 1);
+                Vector3Int pos = new Vector3Int(i, j, 0);
                 _level.SetTile(pos, tileToFill);
                 _level.SetTileFlags(pos, TileFlags.None);
                 _level.SetColor(pos, Color.grey);
@@ -310,7 +314,7 @@ public class MapGenerator : MonoBehaviour
                 }
                 else
                     roomWFC = new TileWFC(_sample, _level, rooms[i].bottomLeft + Vector2Int.one, (rooms[i].topRight - rooms[i].bottomLeft) - Vector2Int.one, _debug);
-                yield return StartCoroutine(roomWFC.GenerateCoroutine());
+                yield return StartCoroutine(roomWFC.GenerateCoroutine(this));
             }
 
             //recolor room

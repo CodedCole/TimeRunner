@@ -54,7 +54,7 @@ namespace WaveFunctionCollapse
             FindNeighbors();
 
             //DEBUG
-            Log();
+            //Log();
         }
 
         //patterns
