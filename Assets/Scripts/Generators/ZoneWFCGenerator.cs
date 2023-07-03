@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using WaveFunctionCollapse;
 
@@ -19,7 +20,8 @@ public class ZoneWFCGenerator : ITilemapGenerator
     public IEnumerator Generate()
     {
         Zone zone = _zoneGenerator.GetZoneAtIndex(_zoneIndex);
-        
+        TileWFC wfc = new TileWFC(_zoneGenerator.Map, _template, zone.tilesInZone.ToArray(), true);
+
         yield return null;
     }
 }

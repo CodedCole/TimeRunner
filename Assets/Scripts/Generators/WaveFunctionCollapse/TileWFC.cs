@@ -22,7 +22,7 @@ namespace WaveFunctionCollapse
         private List<WFCTileData> _tileData = new List<WFCTileData>();
 
         private Dictionary<Vector3Int, HashSet<ulong>> _cells;
-        private HashSet<ulong> EMPTY = null;
+        private HashSet<ulong>EMPTY = null;
         private bool _restart = false;
 
         private Dictionary<Vector3Int, HashSet<int>> _tileRestrictions;
@@ -153,7 +153,7 @@ namespace WaveFunctionCollapse
             yield return null;
 
             //Collapse
-            Vector3Int collapsePos = _cells.Keys.ElementAt(Random.Range(0, _cells.Count));
+            Vector3Int collapsePos = FindCellWithLeastEntropy();
             while (true)
             {
                 if (collapsePos == -Vector3Int.one)
@@ -228,7 +228,7 @@ namespace WaveFunctionCollapse
                     {
                         Vector3Int offset;
 
-                        //check for cells that contian the restriction as a tile
+                        //check for cells that contian the restriction as a tile within its pattern
                         for (int x = 0; x < _template.PatternSize; x++)
                         {
                             for (int y = 0; y < _template.PatternSize; y++)
@@ -293,7 +293,7 @@ namespace WaveFunctionCollapse
                     //then get the possible neighbors to the restriction's "cell"
                     if (targetCell == restriction.Key + Vector3Int.right)
                     {
-                        validWithRestriction = GetPossibleTilesInDirection(validWithRestriction, EDirection.West);
+                        validWithRestriction = GetPossibleTilesInDirection(validWithRestriction, EDirection.East);
                     }
                     else if (targetCell == restriction.Key + Vector3Int.up)
                     {
@@ -328,8 +328,12 @@ namespace WaveFunctionCollapse
                 }
                 foreach (var c in cellsRestricted)
                 {
-                    Propagate(c);
-                    yield return null;
+                    bool changed = Propagate(c);
+                    if (_debug && changed)
+                    {
+                        BuildOutputTilemap();
+                        yield return null;
+                    }
                 }
             }
         }
@@ -396,9 +400,10 @@ namespace WaveFunctionCollapse
         /// Propagates the WFC rules starting from 'pos'. This could cause an unsolvable tile, which will make the '_restart' flag true
         /// </summary>
         /// <param name="pos">starting position of propagation</param>
-        void Propagate(Vector3Int pos)
+        bool Propagate(Vector3Int pos)
         {
             int propTimes = 0;
+            bool changed = false;
             //queue and set to track which cells need to be propagated and which already have
             Queue<Vector3Int> cellsToPropagate = new Queue<Vector3Int>();
 
@@ -431,6 +436,8 @@ namespace WaveFunctionCollapse
                         //if the neighbor's possibilities and the intersected possibilities match, propagation is not needed on this neighbor
                         if (!_cells[neighborPos].SetEquals(newSet))
                         {
+                            changed = true;
+
                             //apply the intersection to the neighbor
                             _cells[neighborPos] = newSet;
 
@@ -444,7 +451,7 @@ namespace WaveFunctionCollapse
                                 Debug.LogWarning("no possible tiles at " + neighborPos.ToString() + " - restarting");
                                 BuildOutputTilemap();
                                 _restart = true;
-                                return;
+                                return changed;
                             }
                         }
                     }
@@ -454,6 +461,7 @@ namespace WaveFunctionCollapse
                 }
             }
             Debug.Log(propTimes);
+            return changed;
         }
 
         /// <summary>

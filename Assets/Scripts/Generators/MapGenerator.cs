@@ -64,17 +64,19 @@ public class MapGenerator : MonoBehaviour
 
         public Vector3Int[] Border()
         {
-            const int MIN = -1;
-            const int MAX = 0;
+            const int BL_OFFSET = -1;
+            const int TR_OFFSET = 1;
+            int width = RoomSize.x;
+            int height = RoomSize.y;
 
-            Vector3Int[] result = new Vector3Int[(RoomSize.x + RoomSize.y + ((Mathf.Abs(MIN) + Mathf.Abs(MAX)) * 2)) * 2];
+            Vector3Int[] result = new Vector3Int[((width + TR_OFFSET - BL_OFFSET) * (height + TR_OFFSET - BL_OFFSET)) - (width * height)];
             int index = 0;
 
-            for (int x = MIN; x <= RoomSize.x + MAX; x++)
+            for (int x = BL_OFFSET; x < width + TR_OFFSET; x++)
             {
-                for (int y = MIN; y <= RoomSize.y + MAX; y++)
+                for (int y = BL_OFFSET; y < height + TR_OFFSET; y++)
                 {
-                    if (y == MIN || y == RoomSize.y + MAX || x == MIN || x == RoomSize.x + MAX)
+                    if (y == BL_OFFSET || y == height + TR_OFFSET - 1 || x == BL_OFFSET || x == width + TR_OFFSET - 1)
                     {
                         result[index] = (Vector3Int)bottomLeft + new Vector3Int(x, y);
                         index++;
