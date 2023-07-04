@@ -63,7 +63,7 @@ public static class DirectionHelper
     }
 }
 
-public enum EGeneratorType { None, Border, Doors }
+public enum EGeneratorType { None, Border, Doors, WFC }
 
 public static class GeneratorHelper
 {
@@ -77,6 +77,8 @@ public static class GeneratorHelper
                 return new BorderGenerator();
             case EGeneratorType.Doors:
                 return new DoorGenerator();
+            case EGeneratorType.WFC:
+                return new ZoneWFCGenerator();
             default:
                 return null;
         }

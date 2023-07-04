@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using WaveFunctionCollapse;
 
 [Serializable]
 public class Zone
@@ -14,6 +15,7 @@ public class Zone
     public string subtitle;
     public Color color;
     public EGeneratorType[] generator = new EGeneratorType[0];
+    public WFCTemplate template;
 
     public HashSet<Vector3Int> tilesInZone;
     public HashSet<Vector3Int> border;
@@ -139,6 +141,10 @@ public class ZoneGenerator : MonoBehaviour
                 ITilemapGenerator gen = gt.GetGenerator();
                 if (gen != null)
                 {
+                    if (gen is ZoneWFCGenerator)
+                    {
+                        (gen as ZoneWFCGenerator).SetTemplate(z.template);
+                    }
                     gen.PrepGenerator(z.index, this);
                     yield return StartCoroutine(gen.Generate());
                 }
@@ -175,10 +181,14 @@ public class ZoneGenerator : MonoBehaviour
 
     public void BuildWalls(Vector3Int[] positions)
     {
-        TileBase[] walls = new TileBase[positions.Length];
+        //TileBase[] walls = new TileBase[positions.Length];
         for (int i = 0; i < positions.Length; i++)
-            walls[i] = _wall;
-        _zoneTilemap.SetTiles(positions, walls);
+        {
+            _zoneTilemap.SetTile(positions[i], _wall);
+            _zoneTilemap.SetColor(positions[i], Color.white);
+            //walls[i] = _wall;
+        }
+        //_zoneTilemap.SetTiles(positions, walls);
     }
 
     public void MakeEmptySpace(Vector3Int[] positions)
