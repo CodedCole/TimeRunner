@@ -249,20 +249,29 @@ namespace WaveFunctionCollapse
                         //if a cell still isn't found...
                         if (targetCell == restriction.Key)
                         {
-                            //...then find a neighboring cell that would be influenced if the restriction was actually a cell
-                            offset = new Vector3Int(1, 0);
-                            if (!_cells.ContainsKey(restriction.Key + offset))
+                            HashSet<ulong> valid = FindPatternsWithTileRestrictionAtIndex(restriction.Value, 0);
+                            bool changed = VirtualPropagate(restriction.Key, valid);
+                            if (changed)
                             {
-                                offset = new Vector3Int(0, 1);
+                                Debug.Log("Virtual propagation for " + restriction.Key.ToString());
+                            }
+
+                            /*
+                            //...then find a neighboring cell that would be influenced if the restriction was actually a cell
+                            offset = new Vector3Int(0, 1);
+                            if (_cells.ContainsKey(restriction.Key + offset))
+                            {
+                                targetCell = restriction.Key + offset;
+                            }
+                            else
+                            {
+                                offset = new Vector3Int(1, 0);
                                 if (_cells.ContainsKey(restriction.Key + offset))
                                 {
                                     targetCell = restriction.Key + offset;
                                 }
                             }
-                            else
-                            {
-                                targetCell = restriction.Key + offset;
-                            }
+                            //*/
                         }
 
                         //if a cell still isn't found...
@@ -280,14 +289,7 @@ namespace WaveFunctionCollapse
                     //pretend the restriction is a real cell and "collapse" and propagate to neighbors
 
                     //find all valid patterns with the restriction
-                    HashSet<ulong> validWithRestriction = new HashSet<ulong>();
-                    foreach (var pattern in _template.IDtoPattern)
-                    {
-                        if (restriction.Value.Contains(pattern.Value.Tiles[tileIndexInPattern]))
-                        {
-                            validWithRestriction.Add(pattern.Key);
-                        }
-                    }
+                    HashSet<ulong> validWithRestriction = FindPatternsWithTileRestrictionAtIndex(restriction.Value, tileIndexInPattern);
 
                     //if the target is a cell that doesn't contain the restriction in its pattern,
                     //then get the possible neighbors to the restriction's "cell"
@@ -304,7 +306,7 @@ namespace WaveFunctionCollapse
                     validWithRestriction.IntersectWith(_cells[targetCell]);
                     if (validWithRestriction.Count == 0)
                     {
-                        Debug.LogWarning("no possible patterns with restriction at " + restriction.Key.ToString());
+                        Debug.LogError("no possible patterns with restriction at " + restriction.Key.ToString());
                         if (_debug)
                         {
                             _cells[targetCell] = validWithRestriction;
@@ -336,6 +338,19 @@ namespace WaveFunctionCollapse
                     }
                 }
             }
+        }
+
+        HashSet<ulong> FindPatternsWithTileRestrictionAtIndex(HashSet<int> restriction, int index)
+        {
+            HashSet<ulong> validWithRestriction = new HashSet<ulong>();
+            foreach (var pattern in _template.IDtoPattern)
+            {
+                if (restriction.Contains(pattern.Value.Tiles[index]))
+                {
+                    validWithRestriction.Add(pattern.Key);
+                }
+            }
+            return validWithRestriction;
         }
 
         /// <summary>
@@ -394,6 +409,27 @@ namespace WaveFunctionCollapse
 
             //propagate this change to the neighbors
             Propagate(pos);
+        }
+
+        /// <summary>
+        /// Calls Propagate at 'pos' after creating a temporary cell at 'pos' with the value 'vcell'. Just propagates if a cell exists at 'pos'.
+        /// </summary>
+        /// <param name="pos">start position of propagation</param>
+        /// <param name="vcell">values to propagate</param>
+        /// <returns></returns>
+        bool VirtualPropagate(Vector3Int pos, HashSet<ulong> vcell)
+        {
+            if (!_cells.ContainsKey(pos))
+            {
+                _cells.Add(pos, vcell);
+                bool changed = Propagate(pos);
+                _cells.Remove(pos);
+                return changed;
+            }
+            else
+            {
+                return Propagate(pos);
+            }
         }
 
         /// <summary>

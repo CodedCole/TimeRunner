@@ -37,6 +37,7 @@ public class BorderGenerator : ITilemapGenerator
                 if (found)
                     break;
             }
+            /*
             if (!zone.tilesInZone.Contains(point + new Vector3Int(-1, 1)) 
                 && zone.tilesInZone.Contains(point + new Vector3Int(-1, 0)) 
                 && zone.tilesInZone.Contains(point + new Vector3Int(0, 1)))
@@ -49,6 +50,7 @@ public class BorderGenerator : ITilemapGenerator
             {
                 border.Add(new Vector3Int(point.x + 1, point.y - 1));
             }
+            //*/
         }
 
         zone.border = border.ToHashSet();
