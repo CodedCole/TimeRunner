@@ -36,6 +36,8 @@ public class Gun : MonoBehaviour
     private float _nextShotTime;
     private float _reloadedTime;
     private bool _reloading;
+    private int _shotsFired;
+    private bool _triggerPulled;
 
     /// <summary>
     /// Action called when reload is finished. Use to put the correct amount of ammo in the gun.
@@ -66,11 +68,21 @@ public class Gun : MonoBehaviour
 
             _reloading = false;
         }
+
+        if (!_triggerPulled)
+        {
+            _shotsFired = 0;
+        }
+        else
+        {
+            _triggerPulled = false;
+        }
     }
 
     public void Fire()
     {
-        if (_gunInstance != null && _nextShotTime <= Time.time && _gunInstance.mag > 0 && !_reloading)
+        _triggerPulled = true;
+        if (_gunInstance != null && _nextShotTime <= Time.time && _gunInstance.mag > 0 && !_reloading && (_shotsFired < _gunInstance.gun.GetStats().shotsPerTriggerPull || _gunInstance.gun.GetStats().shotsPerTriggerPull == 0))
         {
             _nextShotTime = Time.time + (1f / _gunInstance.gun.GetStats().rateOfFire);
             _gunInstance.mag--;
@@ -82,6 +94,8 @@ public class Gun : MonoBehaviour
 
             if (_gunInstance.mag <= 0)
                 Reload();
+
+            _shotsFired++;
         }
     }
 

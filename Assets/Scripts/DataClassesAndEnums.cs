@@ -27,6 +27,7 @@ public struct GunStats
     public int magSize;
     public float reloadTime;
     public float projectileVelocity;
+    public int shotsPerTriggerPull;
 }
 
 [Serializable]
