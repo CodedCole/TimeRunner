@@ -5,17 +5,23 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     [SerializeField] private Transform _anchor;
+    [SerializeField] private GunItem _defaultGun;
 
     private Gun _gun;
     private Inventory _inventory;
     private bool _useSecondary;
+
+    private bool _reloading;
 
     // Start is called before the first frame update
     void Start()
     {
         _gun = GetComponentInChildren<Gun>();
         _inventory = GetComponent<Inventory>();
-        _gun.GunInstance = _inventory.primaryWeapon;
+        if (_inventory != null)
+            _gun.GunInstance = _inventory.primaryWeapon;
+        else
+            _gun.GunInstance = _defaultGun.MakeItemInstance() as GunItemInstance;
         _gun.onReloaded += OnReloaded;
         _gun.canReload = CanReload;
     }
@@ -35,7 +41,12 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void Fire()
     {
+        if (_reloading)
+            return;
+
         _gun.Fire();
+        if (_gun.GunInstance.mag <= 0)
+            Reload();
     }
 
     /// <summary>
@@ -43,6 +54,9 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void Reload()
     {
+        if (_reloading)
+            return;
+        _reloading = true;
         _gun.Reload();
     }
 
@@ -73,6 +87,9 @@ public class GunController : MonoBehaviour
     /// </summary>
     private void UpdateUsedWeapon()
     {
+        if (_inventory == null)
+            return;
+
         if (_useSecondary)
         {
             _gun.GunInstance = _inventory.secondaryWeapon;
@@ -90,8 +107,11 @@ public class GunController : MonoBehaviour
     /// </summary>
     private void OnReloaded()
     {
-        int absent = _inventory.GetContainer().RemoveItem(_gun.GunInstance.gun.GetAmmo(), _gun.GunInstance.gun.GetStats().magSize - _gun.GunInstance.mag);
+        int absent = 0;
+        if(_inventory != null)
+            absent = _inventory.GetContainer().RemoveItem(_gun.GunInstance.gun.GetAmmo(), _gun.GunInstance.gun.GetStats().magSize - _gun.GunInstance.mag);
         _gun.GunInstance.mag = _gun.GunInstance.gun.GetStats().magSize - absent;
+        _reloading = false;
         Debug.Log("Reloaded");
     }
 
@@ -101,6 +121,9 @@ public class GunController : MonoBehaviour
     /// <returns>whether the weapon can reload</returns>
     private bool CanReload()
     {
+        if (_inventory == null)
+            return true;
+
         return _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());
     }
 }
