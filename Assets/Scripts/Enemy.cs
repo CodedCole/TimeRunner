@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public enum EState { Idle, Patrol, Wander, Attacking, Retreating, }
+
+    [Header("Sight")]
     [SerializeField] private float _searchRadius = 12;
     [SerializeField] [Range(0.01f, 1.0f)] private float _searchRatio = 0.5f;
     [SerializeField] private Transform _eyes;
@@ -14,11 +17,21 @@ public class Enemy : MonoBehaviour
     [SerializeField] private LayerMask _targetableLayers;
     [SerializeField] private LayerMask _blockLineOfSightLayers;
 
+    [Header("Wander")]
+    [SerializeField] private float _wanderRadius;
+    [SerializeField] private float _wanderRadiusStrength = 10;
+    [SerializeField] private float _changeDirectionRate = 0.2f;
+    [SerializeField] private float _wanderStrength = 1;
+
     [Header("Debug")]
     [SerializeField] [Min(1)] private int _searchResolution = 1;
 
     private TopDownMovement _movement;
+    private ContextMovement _contextMovement;
     private GunController _gunController;
+    private Vector3 _home;
+
+    private Vector2 _moveDirectionPerlinOffset;
 
     private List<Transform> _targets = new List<Transform>();
 
@@ -26,7 +39,13 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _movement = GetComponent<TopDownMovement>();
+        _contextMovement = GetComponent<ContextMovement>();
         _gunController = GetComponent<GunController>();
+
+        _home = transform.position;
+        _contextMovement._interestPoints = new Vector3[2];
+        _contextMovement._interestPoints[0] = _home;
+        _moveDirectionPerlinOffset = new Vector2(Random.Range(0f, 10000f), Random.Range(0f, 10000f));
 
         StartCoroutine(SearchForTargets(_searchDelay));
     }
@@ -39,6 +58,12 @@ public class Enemy : MonoBehaviour
         {
             _gunController.Fire();
         }
+
+        _contextMovement._interestPoints[1] = transform.position + 
+            (new Vector3((Mathf.PerlinNoise1D(_moveDirectionPerlinOffset.x + Time.time * _changeDirectionRate) * 2) - 1,
+            (Mathf.PerlinNoise1D(_moveDirectionPerlinOffset.y + Time.time * _changeDirectionRate) * 2) - 1).normalized);
+        _contextMovement._interestPoints[1].z = _wanderStrength;
+        _contextMovement._interestPoints[0].z = Mathf.Max(0, ((_home - transform.position).magnitude - _wanderRadius)) * _wanderRadiusStrength;
     }
 
     IEnumerator SearchForTargets(float delay)
@@ -48,15 +73,15 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(delay);
 
             _targets.Clear();
-            Collider2D[] possibleTargets = Physics2D.OverlapCircleAll(transform.position, _searchRadius, _targetableLayers);
+            Collider2D[] possibleTargets = Physics2D.OverlapCircleAll(_eyes.position, _searchRadius, _targetableLayers);
             foreach (var pt in possibleTargets)
             {
                 //not us
-                if (pt.transform == transform)
+                if (pt.transform == transform || pt.transform == _eyes)
                     continue;
 
                 //within the search ratio
-                Vector2 toTarget = pt.transform.position - transform.position;
+                Vector2 toTarget = pt.transform.position - _eyes.position;
                 float scaledY = toTarget.y / _searchRatio;
                 if (new Vector2(toTarget.x, scaledY).sqrMagnitude > _searchRadius * _searchRadius)
                     continue;
@@ -68,7 +93,7 @@ public class Enemy : MonoBehaviour
                 Vector3 fovMin = _eyes.right * Mathf.Cos(_searchFOV * 0.5f * Mathf.Deg2Rad) - _eyes.up * Mathf.Sin(_searchFOV * 0.5f * Mathf.Deg2Rad);
                 fovMin.y *= _searchRatio;
                 fovMin.Normalize();
-                if (Vector2.SignedAngle(fovMax.normalized, toTarget.normalized) > 0 || Vector2.SignedAngle(fovMin.normalized, toTarget.normalized) < 0)
+                if (Vector2.SignedAngle(fovMax, toTarget.normalized) > 0 || Vector2.SignedAngle(fovMin, toTarget.normalized) < 0)
                     continue;
 
                 //unobstructed
