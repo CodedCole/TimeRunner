@@ -117,4 +117,15 @@ public class Inventory : MonoBehaviour
 
     public void RegisterOnEquip(Action action) { onEquip += action; }
     public void UnregisterOnEquip(Action action) { onEquip -= action; }
+
+    public ArmorStats GetCurrentArmorStats()
+    {
+        ArmorStats helm = new ArmorStats();
+        if (helmet != null)
+            helm = helmet.armor.GetStats();
+        ArmorStats body = new ArmorStats();
+        if (bodyArmor != null)
+            body = bodyArmor.armor.GetStats();
+        return ArmorStats.Combine(body, helm);
+    }
 }

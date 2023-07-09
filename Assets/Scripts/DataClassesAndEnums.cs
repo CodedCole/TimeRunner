@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum EDamageType { Kinetic, Heat, Electric, Gravity };
@@ -16,6 +17,16 @@ public struct ArmorStats
     public float heatResistance;
     public float electricResistance;
     public float gravityResistance;
+
+    public static ArmorStats Combine(ArmorStats a, ArmorStats b)
+    {
+        ArmorStats combined = new ArmorStats();
+        combined.kineticResistance = a.kineticResistance + b.kineticResistance;
+        combined.heatResistance = a.heatResistance + b.heatResistance;
+        combined.electricResistance = a.electricResistance + b.electricResistance;
+        combined.gravityResistance = a.gravityResistance + b.gravityResistance;
+        return combined;
+    }
 }
 
 [Serializable]

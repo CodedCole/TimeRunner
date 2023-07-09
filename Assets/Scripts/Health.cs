@@ -17,6 +17,7 @@ public class Health : MonoBehaviour
     
     private float _health;
     private SpriteRenderer _spriteRenderer;
+    private Inventory _inventory;
 
     private float _damageFlashTimer;
 
@@ -26,6 +27,9 @@ public class Health : MonoBehaviour
     void Start()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _inventory = GetComponent<Inventory>();
+        if (_inventory != null)
+            _inventory.RegisterOnEquip(UpdateArmor);
         _health = _maxHealth;
     }
 
@@ -81,4 +85,9 @@ public class Health : MonoBehaviour
 
     public void RegisterOnDeath(Action action) { onDeath += action; }
     public void UnregisterOnDeath(Action action) { onDeath -= action; }
+
+    void UpdateArmor()
+    {
+        _armorStats = _inventory.GetCurrentArmorStats();
+    }
 }
