@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 702b522b9182ac944a21d81175362315, type: 3}
-  m_Name: KevlarPlateCarrier
+  m_Name: PoliceRiotBodyArmor
   m_EditorClassIdentifier: 
-  itemName: Kevlar Plate Carrier
-  description: A vest made of kevlar that can hold a variety of armor plates
+  itemName: Police Vest
+  description: A vest that protects the wearer from blunt attacks and light firearms.
   icon: {fileID: -70326220, guid: b57939b81be047d4aad3ea1f8857a27d, type: 3}
   weight: 1.5
   maxStackSize: 1
   armorType: 1
+  spriteLibrary: {fileID: 7108339969198208228, guid: ca7e354ce1c870149bcc1afef994afa2, type: 3}
   stats:
     kineticResistance: 0.2
     heatResistance: 0.02

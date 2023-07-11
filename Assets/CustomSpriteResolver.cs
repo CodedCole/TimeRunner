@@ -37,7 +37,7 @@ public class CustomSpriteResolver : MonoBehaviour
         }
     }
 
-    void UpdateSprite()
+    public void UpdateSprite()
     {
         if (_spriteRenderer == null)
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -50,7 +50,6 @@ public class CustomSpriteResolver : MonoBehaviour
         if (_library == null)
             throw new System.NullReferenceException("_library is null");
         _spriteRenderer.sprite = _library.GetSprite(_category, _label);
-        Debug.Log("Updated Sprite");
     }
 
     public void SetFlip(bool flip)

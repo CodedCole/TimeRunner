@@ -108,4 +108,14 @@ public class Gun : MonoBehaviour
             Debug.Log("Start Reload");
         }
     }
+
+    public void SetSpriteFlip(bool flip)
+    {
+        spriteRenderer.flipY = flip;
+    }
+
+    public void SetSpriteSortingOrder(int order)
+    {
+        spriteRenderer.sortingOrder = order;
+    }
 }

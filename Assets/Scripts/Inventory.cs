@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public class Inventory : MonoBehaviour
 {
     [SerializeField] private float _maxWeight;
     [SerializeField] private int _maxItems;
     [SerializeField] private List<ItemInitialState> _startingItems;
+    [SerializeField] private SpriteLibrary _helmetLibrary;
+    [SerializeField] private SpriteLibrary _bodyArmorLibrary;
     public GunItemInstance primaryWeapon { get; private set; }
     public GunItemInstance secondaryWeapon { get; private set; }
     public ArmorItemInstance helmet { get; private set; }
@@ -16,6 +19,7 @@ public class Inventory : MonoBehaviour
     public ItemInstance rightGadget { get; private set; }
 
     private Container _container;
+
     private Action onStart;
     private Action onEquip;
     public Action<GunItemInstance> onEquipWeapon;
@@ -81,9 +85,17 @@ public class Inventory : MonoBehaviour
             if (item is ArmorItemInstance)
             {
                 if (gearSlot == EGearSlot.Helmet && ((item as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Helmet)
+                {
                     helmet = item as ArmorItemInstance;
+                    _helmetLibrary.spriteLibraryAsset = helmet.armor.GetSpriteLibrary();
+                    _helmetLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
+                }
                 else
+                {
                     bodyArmor = item as ArmorItemInstance;
+                    _bodyArmorLibrary.spriteLibraryAsset = bodyArmor.armor.GetSpriteLibrary();
+                    _bodyArmorLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
+                }
                 Debug.Log("Equipped");
                 if (onEquip != null)
                     onEquip();

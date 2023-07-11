@@ -5,7 +5,9 @@ using UnityEngine.U2D.Animation;
 
 public class GunController : MonoBehaviour
 {
-    CustomSpriteResolver sr;
+    [SerializeField] private CustomSpriteResolver character;
+    [SerializeField] private CustomSpriteResolver helmet;
+    [SerializeField] private CustomSpriteResolver bodyArmor;
 
     [SerializeField] private Transform _anchor;
     [SerializeField] private GunItem _defaultGun;
@@ -22,15 +24,27 @@ public class GunController : MonoBehaviour
         _gun = GetComponentInChildren<Gun>();
         _inventory = GetComponent<Inventory>();
         if (_inventory != null)
+        {
             _gun.GunInstance = _inventory.primaryWeapon;
+            _inventory.RegisterOnEquip(UpdateUsedWeapon);
+        }
         else
             _gun.GunInstance = _defaultGun.MakeItemInstance() as GunItemInstance;
         _gun.onReloaded += OnReloaded;
         _gun.canReload = CanReload;
 
-        sr = GetComponentInChildren<CustomSpriteResolver>(true);
-        if (sr != null)
-            sr.Category = "Right";
+        if (character != null)
+            character.Category = "Right";
+        if (helmet != null)
+        {
+            helmet.Category = "Right";
+            helmet.Label = "Helmet";
+        }
+        if (bodyArmor != null)
+        {
+            bodyArmor.Category = "Right";
+            bodyArmor.Label = "BodyArmor";
+        }
     }
 
     /// <summary>
@@ -40,36 +54,76 @@ public class GunController : MonoBehaviour
     public void AimAtPos(Vector2 pos)
     {
         Vector2 direction = new Vector2(pos.x - _anchor.position.x, pos.y - _anchor.position.y);
-        if (sr != null)
+        if (character != null)
         {
             if (direction.y > Mathf.Abs(direction.x) * 2)
             {
-                sr.Category = "Up";
-                sr.SetFlip(false);
+                character.Category = "Up";
+                character.SetFlip(false);
+
+                helmet.Category = "Up";
+                helmet.SetFlip(false);
+
+                bodyArmor.Category = "Up";
+                bodyArmor.SetFlip(false);
+
+                _gun.SetSpriteSortingOrder(-1);
             }
             else if (direction.y > Mathf.Abs(direction.x) * 0.5f)
             {
-                sr.Category = "UpRight";
-                sr.SetFlip(direction.x < 0);
+                character.Category = "UpRight";
+                character.SetFlip(direction.x < 0);
+
+                helmet.Category = "UpRight";
+                helmet.SetFlip(direction.x < 0);
+
+                bodyArmor.Category = "UpRight";
+                bodyArmor.SetFlip(direction.x < 0);
+                _gun.SetSpriteSortingOrder(-1);
             }
             else if (direction.y > -Mathf.Abs(direction.x) * 0.5f)
             {
-                sr.Category = "Right";
-                sr.SetFlip(direction.x < 0);
+                character.Category = "Right";
+                character.SetFlip(direction.x < 0);
+
+                helmet.Category = "Right";
+                helmet.SetFlip(direction.x < 0);
+
+                bodyArmor.Category = "Right";
+                bodyArmor.SetFlip(direction.x < 0);
+                _gun.SetSpriteSortingOrder(1);
             }
             else if (direction.y > -Mathf.Abs(direction.x) * 2)
             {
-                sr.Category = "DownRight";
-                sr.SetFlip(direction.x < 0);
+                character.Category = "DownRight";
+                character.SetFlip(direction.x < 0);
+
+                helmet.Category = "DownRight";
+                helmet.SetFlip(direction.x < 0);
+
+                bodyArmor.Category = "DownRight";
+                bodyArmor.SetFlip(direction.x < 0);
+
+                _gun.SetSpriteSortingOrder(1);
             }
             else
             {
-                sr.Category = "Down";
-                sr.SetFlip(false);
+                character.Category = "Down";
+                character.SetFlip(false);
+
+                helmet.Category = "Down";
+                helmet.SetFlip(false);
+
+                bodyArmor.Category = "Down";
+                bodyArmor.SetFlip(false);
+
+                _gun.SetSpriteSortingOrder(1);
             }
         }
+        
         float tan = Mathf.Atan2(direction.y, direction.x);
         _anchor.localEulerAngles = Vector3.forward * tan * Mathf.Rad2Deg;
+        _gun.SetSpriteFlip(direction.x < 0);
     }
 
     /// <summary>

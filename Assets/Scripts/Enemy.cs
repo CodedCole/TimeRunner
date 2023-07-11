@@ -47,6 +47,8 @@ public class Enemy : MonoBehaviour
         _contextMovement._interestPoints[0] = _home;
         _moveDirectionPerlinOffset = new Vector2(Random.Range(0f, 10000f), Random.Range(0f, 10000f));
 
+        GetComponent<Health>().RegisterOnDeath(Die);
+
         StartCoroutine(SearchForTargets(_searchDelay));
     }
 
@@ -134,5 +136,15 @@ public class Enemy : MonoBehaviour
         {
             Gizmos.DrawLine(transform.position, t.position);
         }
+    }
+
+    void Die()
+    {
+        StopAllCoroutines();
+        _contextMovement.enabled = false;
+        _movement.enabled = false;
+        _gunController.enabled = false;
+        GetComponent<Health>().UnregisterOnDeath(Die);
+        this.enabled = false;
     }
 }
