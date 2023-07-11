@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public class GunController : MonoBehaviour
 {
+    CustomSpriteResolver sr;
+
     [SerializeField] private Transform _anchor;
     [SerializeField] private GunItem _defaultGun;
 
@@ -15,7 +18,7 @@ public class GunController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
         _gun = GetComponentInChildren<Gun>();
         _inventory = GetComponent<Inventory>();
         if (_inventory != null)
@@ -24,6 +27,10 @@ public class GunController : MonoBehaviour
             _gun.GunInstance = _defaultGun.MakeItemInstance() as GunItemInstance;
         _gun.onReloaded += OnReloaded;
         _gun.canReload = CanReload;
+
+        sr = GetComponentInChildren<CustomSpriteResolver>(true);
+        if (sr != null)
+            sr.Category = "Right";
     }
 
     /// <summary>
@@ -32,7 +39,36 @@ public class GunController : MonoBehaviour
     /// <param name="pos">world position to aim at</param>
     public void AimAtPos(Vector2 pos)
     {
-        float tan = Mathf.Atan2(pos.y - _anchor.position.y, pos.x - _anchor.position.x);
+        Vector2 direction = new Vector2(pos.x - _anchor.position.x, pos.y - _anchor.position.y);
+        if (sr != null)
+        {
+            if (direction.y > Mathf.Abs(direction.x) * 2)
+            {
+                sr.Category = "Up";
+                sr.SetFlip(false);
+            }
+            else if (direction.y > Mathf.Abs(direction.x) * 0.5f)
+            {
+                sr.Category = "UpRight";
+                sr.SetFlip(direction.x < 0);
+            }
+            else if (direction.y > -Mathf.Abs(direction.x) * 0.5f)
+            {
+                sr.Category = "Right";
+                sr.SetFlip(direction.x < 0);
+            }
+            else if (direction.y > -Mathf.Abs(direction.x) * 2)
+            {
+                sr.Category = "DownRight";
+                sr.SetFlip(direction.x < 0);
+            }
+            else
+            {
+                sr.Category = "Down";
+                sr.SetFlip(false);
+            }
+        }
+        float tan = Mathf.Atan2(direction.y, direction.x);
         _anchor.localEulerAngles = Vector3.forward * tan * Mathf.Rad2Deg;
     }
 
@@ -41,7 +77,7 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void Fire()
     {
-        if (_reloading)
+        if (_reloading || _gun.GunInstance == null)
             return;
 
         _gun.Fire();

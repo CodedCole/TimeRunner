@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player8D-Sheet_0
+      name: DownIdle1
       rect:
         serializedVersion: 2
         x: 0
@@ -131,7 +131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_1
+      name: DownIdle2
       rect:
         serializedVersion: 2
         x: 16
@@ -152,7 +152,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_2
+      name: DownWalk1
       rect:
         serializedVersion: 2
         x: 32
@@ -173,7 +173,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_3
+      name: DownWalk2
       rect:
         serializedVersion: 2
         x: 48
@@ -194,7 +194,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_4
+      name: DownWalk3
       rect:
         serializedVersion: 2
         x: 64
@@ -215,7 +215,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_5
+      name: DownWalk4
       rect:
         serializedVersion: 2
         x: 80
@@ -236,7 +236,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_6
+      name: DownRightIdle1
       rect:
         serializedVersion: 2
         x: 0
@@ -257,7 +257,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_7
+      name: DownRightIdle2
       rect:
         serializedVersion: 2
         x: 16
@@ -278,7 +278,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_8
+      name: DownRightWalk1
       rect:
         serializedVersion: 2
         x: 32
@@ -299,7 +299,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_9
+      name: DownRightWalk2
       rect:
         serializedVersion: 2
         x: 48
@@ -320,7 +320,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_10
+      name: DownRightWalk3
       rect:
         serializedVersion: 2
         x: 64
@@ -341,7 +341,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_11
+      name: DownRightWalk4
       rect:
         serializedVersion: 2
         x: 80
@@ -362,7 +362,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_12
+      name: RightIdle1
       rect:
         serializedVersion: 2
         x: 0
@@ -383,7 +383,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_13
+      name: RightIdle2
       rect:
         serializedVersion: 2
         x: 16
@@ -404,7 +404,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_14
+      name: RightWalk1
       rect:
         serializedVersion: 2
         x: 32
@@ -425,7 +425,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_15
+      name: RightWalk2
       rect:
         serializedVersion: 2
         x: 48
@@ -446,7 +446,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_16
+      name: RightWalk3
       rect:
         serializedVersion: 2
         x: 64
@@ -467,7 +467,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_17
+      name: RightWalk4
       rect:
         serializedVersion: 2
         x: 80
@@ -488,7 +488,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_18
+      name: UpRightIdle1
       rect:
         serializedVersion: 2
         x: 0
@@ -509,7 +509,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_19
+      name: UpRightIdle2
       rect:
         serializedVersion: 2
         x: 16
@@ -530,7 +530,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_20
+      name: UpRightWalk1
       rect:
         serializedVersion: 2
         x: 32
@@ -551,7 +551,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_21
+      name: UpRightWalk2
       rect:
         serializedVersion: 2
         x: 48
@@ -572,7 +572,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_22
+      name: UpRightWalk3
       rect:
         serializedVersion: 2
         x: 64
@@ -593,7 +593,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_23
+      name: UpRightWalk4
       rect:
         serializedVersion: 2
         x: 80
@@ -614,7 +614,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_24
+      name: UpIdle1
       rect:
         serializedVersion: 2
         x: 0
@@ -635,7 +635,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_25
+      name: UpIdle2
       rect:
         serializedVersion: 2
         x: 16
@@ -656,7 +656,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_26
+      name: UpWalk1
       rect:
         serializedVersion: 2
         x: 32
@@ -677,7 +677,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_27
+      name: UpWalk2
       rect:
         serializedVersion: 2
         x: 48
@@ -698,7 +698,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_28
+      name: UpWalk3
       rect:
         serializedVersion: 2
         x: 64
@@ -719,7 +719,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player8D-Sheet_29
+      name: UpWalk4
       rect:
         serializedVersion: 2
         x: 80
@@ -750,36 +750,36 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player8D-Sheet_0: 40771842
-      Player8D-Sheet_1: -268977186
-      Player8D-Sheet_10: 985794205
-      Player8D-Sheet_11: -361735535
-      Player8D-Sheet_12: 1963610854
-      Player8D-Sheet_13: 995946431
-      Player8D-Sheet_14: -1047667302
-      Player8D-Sheet_15: -1748451698
-      Player8D-Sheet_16: -395596690
-      Player8D-Sheet_17: 667499988
-      Player8D-Sheet_18: 1492794967
-      Player8D-Sheet_19: 832152197
-      Player8D-Sheet_2: -1900716113
-      Player8D-Sheet_20: -773440829
-      Player8D-Sheet_21: 17641942
-      Player8D-Sheet_22: 908686172
-      Player8D-Sheet_23: 1660977208
-      Player8D-Sheet_24: -1148155813
-      Player8D-Sheet_25: 728189178
-      Player8D-Sheet_26: 1507909401
-      Player8D-Sheet_27: 444427980
-      Player8D-Sheet_28: 1813202883
-      Player8D-Sheet_29: 1063856963
-      Player8D-Sheet_3: -97184323
-      Player8D-Sheet_4: -110628111
-      Player8D-Sheet_5: 1177504037
-      Player8D-Sheet_6: -432605671
-      Player8D-Sheet_7: -573787079
-      Player8D-Sheet_8: -2023795462
-      Player8D-Sheet_9: -279821422
+      DownIdle1: 40771842
+      DownIdle2: -268977186
+      DownRightIdle1: -432605671
+      DownRightIdle2: -573787079
+      DownRightWalk1: -2023795462
+      DownRightWalk2: -279821422
+      DownRightWalk3: 985794205
+      DownRightWalk4: -361735535
+      DownWalk1: -1900716113
+      DownWalk2: -97184323
+      DownWalk3: -110628111
+      DownWalk4: 1177504037
+      RightIdle1: 1963610854
+      RightIdle2: 995946431
+      RightWalk1: -1047667302
+      RightWalk2: -1748451698
+      RightWalk3: -395596690
+      RightWalk4: 667499988
+      UpIdle1: -1148155813
+      UpIdle2: 728189178
+      UpRightIdle1: 1492794967
+      UpRightIdle2: 832152197
+      UpRightWalk1: -773440829
+      UpRightWalk2: 17641942
+      UpRightWalk3: 908686172
+      UpRightWalk4: 1660977208
+      UpWalk1: 1507909401
+      UpWalk2: 444427980
+      UpWalk3: 1813202883
+      UpWalk4: 1063856963
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

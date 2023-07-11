@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d5d29a8c9899dec45bdccdc3935b9528
+guid: b57939b81be047d4aad3ea1f8857a27d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ForestScoutArmor_0
+      name: PoliceRiot_Helmet_Down
       rect:
         serializedVersion: 2
         x: 0
@@ -124,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 41ae004c6d01fc04596e4ee2d740eb1f
-      internalID: 356962766
+      spriteID: 26013c14e5187eb45b938553c07a65b2
+      internalID: 609667809
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_1
+      name: PoliceRiot_Helmet_DownRight
       rect:
         serializedVersion: 2
         x: 16
@@ -145,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06b2c74dd8e7bb146967477e9a3bf142
-      internalID: -842847942
+      spriteID: e6feba025ca372e4d957dbc8283ee9c6
+      internalID: -398441312
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_2
+      name: PoliceRiot_Helmet_Right
       rect:
         serializedVersion: 2
         x: 32
@@ -166,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1cddeb457e6db434c8d99fcc10e095fb
-      internalID: 1960504663
+      spriteID: fed873c90412c58488840eff17f42000
+      internalID: 702111922
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_3
+      name: PoliceRiot_Helmet_UpRight
       rect:
         serializedVersion: 2
         x: 48
@@ -187,14 +187,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04abc501e695951448a638e430c84826
-      internalID: -1956596055
+      spriteID: b1f2193cffa5de647b57dac018ce8d58
+      internalID: 1500526890
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_4
+      name: PoliceRiot_Helmet_Up
       rect:
         serializedVersion: 2
         x: 64
@@ -208,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e936ea806560421459f24d85d416fbb1
-      internalID: -223954420
+      spriteID: 5272b664d95d937478d60e365eac4811
+      internalID: 1994829994
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_5
+      name: PoliceRiot_BodyArmor_Down
       rect:
         serializedVersion: 2
         x: 0
@@ -229,14 +229,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 551c72e0b03b53147b98c94e2ff87ee7
-      internalID: -398360557
+      spriteID: a2d238c57050bc34d9adadf68fc1b9d2
+      internalID: -70326220
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_6
+      name: PoliceRiot_BodyArmor_DownRight
       rect:
         serializedVersion: 2
         x: 16
@@ -250,14 +250,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6ca70315a65051e4cb428db75624c89a
-      internalID: 276567533
+      spriteID: 8ddab5181e07a7a42a92a874f9759f62
+      internalID: 731844644
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_7
+      name: PoliceRiot_BodyArmor_Right
       rect:
         serializedVersion: 2
         x: 32
@@ -271,14 +271,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 76f85760e7ab2474c90034c57ce57fb0
-      internalID: 1908842302
+      spriteID: 66fd9006d42db1144b2b9306555478c3
+      internalID: 484097090
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_8
+      name: PoliceRiot_BodyArmor_UpRight
       rect:
         serializedVersion: 2
         x: 48
@@ -292,14 +292,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d22fb361778336e4aac095b51e3d8846
-      internalID: 1155840125
+      spriteID: 1871025d6bdd692419b3a00b237979a7
+      internalID: 72389028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForestScoutArmor_9
+      name: PoliceRiot_BodyArmor_Up
       rect:
         serializedVersion: 2
         x: 64
@@ -313,8 +313,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 203255802350a5d47a942fe8a090f70e
-      internalID: 484441705
+      spriteID: 59cbc2f2468a44d4e93b9e9649edaa5b
+      internalID: 1981707063
       vertices: []
       indices: 
       edges: []
@@ -330,16 +330,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ForestScoutArmor_0: 356962766
-      ForestScoutArmor_1: -842847942
-      ForestScoutArmor_2: 1960504663
-      ForestScoutArmor_3: -1956596055
-      ForestScoutArmor_4: -223954420
-      ForestScoutArmor_5: -398360557
-      ForestScoutArmor_6: 276567533
-      ForestScoutArmor_7: 1908842302
-      ForestScoutArmor_8: 1155840125
-      ForestScoutArmor_9: 484441705
+      PoliceRiot_BodyArmor_Down: -70326220
+      PoliceRiot_BodyArmor_DownRight: 731844644
+      PoliceRiot_BodyArmor_Right: 484097090
+      PoliceRiot_BodyArmor_Up: 1981707063
+      PoliceRiot_BodyArmor_UpRight: 72389028
+      PoliceRiot_Helmet_Down: 609667809
+      PoliceRiot_Helmet_DownRight: -398441312
+      PoliceRiot_Helmet_Right: 702111922
+      PoliceRiot_Helmet_Up: 1994829994
+      PoliceRiot_Helmet_UpRight: 1500526890
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
