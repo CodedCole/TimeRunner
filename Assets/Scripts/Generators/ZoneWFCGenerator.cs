@@ -26,7 +26,7 @@ public class ZoneWFCGenerator : ITilemapGenerator
     public IEnumerator Generate()
     {
         Zone zone = _zoneGenerator.GetZoneAtIndex(_zoneIndex);
-        TileWFC wfc = new TileWFC(_zoneGenerator.Map, _template, zone.tilesInZone.ToArray(), true);
+        TileWFC wfc = new TileWFC(_zoneGenerator.Map, _template, zone.tilesInZone.ToArray(), _zoneGenerator.GetDebugEnabled());
 
         List<Vector3Int> border = new List<Vector3Int>();
         foreach (var point in zone.border)

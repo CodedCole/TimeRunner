@@ -14,9 +14,12 @@ public class GunController : MonoBehaviour
 
     private Gun _gun;
     private Inventory _inventory;
+    private TopDownMovement _movement;
     private bool _useSecondary;
 
     private bool _reloading;
+
+    private Vector2 _currentDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -53,77 +56,9 @@ public class GunController : MonoBehaviour
     /// <param name="pos">world position to aim at</param>
     public void AimAtPos(Vector2 pos)
     {
-        Vector2 direction = new Vector2(pos.x - _anchor.position.x, pos.y - _anchor.position.y);
-        if (character != null)
-        {
-            if (direction.y > Mathf.Abs(direction.x) * 2)
-            {
-                character.Category = "Up";
-                character.SetFlip(false);
-
-                helmet.Category = "Up";
-                helmet.SetFlip(false);
-
-                bodyArmor.Category = "Up";
-                bodyArmor.SetFlip(false);
-
-                _gun.SetSpriteSortingOrder(-1);
-            }
-            else if (direction.y > Mathf.Abs(direction.x) * 0.5f)
-            {
-                character.Category = "UpRight";
-                character.SetFlip(direction.x < 0);
-
-                helmet.Category = "UpRight";
-                helmet.SetFlip(direction.x < 0);
-
-                bodyArmor.Category = "UpRight";
-                bodyArmor.SetFlip(direction.x < 0);
-                _gun.SetSpriteSortingOrder(-1);
-            }
-            else if (direction.y > -Mathf.Abs(direction.x) * 0.5f)
-            {
-                character.Category = "Right";
-                character.SetFlip(direction.x < 0);
-
-                helmet.Category = "Right";
-                helmet.SetFlip(direction.x < 0);
-
-                bodyArmor.Category = "Right";
-                bodyArmor.SetFlip(direction.x < 0);
-                _gun.SetSpriteSortingOrder(1);
-            }
-            else if (direction.y > -Mathf.Abs(direction.x) * 2)
-            {
-                character.Category = "DownRight";
-                character.SetFlip(direction.x < 0);
-
-                helmet.Category = "DownRight";
-                helmet.SetFlip(direction.x < 0);
-
-                bodyArmor.Category = "DownRight";
-                bodyArmor.SetFlip(direction.x < 0);
-
-                _gun.SetSpriteSortingOrder(1);
-            }
-            else
-            {
-                character.Category = "Down";
-                character.SetFlip(false);
-
-                helmet.Category = "Down";
-                helmet.SetFlip(false);
-
-                bodyArmor.Category = "Down";
-                bodyArmor.SetFlip(false);
-
-                _gun.SetSpriteSortingOrder(1);
-            }
-        }
-        
-        float tan = Mathf.Atan2(direction.y, direction.x);
+        _currentDirection = new Vector2(pos.x - _anchor.position.x, pos.y - _anchor.position.y);
+        float tan = Mathf.Atan2(_currentDirection.y, _currentDirection.x);
         _anchor.localEulerAngles = Vector3.forward * tan * Mathf.Rad2Deg;
-        _gun.SetSpriteFlip(direction.x < 0);
     }
 
     /// <summary>
@@ -215,5 +150,10 @@ public class GunController : MonoBehaviour
             return true;
 
         return _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());
+    }
+
+    public Vector2 GetAimVector()
+    {
+        return _currentDirection;
     }
 }

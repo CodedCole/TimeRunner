@@ -14,9 +14,9 @@ TagManager:
   - Interactables
   - Targetable
   - BlockLineOfSight
-  - 
-  - 
-  - 
+  - MovementColliders
+  - Projectile
+  - Hitbox
   - 
   - 
   - 

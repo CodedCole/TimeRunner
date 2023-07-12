@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2825059718565491248}
   - component: {fileID: 590177837319269931}
   - component: {fileID: 2682001494337403361}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 4569700383314133197}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2825059718565491248
 Rigidbody2D:
@@ -47,7 +47,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -120,7 +120,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.025}
+  m_Size: {x: 0.025, y: 0.025}
   m_EdgeRadius: 0
 --- !u!1 &8650336260481775163
 GameObject:
@@ -132,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4569700383314133197}
   - component: {fileID: 459399933000778679}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}

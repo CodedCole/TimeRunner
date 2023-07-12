@@ -27,4 +27,9 @@ public class TopDownMovement : MonoBehaviour
     {
         _targetDirection = direction;
     }
+
+    public Vector2 GetMove()
+    {
+        return _targetDirection;
+    }
 }

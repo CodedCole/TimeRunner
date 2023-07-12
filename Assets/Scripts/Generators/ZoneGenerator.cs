@@ -57,6 +57,7 @@ public class ZoneGenerator : MonoBehaviour
     [SerializeField] private Tilemap _zoneTilemap;
     [SerializeField] private TileBase _tile;
     [SerializeField] private TileBase _wall;
+    [SerializeField] private bool _debug;
 
     private Dictionary<Color, int> _colorToZoneIndex = new Dictionary<Color, int>();
     private Color[] _pixels;
@@ -101,7 +102,8 @@ public class ZoneGenerator : MonoBehaviour
                 }
                 _zones[_colorToZoneIndex.Count].tilesInZone = new HashSet<Vector3Int>();
                 _colorToZoneIndex.Add(_pixels[i], _colorToZoneIndex.Count);
-                Debug.Log("Found Zone: " + _zones[_colorToZoneIndex[_pixels[i]]].name);
+                if (_debug)
+                    Debug.Log("Found Zone: " + _zones[_colorToZoneIndex[_pixels[i]]].name);
             }
         }
 
@@ -181,14 +183,11 @@ public class ZoneGenerator : MonoBehaviour
 
     public void BuildWalls(Vector3Int[] positions)
     {
-        //TileBase[] walls = new TileBase[positions.Length];
         for (int i = 0; i < positions.Length; i++)
         {
             _zoneTilemap.SetTile(positions[i], _wall);
             _zoneTilemap.SetColor(positions[i], Color.white);
-            //walls[i] = _wall;
         }
-        //_zoneTilemap.SetTiles(positions, walls);
     }
 
     public void MakeEmptySpace(Vector3Int[] positions)
@@ -197,5 +196,10 @@ public class ZoneGenerator : MonoBehaviour
         for (int i = 0; i < positions.Length; i++)
             emptySpaces[i] = null;
         _zoneTilemap.SetTiles(positions, emptySpaces);
+    }
+
+    public bool GetDebugEnabled()
+    {
+        return _debug;
     }
 }

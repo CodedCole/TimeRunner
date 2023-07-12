@@ -72,7 +72,8 @@ namespace WaveFunctionCollapse
             _input.CompressBounds();
             Vector3Int min = _input.cellBounds.min;
             Vector3Int max = _input.cellBounds.max;
-            Debug.Log("min: " + min.ToString() + " max: " + max.ToString());
+            if (_debug)
+                Debug.Log("min: " + min.ToString() + " max: " + max.ToString());
             GetTileIndex(null);     //adds the empty tile to the list
             for (int x = min.x; x < max.x; x++)
             {
@@ -253,36 +254,21 @@ namespace WaveFunctionCollapse
                             bool changed = VirtualPropagate(restriction.Key, valid);
                             if (changed)
                             {
-                                Debug.Log("Virtual propagation for " + restriction.Key.ToString());
+                                if(_debug)
+                                    Debug.Log("Virtual propagation for " + restriction.Key.ToString());
                             }
-
-                            /*
-                            //...then find a neighboring cell that would be influenced if the restriction was actually a cell
-                            offset = new Vector3Int(0, 1);
-                            if (_cells.ContainsKey(restriction.Key + offset))
-                            {
-                                targetCell = restriction.Key + offset;
-                            }
-                            else
-                            {
-                                offset = new Vector3Int(1, 0);
-                                if (_cells.ContainsKey(restriction.Key + offset))
-                                {
-                                    targetCell = restriction.Key + offset;
-                                }
-                            }
-                            //*/
                         }
 
                         //if a cell still isn't found...
                         if (targetCell == restriction.Key)
                         {
                             //...then skip this restriction since it cannot be enforced
-                            Debug.LogWarning("restriction at " + restriction.Key.ToString() + " could not be resolved");
+                            if(_debug)
+                                Debug.LogWarning("restriction at " + restriction.Key.ToString() + " could not be resolved");
                             continue;
                         }
-
-                        Debug.Log("Found alternate cell for " + restriction.Key.ToString() + " at " + targetCell.ToString() + " with pattern index at " + tileIndexInPattern.ToString());
+                        if(_debug)
+                            Debug.Log("Found alternate cell for " + restriction.Key.ToString() + " at " + targetCell.ToString() + " with pattern index at " + tileIndexInPattern.ToString());
                     }
 
 
@@ -318,7 +304,6 @@ namespace WaveFunctionCollapse
                     else if (!validWithRestriction.SetEquals(_cells[targetCell]))
                     {
                         _cells[targetCell] = validWithRestriction;
-                        //Propagate(targetCell);
                         if (_debug)
                         {
                             BuildOutputTilemap();
@@ -377,7 +362,7 @@ namespace WaveFunctionCollapse
                 }
             }
             //return the cell with least entropy
-            if (leastEntropyCells.Count == 0)
+            if (leastEntropyCells.Count == 0 && _debug)
                 Debug.Log("fully collapsed");
             return (leastEntropyCells.Count == 0 ? -Vector3Int.one : leastEntropyCells[Random.Range(0, leastEntropyCells.Count)]);
         }
@@ -484,7 +469,9 @@ namespace WaveFunctionCollapse
                             //if the possibility count is 0, then a collision has occured and the '_restart' flag is set
                             if (newSet.Count == 0)
                             {
-                                Debug.LogWarning("no possible tiles at " + neighborPos.ToString() + " - restarting");
+                                if (_debug)
+                                    Debug.LogWarning("no possible tiles at " + neighborPos.ToString() + " - restarting");
+
                                 BuildOutputTilemap();
                                 _restart = true;
                                 return changed;
@@ -496,7 +483,9 @@ namespace WaveFunctionCollapse
                     dir++;
                 }
             }
-            Debug.Log(propTimes);
+            if(_debug)
+                Debug.Log(propTimes);
+
             return changed;
         }
 
