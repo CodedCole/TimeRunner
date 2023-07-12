@@ -330,7 +330,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -273440451, guid: ac7cd4a3ebc96ac48bc1b40461ad1a9d, type: 3}
+  m_Sprite: {fileID: 1572464495, guid: 569b0184e1038b64c81eebf6b2a3741f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -8993,6 +8993,12 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 985522f997c7d0546a6d7f77b5b0659d, type: 2}
     stackSize: 1
   - item: {fileID: 11400000, guid: 465b2a38ca1adef49884f0e8657f35df, type: 2}
+    stackSize: 1
+  - item: {fileID: 11400000, guid: 8ce10c8e99f268c4a8e0b066d2b26884, type: 2}
+    stackSize: 1
+  - item: {fileID: 11400000, guid: 844538e2b45b4804290a3ea5a14554b0, type: 2}
+    stackSize: 1
+  - item: {fileID: 11400000, guid: b284af7d000d64449862a555aba6bb77, type: 2}
     stackSize: 1
 --- !u!61 &1582711916
 BoxCollider2D:

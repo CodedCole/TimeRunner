@@ -10,6 +10,7 @@ public class Item : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private Sprite icon;
     [SerializeField] private float weight;
+    [Min(1)]
     [SerializeField] private int maxStackSize;
 
     public string GetItemName() { return itemName; }

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702b522b9182ac944a21d81175362315, type: 3}
+  m_Name: ForestScoutHelmet
+  m_EditorClassIdentifier: 
+  itemName: Forest Scout Helmet
+  description: A helmet used when gathering intel. It is equipped with a few sensors
+    and displays to assist in gathering the intel.
+  icon: {fileID: -842847942, guid: d5d29a8c9899dec45bdccdc3935b9528, type: 3}
+  weight: 0.6
+  maxStackSize: 1
+  armorType: 0
+  spriteLibrary: {fileID: 7108339969198208228, guid: 994a68b6e549adc4ca4eccd3d325f988, type: 3}
+  stats:
+    kineticResistance: 0.1
+    heatResistance: 0
+    electricResistance: -0.05
+    gravityResistance: 0
