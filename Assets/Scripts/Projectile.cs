@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Health hit = collision.collider.GetComponentInChildren<Health>();
+        Health hit = collision.collider.GetComponentInParent<Health>();
         if (hit != null)
         {
             hit.TakeDamage(damage, damageType);
