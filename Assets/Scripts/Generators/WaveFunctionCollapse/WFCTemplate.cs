@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -52,6 +53,9 @@ namespace WaveFunctionCollapse
             _source.CompressBounds();
             FindAllPatterns();
             FindNeighbors();
+
+            Debug.Log("Marked WFC Template as dirty: " + this.name);
+            EditorUtility.SetDirty(this);
 
             //DEBUG
             //Log();
