@@ -28,5 +28,7 @@ MonoBehaviour:
     shotsPerTriggerPull: 1
   ammunition: {fileID: 11400000, guid: 73c948c994e384b4a9c9fbe58dab5c6a, type: 2}
   sprite: {fileID: -273440451, guid: ac7cd4a3ebc96ac48bc1b40461ad1a9d, type: 3}
+  spriteLibrary: {fileID: 7108339969198208228, guid: 19a51d6f74976b8419a064dd8d290ea2, type: 3}
+  animatorController: {fileID: 9100000, guid: 0f271da2896228349aa4d93d42794eb4, type: 2}
   projectile: {fileID: 590177837319269931, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
   projectileSpawn: {x: 0.25, y: 0}

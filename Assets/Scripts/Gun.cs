@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public class Gun : MonoBehaviour
 {
@@ -18,19 +19,25 @@ public class Gun : MonoBehaviour
                 _gunInstance = value;
                 _nextShotTime = Time.time;
                 _reloadedTime = Time.time;
-                spriteRenderer.sprite = value.gun.GetSprite();
+                _spriteRenderer.sprite = value.gun.GetSprite();
+                _library.spriteLibraryAsset = value.gun.GetSpriteLibrary();
+                _animator.runtimeAnimatorController = value.gun.GetAnimatorController();
                 _reloading = false;
             }
             else
             {
                 _gunInstance = null;
-                spriteRenderer.sprite = null;
+                _spriteRenderer.sprite = null;
+                _animator.runtimeAnimatorController = null;
                 _reloading = false;
             }
         } 
     }
 
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+
+    private SpriteLibrary _library;
+    private Animator _animator;
 
     private GunItemInstance _gunInstance;
     private float _nextShotTime;
@@ -53,6 +60,8 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
+        _library = _spriteRenderer.GetComponent<SpriteLibrary>();
+        _animator = GetComponent<Animator>();
         _reloadedTime = Time.time;
         _nextShotTime = Time.time;
     }
@@ -65,6 +74,9 @@ public class Gun : MonoBehaviour
                 onReloaded();
             else
                 _gunInstance.mag = _gunInstance.gun.GetStats().magSize;
+
+            if (_animator != null)
+                _animator.speed = 1;
 
             _reloading = false;
         }
@@ -105,17 +117,27 @@ public class Gun : MonoBehaviour
         {
             _reloading = true;
             _reloadedTime = Time.time + _gunInstance.gun.GetStats().reloadTime;
+            if (_animator != null && _animator.runtimeAnimatorController != null)
+            {
+                _animator.SetTrigger("Reload");
+                _animator.speed = 1 / _gunInstance.gun.GetStats().reloadTime;
+            }
             Debug.Log("Start Reload");
         }
     }
 
+    public bool IsReloading()
+    {
+        return _reloading;
+    }
+
     public void SetSpriteFlip(bool flip)
     {
-        spriteRenderer.flipY = flip;
+        _spriteRenderer.flipY = flip;
     }
 
     public void SetSpriteSortingOrder(int order)
     {
-        spriteRenderer.sortingOrder = order;
+        _spriteRenderer.sortingOrder = order;
     }
 }

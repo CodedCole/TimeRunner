@@ -66,7 +66,7 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void Fire()
     {
-        if (_reloading || _gun.GunInstance == null)
+        if (_gun.GunInstance == null)
             return;
 
         _gun.Fire();
@@ -79,9 +79,8 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void Reload()
     {
-        if (_reloading)
+        if (_gun.IsReloading())
             return;
-        _reloading = true;
         _gun.Reload();
     }
 
@@ -136,7 +135,6 @@ public class GunController : MonoBehaviour
         if(_inventory != null)
             absent = _inventory.GetContainer().RemoveItem(_gun.GunInstance.gun.GetAmmo(), _gun.GunInstance.gun.GetStats().magSize - _gun.GunInstance.mag);
         _gun.GunInstance.mag = _gun.GunInstance.gun.GetStats().magSize - absent;
-        _reloading = false;
         Debug.Log("Reloaded");
     }
 
@@ -148,8 +146,9 @@ public class GunController : MonoBehaviour
     {
         if (_inventory == null)
             return true;
-
-        return _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());
+        bool canReload = _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());
+        Debug.Log("Can reload? " + canReload);
+        return canReload;
     }
 
     public Vector2 GetAimVector()
