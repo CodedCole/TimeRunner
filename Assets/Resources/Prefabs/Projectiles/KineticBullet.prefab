@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 590177837319269931}
   - component: {fileID: 2682001494337403361}
   m_Layer: 10
-  m_Name: bullet
+  m_Name: KineticBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 4569700383314133197}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2825059718565491248
 Rigidbody2D:
@@ -174,7 +174,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: ffc419f59aa99f24c8b5bf57ef4b247c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -196,7 +196,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.9209772, b: 0.36320752, a: 1}
+  m_Color: {r: 1, g: 0.997672, b: 0.16509432, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

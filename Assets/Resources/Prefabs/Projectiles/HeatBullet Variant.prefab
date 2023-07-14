@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6828071879153041086
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 459399933000778679, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_Color.b
+      value: 0.18396229
+      objectReference: {fileID: 0}
+    - target: {fileID: 459399933000778679, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_Color.g
+      value: 0.2490507
+      objectReference: {fileID: 0}
+    - target: {fileID: 459399933000778679, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 590177837319269931, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: damageType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970741932854948647, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970741932854948647, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970741932854948647, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970741932854948647, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3555555072496422067, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: m_Name
+      value: HeatBullet Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
