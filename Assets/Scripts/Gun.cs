@@ -38,6 +38,7 @@ public class Gun : MonoBehaviour
 
     private SpriteLibrary _library;
     private Animator _animator;
+    private ParticleSystem _muzzleFlash;
 
     private GunItemInstance _gunInstance;
     private float _nextShotTime;
@@ -62,6 +63,8 @@ public class Gun : MonoBehaviour
     {
         _library = _spriteRenderer.GetComponent<SpriteLibrary>();
         _animator = GetComponent<Animator>();
+        _muzzleFlash = GetComponentInChildren<ParticleSystem>();
+
         _reloadedTime = Time.time;
         _nextShotTime = Time.time;
     }
@@ -103,6 +106,8 @@ public class Gun : MonoBehaviour
             p.damage = _gunInstance.gun.GetStats().damage;
             p.damageType = _gunInstance.gun.GetStats().damageType;
             p.GetComponent<Rigidbody2D>().velocity = transform.right * _gunInstance.gun.GetStats().projectileVelocity;
+
+            _muzzleFlash.Play();
 
             if (_gunInstance.mag <= 0)
                 Reload();

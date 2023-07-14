@@ -9,8 +9,8 @@ public class CustomSpriteResolver : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private SpriteLibrary _library;
 
-    private string _category;
-    private string _label;
+    [SerializeField] private string _category;
+    [SerializeField] private string _label;
 
     public string Category 
     { 

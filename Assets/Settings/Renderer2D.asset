@@ -30,7 +30,7 @@ MonoBehaviour:
   - name: Additive
     maskTextureChannel: 0
     blendMode: 0
-  - name: Multiply with Mask
+  - name: EmissiveLight
     maskTextureChannel: 1
     blendMode: 1
   - name: Additive with Mask

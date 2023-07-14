@@ -47,7 +47,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Interact"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""6694b6af-a001-42b5-8246-d99bc0fab1f4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour
             foreach (var pt in possibleTargets)
             {
                 //not us
-                if (pt.transform == transform || pt.transform == _eyes)
+                if (pt.transform.parent == transform || pt.transform == _eyes)
                     continue;
 
                 //within the search ratio

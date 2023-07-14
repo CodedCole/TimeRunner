@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AnimationController : MonoBehaviour
 {
     [SerializeField] private CustomSpriteResolver _character;
     [SerializeField] private CustomSpriteResolver _helmet;
     [SerializeField] private CustomSpriteResolver _bodyArmor;
-    [SerializeField] private SpriteRenderer _gun;
+    [SerializeField] private SortingGroup _gun;
     [SerializeField] private Animator _animator;
     [SerializeField] private float _walkSpeed;
 
@@ -21,6 +22,9 @@ public class AnimationController : MonoBehaviour
     {
         _gunController = GetComponent<GunController>();
         _movement = GetComponent<TopDownMovement>();
+        Health h = GetComponent<Health>();
+        if (h != null)
+            h.RegisterOnDeath(Die);
 
         if (_character != null)
             _character.Category = "Right";
@@ -137,6 +141,14 @@ public class AnimationController : MonoBehaviour
         float speedMultiplier = Vector2.Dot(_movement.GetMove().normalized, _aimSector) < 0 ? -_walkSpeed : _walkSpeed;
         _animator.SetFloat("Speed", _movement.GetMove().magnitude * speedMultiplier);
 
-        _gun.flipY = direction.x < 0;
+        _gun.transform.localScale = direction.x < 0 ? new Vector3(1, -1, 1) : Vector3.one;
+    }
+
+    void Die()
+    {
+        _animator.SetFloat("Speed", 0);
+        _animator.Update(Time.deltaTime);
+        _animator.enabled = false;
+        this.enabled = false;
     }
 }

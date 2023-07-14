@@ -39,11 +39,14 @@ public class Health : MonoBehaviour
         if (_damageFlashTimer > 0)
         {
             _damageFlashTimer -= Time.deltaTime;
-            _spriteRenderer.color = _damageFlashColor;
+            if (_damageFlashTimer <= 0)
+                _spriteRenderer.material.SetFloat("_DamageFlashIntensity", 0);
+            //_spriteRenderer.color = _damageFlashColor;
         }
         else
         {
-            _spriteRenderer.color = Color.white;
+            //_spriteRenderer.color = Color.white;
+            
         }
     }
 
@@ -69,10 +72,12 @@ public class Health : MonoBehaviour
                 break;
         }
         _damageFlashTimer = _damageFlashDuration;
+        _spriteRenderer.material.SetFloat("_DamageFlashIntensity", 1);
 
         if (_health <= 0)
         {
             _spriteRenderer.color = _deathColor;
+            _spriteRenderer.material.SetFloat("_DamageFlashIntensity", 0);
             enabled = false;
 
             if (onDeath != null)
