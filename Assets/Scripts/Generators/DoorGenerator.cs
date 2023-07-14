@@ -58,7 +58,7 @@ public class DoorGenerator : ITilemapGenerator
     private bool ValidDoorPosition(Vector3Int pos)
     {
         //check that the position is within the zone
-        if (_zoneGenerator.GetZoneAtTile(pos - Vector3Int.one).index != _zoneIndex)
+        if (_zoneGenerator.GetZoneAtTile(pos).index != _zoneIndex)
         {
             return false;
         }
@@ -68,7 +68,7 @@ public class DoorGenerator : ITilemapGenerator
         EDirection dir = EDirection.North;
         for (int i = 0; i < 4; i++)
         {
-            if (_zoneGenerator.Map.GetTile(pos + (Vector3Int)dir.GetDirectionVector()) != null)
+            if (/*_zoneGenerator.Map.GetTile(pos + (Vector3Int)dir.GetDirectionVector()) != null*/ _zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
                 neighbors++;
             dir++;
         }
@@ -84,7 +84,7 @@ public class DoorGenerator : ITilemapGenerator
                 if (i == 0 && j == 0)
                     continue;
 
-                if (_zoneGenerator.GetZoneAtTile(pos - Vector3Int.one + new Vector3Int(i, j)).index == _zoneIndex)
+                if (_zoneGenerator.GetZoneAtTile(pos + new Vector3Int(i, j)).index == _zoneIndex)
                     cornersInZone++;
             }
         }
@@ -102,7 +102,7 @@ public class DoorGenerator : ITilemapGenerator
         //check north an extra time
         for (int i = 0; i < 5; i++)
         {
-            if (_zoneGenerator.Map.GetTile(pos + (Vector3Int)dir.GetDirectionVector()) != null)
+            if (/*_zoneGenerator.Map.GetTile(pos + (Vector3Int)dir.GetDirectionVector()) != null*/ _zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
             {
                 if (previous)
                 {

@@ -143,10 +143,6 @@ public class ZoneGenerator : MonoBehaviour
                 ITilemapGenerator gen = gt.GetGenerator();
                 if (gen != null)
                 {
-                    if (gen is ZoneWFCGenerator)
-                    {
-                        (gen as ZoneWFCGenerator).SetTemplate(z.template);
-                    }
                     gen.PrepGenerator(z.index, this);
                     yield return StartCoroutine(gen.Generate());
                 }
