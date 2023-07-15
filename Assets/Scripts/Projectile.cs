@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     public float lifetime;
     public float damage;
     public EDamageType damageType;
+    public GameObject hitEffect;
 
     private void Start()
     {
@@ -20,6 +21,9 @@ public class Projectile : MonoBehaviour
         {
             hit.TakeDamage(damage, damageType);
         }
+
+        if(hitEffect != null)
+            Instantiate(hitEffect, collision.GetContact(0).point, Quaternion.identity);
 
         Destroy(gameObject);
     }

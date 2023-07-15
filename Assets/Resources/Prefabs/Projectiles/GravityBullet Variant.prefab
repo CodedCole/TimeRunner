@@ -21,6 +21,10 @@ PrefabInstance:
       value: 0.6205092
       objectReference: {fileID: 0}
     - target: {fileID: 590177837319269931, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
+      propertyPath: hitEffect
+      value: 
+      objectReference: {fileID: 9025523380965419067, guid: 4b1bd213119b2c049991337a6d971859, type: 3}
+    - target: {fileID: 590177837319269931, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
       propertyPath: damageType
       value: 3
       objectReference: {fileID: 0}
