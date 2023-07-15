@@ -21,6 +21,8 @@ public class Health : MonoBehaviour
 
     private float _damageFlashTimer;
 
+    private Action<float> onHealthChange;
+    private Action onTakeDamage;
     private Action onDeath;
 
     // Start is called before the first frame update
@@ -74,6 +76,12 @@ public class Health : MonoBehaviour
         _damageFlashTimer = _damageFlashDuration;
         _spriteRenderer.material.SetFloat("_DamageFlashIntensity", 1);
 
+        if (onHealthChange != null)
+            onHealthChange(_health / _maxHealth);
+
+        if (onTakeDamage != null)
+            onTakeDamage();
+
         if (_health <= 0)
         {
             _spriteRenderer.color = _deathColor;
@@ -87,6 +95,12 @@ public class Health : MonoBehaviour
         }
         return false;
     }
+
+    public void RegisterOnHealthChange(Action<float> action) { onHealthChange += action; }
+    public void UnregisterOnHealthChange(Action<float> action) { onHealthChange -= action; }
+
+    public void RegisterOnTakeDamage(Action action) { onTakeDamage += action; }
+    public void UnregisterOnTakeDamage(Action action) { onTakeDamage -= action; }
 
     public void RegisterOnDeath(Action action) { onDeath += action; }
     public void UnregisterOnDeath(Action action) { onDeath -= action; }
