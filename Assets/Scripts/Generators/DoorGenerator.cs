@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class DoorGenerator : ITilemapGenerator
 {
+    private readonly Vector3Int[] NEIGHBOR_DIRECTIONS = new Vector3Int[8]
+    {
+        Vector3Int.up,
+        Vector3Int.up + Vector3Int.right,
+        Vector3Int.right,
+        Vector3Int.right + Vector3Int.down,
+        Vector3Int.down,
+        Vector3Int.down + Vector3Int.left,
+        Vector3Int.left,
+        Vector3Int.left + Vector3Int.up
+    };
     private const int TRY_COUNT = 10;
     private const int TILES_PER_DOOR = 40;
     private const int DISTANCE_BETWEEN_DOORS = 8;
@@ -51,7 +62,7 @@ public class DoorGenerator : ITilemapGenerator
                 pos = _zone.border.ElementAt(Random.Range(0, _zone.border.Count));
             }
         }
-        _zoneGenerator.MakeEmptySpace(doors.ToArray());
+        //_zoneGenerator.MakeEmptySpace(doors.ToArray());
         yield return null;
     }
 
@@ -68,7 +79,7 @@ public class DoorGenerator : ITilemapGenerator
         EDirection dir = EDirection.North;
         for (int i = 0; i < 4; i++)
         {
-            if (/*_zoneGenerator.Map.GetTile(pos + (Vector3Int)dir.GetDirectionVector()) != null*/ _zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
+            if (_zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
                 neighbors++;
             dir++;
         }
@@ -96,13 +107,14 @@ public class DoorGenerator : ITilemapGenerator
 
     private Vector3Int[] MakeDoor(Vector3Int pos)
     {
+        /*
         EDirection dir = EDirection.North;
         bool diagonal = false;
         bool previous = false;
         //check north an extra time
         for (int i = 0; i < 5; i++)
         {
-            if (/*_zoneGenerator.Map.GetTile(pos + (Vector3Int)dir.GetDirectionVector()) != null*/ _zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
+            if (_zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
             {
                 if (previous)
                 {
@@ -127,5 +139,27 @@ public class DoorGenerator : ITilemapGenerator
         {
             return new Vector3Int[1] { pos };
         }
+        //*/
+        int prev = NEIGHBOR_DIRECTIONS.Length - 1;
+        int next;
+        for (int i = 0; i < NEIGHBOR_DIRECTIONS.Length; i++)
+        {
+            next = i + 1;
+            if (next >= NEIGHBOR_DIRECTIONS.Length)
+                next = 0;
+
+            if (_zoneGenerator.GetZoneAtTile(pos + NEIGHBOR_DIRECTIONS[prev]).index != _zoneIndex &&
+                _zoneGenerator.GetZoneAtTile(pos + NEIGHBOR_DIRECTIONS[i]).index != _zoneIndex &&
+                _zoneGenerator.GetZoneAtTile(pos + NEIGHBOR_DIRECTIONS[next]).index != _zoneIndex)
+            {
+                if (_zone.doors != null && _zone.doors.Length == NEIGHBOR_DIRECTIONS.Length)
+                    _zoneGenerator.Map.SetTile(pos, _zone.doors[i]);
+                else
+                    _zoneGenerator.Map.SetTile(pos, null);
+            }
+
+            prev = i;
+        }
+        return new Vector3Int[1] { pos };
     }
 }

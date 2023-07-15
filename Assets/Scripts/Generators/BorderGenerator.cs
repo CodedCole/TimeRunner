@@ -27,7 +27,7 @@ public class BorderGenerator : ITilemapGenerator
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    if (!zone.tilesInZone.Contains(point + new Vector3Int(i, j)) && i != -j)
+                    if (!zone.tilesInZone.Contains(point + new Vector3Int(i, j))/* && i != -j/**/)
                     {
                         border.Add(new Vector3Int(point.x, point.y));
                         found = true;

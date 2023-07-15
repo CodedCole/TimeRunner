@@ -16,6 +16,7 @@ public class Zone
     public Color color;
     public EGeneratorType[] generator = new EGeneratorType[0];
     public WFCTemplate template;
+    public Tile[] doors;
 
     public HashSet<Vector3Int> tilesInZone;
     public HashSet<Vector3Int> border;
