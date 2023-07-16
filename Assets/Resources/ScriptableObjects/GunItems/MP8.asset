@@ -32,3 +32,6 @@ MonoBehaviour:
   animatorController: {fileID: 9100000, guid: 0f271da2896228349aa4d93d42794eb4, type: 2}
   projectile: {fileID: 590177837319269931, guid: ea33b3a0241a6d04ab55f2a044c0bb79, type: 3}
   projectileSpawn: {x: 0.25, y: 0}
+  muzzleFlashPosition: {x: 0.19, y: 0.01}
+  muzzleFlashEffect: {fileID: 8926484042661614526, guid: 74c62e3666cbdb543a56a21a68fd07d6, type: 3}
+  fireSoundEffect: {fileID: 8300000, guid: 9c8e0ebc10fdd054480b574155805c5f, type: 3}

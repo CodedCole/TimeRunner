@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
+using UnityEngine.VFX;
 
 public class Gun : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class Gun : MonoBehaviour
                 _spriteRenderer.sprite = value.gun.GetSprite();
                 _library.spriteLibraryAsset = value.gun.GetSpriteLibrary();
                 _animator.runtimeAnimatorController = value.gun.GetAnimatorController();
+                if (_effect != null)
+                {
+                    _effect.transform.localPosition = value.gun.GetMuzzleFlashPosition();
+                    _effect.visualEffectAsset = value.gun.GetMuzzleFlashEffect();
+                }
                 _reloading = false;
             }
             else
@@ -39,6 +45,8 @@ public class Gun : MonoBehaviour
     private SpriteLibrary _library;
     private Animator _animator;
     private ParticleSystem _muzzleFlash;
+    private VisualEffect _effect;
+    private AudioSource _audio;
 
     private GunItemInstance _gunInstance;
     private float _nextShotTime;
@@ -64,6 +72,8 @@ public class Gun : MonoBehaviour
         _library = _spriteRenderer.GetComponent<SpriteLibrary>();
         _animator = GetComponent<Animator>();
         _muzzleFlash = GetComponentInChildren<ParticleSystem>();
+        _effect = GetComponentInChildren<VisualEffect>();
+        _audio = GetComponentInChildren<AudioSource>();
 
         _reloadedTime = Time.time;
         _nextShotTime = Time.time;
@@ -107,7 +117,12 @@ public class Gun : MonoBehaviour
             p.damageType = _gunInstance.gun.GetStats().damageType;
             p.GetComponent<Rigidbody2D>().velocity = transform.right * _gunInstance.gun.GetStats().projectileVelocity;
 
-            _muzzleFlash.Play();
+            if (_muzzleFlash != null)
+                _muzzleFlash.Play();
+            if (_effect != null && _effect.visualEffectAsset != null)
+                _effect.Play();
+            if (_audio != null && _gunInstance.gun.GetFireSoundEffect() != null)
+                _audio.PlayOneShot(_gunInstance.gun.GetFireSoundEffect());
 
             if (_gunInstance.mag <= 0)
                 Reload();
@@ -144,5 +159,11 @@ public class Gun : MonoBehaviour
     public void SetSpriteSortingOrder(int order)
     {
         _spriteRenderer.sortingOrder = order;
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        if (_audio != null)
+            _audio.PlayOneShot(clip);
     }
 }

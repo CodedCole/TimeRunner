@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
         }
 
         if(hitEffect != null)
-            Instantiate(hitEffect, collision.GetContact(0).point, Quaternion.identity);
+            Destroy(Instantiate(hitEffect, collision.GetContact(0).point, Quaternion.identity), 5);
 
         Destroy(gameObject);
     }
