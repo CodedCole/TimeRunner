@@ -21,7 +21,7 @@ MonoBehaviour:
   stats:
     damage: 10
     damageType: 0
-    rateOfFire: 15
+    rateOfFire: 12
     magSize: 30
     reloadTime: 2.5
     projectileVelocity: 20
@@ -34,4 +34,4 @@ MonoBehaviour:
   projectileSpawn: {x: 0.25, y: 0}
   muzzleFlashPosition: {x: 0.19, y: 0.01}
   muzzleFlashEffect: {fileID: 8926484042661614526, guid: 74c62e3666cbdb543a56a21a68fd07d6, type: 3}
-  fireSoundEffect: {fileID: 8300000, guid: 9c8e0ebc10fdd054480b574155805c5f, type: 3}
+  fireSoundEffect: {fileID: 8300000, guid: 119b10bce46bc9847a097dcf83d3405c, type: 3}
