@@ -5,8 +5,14 @@
     <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:Instance template="Reticle" name="Reticle" style="width: 100px; height: 100px; bottom: -50px; left: -50px; position: absolute;" />
-        <ui:ProgressBar value="0.2" title="Interact" name="InteractBar" high-value="1" class="border" style="position: absolute; left: 45%; top: 45%; right: 45%; bottom: auto; transition-property: all, display; transition-duration: 0s, 1s; transition-timing-function: ease, ease; transition-delay: 0s, 1s; visibility: visible;" />
+        <ui:ProgressBar value="0.2" title="Interact" name="InteractBar" high-value="1" class="border" style="position: absolute; left: 45%; top: 45%; right: 45%; bottom: auto; transition-property: all, display; transition-duration: 0s, 1s; transition-timing-function: ease, ease; transition-delay: 0s, 1s; visibility: visible; -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
         <ui:Instance template="DebugPanel" name="DebugPanel" style="position: absolute; width: 200px; height: 200px;" />
+        <ui:VisualElement name="ZoneName" style="background-color: rgba(0, 0, 0, 0); left: 25px; bottom: 25px; position: absolute; flex-grow: 1; width: 300px; height: 200px; min-width: 200px; min-height: 80px;">
+            <ui:Label tabindex="-1" text="The Diner" display-tooltip-when-elided="true" name="zone-title" enable-rich-text="true" style="color: rgb(231, 231, 231); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 24px; -unity-font-style: normal;" />
+            <ui:VisualElement style="background-color: rgb(231, 231, 231); height: 2px; max-height: 2px; flex-grow: 1;" />
+            <ui:Label tabindex="-1" text="Best food within 100 meters" display-tooltip-when-elided="true" name="zone-subtitle" style="color: rgb(217, 217, 217); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); white-space: normal;" />
+            <ui:Label tabindex="-1" text="The Lowest Level" display-tooltip-when-elided="true" name="level-title" style="color: rgb(202, 202, 202); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+        </ui:VisualElement>
         <ui:Instance template="Inventory" name="Inventory" class="hidden" style="align-self: stretch; height: 100%;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -107,9 +107,9 @@ public class HUD : MonoBehaviour
     }
 
     public void MoveReticle(Vector2 pos)
-    {
+    {   
         //move reticle
-        _reticle.transform.position = pos;
+        _reticle.transform.position = RuntimePanelUtils.ScreenToPanel(_hud.rootVisualElement.panel, pos); ;
 
         //debug text
         _mousePos.text = "mouse-pos: (x: " + pos.x + ", y: " + pos.y + ")";

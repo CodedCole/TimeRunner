@@ -3,13 +3,13 @@
     <ui:VisualElement style="background-color: rgb(255, 255, 255); width: 300px;">
         <ui:VisualElement name="TopRow" style="background-color: rgb(149, 213, 237); flex-direction: row; height: 120px; flex-grow: 1;">
             <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 60%;">
-                <ui:Label tabindex="-1" text="Key Card" display-tooltip-when-elided="true" name="ItemName" style="flex-grow: 1; flex-shrink: 1; -unity-font-style: bold; font-size: 18px;" />
-                <ui:Label tabindex="-1" text="Key" display-tooltip-when-elided="true" name="ItemClass" style="flex-grow: 1; flex-shrink: 1; color: rgb(101, 101, 101); -unity-font-style: italic;" />
-                <ui:Label tabindex="-1" text="0.1kg" display-tooltip-when-elided="true" name="ItemWeight" style="flex-grow: 1; flex-shrink: 1;" />
+                <ui:Label tabindex="-1" text="Key Card" display-tooltip-when-elided="true" name="ItemName" style="flex-grow: 1; flex-shrink: 1; -unity-font-style: bold; font-size: 18px; -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                <ui:Label tabindex="-1" text="Key" display-tooltip-when-elided="true" name="ItemClass" style="flex-grow: 1; flex-shrink: 1; color: rgb(101, 101, 101); -unity-font-style: italic; -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                <ui:Label tabindex="-1" text="0.1kg" display-tooltip-when-elided="true" name="ItemWeight" style="flex-grow: 1; flex-shrink: 1; -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
             </ui:VisualElement>
             <ui:VisualElement name="ItemIcon" style="background-color: rgb(61, 202, 255); align-self: stretch; width: 40%; flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Kenney/Items/PNG/Colored/key_card.png?fileID=21300000&amp;guid=40d3203816b76554198d4490dd802bd3&amp;type=3#key_card&apos;); -unity-background-scale-mode: scale-to-fit;" />
         </ui:VisualElement>
-        <ui:Label tabindex="-1" text="This is a description of this item that extends past the bounds so that it wraps." display-tooltip-when-elided="true" name="ItemDescription" style="white-space: normal;" />
+        <ui:Label tabindex="-1" text="This is a description of this item that extends past the bounds so that it wraps." display-tooltip-when-elided="true" name="ItemDescription" style="white-space: normal; -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
         <ui:VisualElement name="Stats" style="background-color: rgba(0, 0, 0, 0); align-self: stretch;" />
     </ui:VisualElement>
 </ui:UXML>
