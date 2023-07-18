@@ -6563,7 +6563,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &372305207
 Transform:
   m_ObjectHideFlags: 0
@@ -6621,66 +6621,9 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 7
     m_NumAlphaKeys: 2
-  _zoneMap: {fileID: 2800000, guid: c5321e93e5170624184157b31a4280c9, type: 3}
-  _zones:
-  - index: 0
-    name: 
-    subtitle: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 
-    template: {fileID: 0}
-    doors: []
-  - index: 1
-    name: The Perimeter
-    subtitle: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 
-    template: {fileID: 0}
-    doors: []
-  - index: 3
-    name: Main Road
-    subtitle: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 
-    template: {fileID: 0}
-    doors: []
-  - index: 10
-    name: Tower
-    subtitle: A Ride to the Other Levels
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 0100000002000000
-    template: {fileID: 0}
-    doors: []
-  - index: 2
-    name: Diner
-    subtitle: Best Food within 100 meters
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 010000000300000002000000
-    template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-    doors:
-    - {fileID: 11400000, guid: 4438e3a5b8d8c484a874cb7b10c4570c, type: 2}
-    - {fileID: 11400000, guid: d4affc552974dba419be9364006cdb0a, type: 2}
-    - {fileID: 11400000, guid: b92638886d9ece1409a66cfc59e18136, type: 2}
-    - {fileID: 11400000, guid: 0b79ea00c43d6ee4682a4cb8f5e15b34, type: 2}
-    - {fileID: 11400000, guid: ecaadc6397a668a4d84c81e9009a0910, type: 2}
-    - {fileID: 11400000, guid: 61bc2fa7bce6cf04a80216aa2ec7de39, type: 2}
-    - {fileID: 11400000, guid: 1e7317ac13d785c489122f264afdf8ae, type: 2}
-    - {fileID: 11400000, guid: 4f088da245d07e44195aef65019ebed7, type: 2}
-  - index: 4
-    name: Diner 2
-    subtitle: 2nd Best Food within 100 meters
-    color: {r: 0, g: 0, b: 0, a: 0}
-    generator: 010000000300000002000000
-    template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-    doors:
-    - {fileID: 11400000, guid: 4438e3a5b8d8c484a874cb7b10c4570c, type: 2}
-    - {fileID: 11400000, guid: d4affc552974dba419be9364006cdb0a, type: 2}
-    - {fileID: 11400000, guid: b92638886d9ece1409a66cfc59e18136, type: 2}
-    - {fileID: 11400000, guid: 0b79ea00c43d6ee4682a4cb8f5e15b34, type: 2}
-    - {fileID: 11400000, guid: ecaadc6397a668a4d84c81e9009a0910, type: 2}
-    - {fileID: 11400000, guid: 61bc2fa7bce6cf04a80216aa2ec7de39, type: 2}
-    - {fileID: 11400000, guid: 1e7317ac13d785c489122f264afdf8ae, type: 2}
-    - {fileID: 11400000, guid: 4f088da245d07e44195aef65019ebed7, type: 2}
+  _levelLayout:
+    map: {fileID: 0}
+    zones: []
   _zoneTilemap: {fileID: 1682705109}
   _tile: {fileID: 11400000, guid: caaec0dd467ff2f44b0507c797a5d8b5, type: 2}
   _wall: {fileID: 11400000, guid: 85e3c901e1c77464ba6af4bccde772d1, type: 2}
@@ -7347,14 +7290,14 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.006677796
+    y: 0.006674082
     width: 1
-    height: 0.9877574
+    height: 0.98751694
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -7392,17 +7335,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
   m_AssetsPPU: 50
-  m_RefResolutionX: 360
-  m_RefResolutionY: 200
+  m_RefResolutionX: 540
+  m_RefResolutionY: 300
   m_CropFrame: 4
-  m_GridSnapping: 0
+  m_GridSnapping: 2
   m_FilterMode: 1
   m_UpscaleRT: 0
   m_PixelSnapping: 0
@@ -19765,6 +19708,144 @@ Transform:
   - {fileID: 1823888716}
   m_Father: {fileID: 2138961934}
   m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1743946124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1743946126}
+  - component: {fileID: 1743946125}
+  m_Layer: 0
+  m_Name: RaidManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1743946125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743946124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411a825493ecdbc48b22561402d1be0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _difficultyProgression:
+  - name: Mild
+    duration: 60
+  - name: Moderate
+    duration: 60
+  - name: High
+    duration: 60
+  - name: Alpha
+    duration: 120
+  - name: Beta
+    duration: 120
+  - name: Gamma
+    duration: 120
+  - name: Delta
+    duration: 120
+  - name: Epsilon
+    duration: 120
+  - name: Zeta
+    duration: 120
+  _levels:
+  - name: The Lowest Level
+    levelLayouts:
+    - map: {fileID: 2800000, guid: c5321e93e5170624184157b31a4280c9, type: 3}
+      zones:
+      - index: 2
+        name: Diner
+        subtitle: Best food in the Arcology
+        color: {r: 0, g: 0, b: 0, a: 0}
+        generator: 010000000300000002000000
+        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
+        doors: []
+      - index: 4
+        name: Diner 2
+        subtitle: 2nd best food in the Arcology
+        color: {r: 0, g: 0, b: 0, a: 0}
+        generator: 010000000300000002000000
+        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
+        doors: []
+      - index: 3
+        name: Main Road
+        subtitle: 
+        color: {r: 0, g: 0, b: 0, a: 0}
+        generator: 
+        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
+        doors: []
+      - index: 1
+        name: Perimeter
+        subtitle: Edge of the Law
+        color: {r: 0, g: 0, b: 0, a: 0}
+        generator: 
+        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
+        doors: []
+      - index: 0
+        name: 
+        subtitle: 
+        color: {r: 0, g: 0, b: 0, a: 0}
+        generator: 
+        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
+        doors: []
+  _tilemapGrid: {fileID: 2138961933}
+  _tilemapLayer: 8
+  _zoneColors:
+    serializedVersion: 2
+    key0: {r: 0, g: 0, b: 0, a: 0}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0.9632353, a: 0}
+    key3: {r: 0, g: 1, b: 0, a: 0}
+    key4: {r: 0.9465648, g: 1, b: 0, a: 0}
+    key5: {r: 1, g: 0, b: 0, a: 0}
+    key6: {r: 1, g: 0, b: 1, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 13107
+    ctime2: 13762
+    ctime3: 26214
+    ctime4: 39321
+    ctime5: 52428
+    ctime6: 65535
+    ctime7: 0
+    atime0: 0
+    atime1: 1311
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 7
+    m_NumAlphaKeys: 2
+  _tile: {fileID: 11400000, guid: caaec0dd467ff2f44b0507c797a5d8b5, type: 2}
+  _wall: {fileID: 11400000, guid: 85e3c901e1c77464ba6af4bccde772d1, type: 2}
+  _debug: 0
+--- !u!4 &1743946126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743946124}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1744540072
 GameObject:

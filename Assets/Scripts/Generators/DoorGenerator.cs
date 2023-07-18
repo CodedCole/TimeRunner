@@ -94,8 +94,8 @@ public class DoorGenerator : ITilemapGenerator
             {
                 if (i == 0 && j == 0)
                     continue;
-
-                if (_zoneGenerator.GetZoneAtTile(pos + new Vector3Int(i, j)).index == _zoneIndex)
+                Zone z = _zoneGenerator.GetZoneAtTile(pos + new Vector3Int(i, j));
+                if (z != null && z.index == _zoneIndex)
                     cornersInZone++;
             }
         }

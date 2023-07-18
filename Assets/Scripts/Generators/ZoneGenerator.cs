@@ -52,14 +52,14 @@ public class Zone
 
 public class ZoneGenerator : MonoBehaviour
 {
-    [SerializeField] private Gradient _zoneColors;
-    [SerializeField] private Texture2D _zoneMap;
-    [SerializeField] private List<Zone> _zones;
+    public Gradient _zoneColors;
+    [SerializeField] private LevelLayout _levelLayout;
     [SerializeField] private Tilemap _zoneTilemap;
-    [SerializeField] private TileBase _tile;
-    [SerializeField] private TileBase _wall;
+    public TileBase _tile;
+    public TileBase _wall;
     [SerializeField] private bool _debug;
 
+    private List<Zone> _zones;
     private Dictionary<Color, int> _colorToZoneIndex = new Dictionary<Color, int>();
     private Color[] _pixels;
 
@@ -67,11 +67,25 @@ public class ZoneGenerator : MonoBehaviour
 
     private void Start()
     {
+        //generate zones
+        //StartCoroutine(Generate(_levelLayout));
+    }
+
+    public IEnumerator Generate(LevelLayout layout, Tilemap tilemap, bool debug = false)
+    {
+        _levelLayout = layout;
+        _zoneTilemap = tilemap;
+        _debug = debug;
+
         //put the serialized zones into the proper place in the zone list
-        Zone[] zones = new Zone[_zones.Count];
-        _zones.CopyTo(zones);
-        _zones.Clear();
-        foreach (var zone in zones)
+        //Zone[] zones = new Zone[_zones.Count];
+        //_zones.CopyTo(zones);
+        if(_zones == null)
+            _zones = new List<Zone>();
+        else
+            _zones.Clear();
+
+        foreach (var zone in layout.zones)
         {
             if (zone.index > _zones.Count)
             {
@@ -80,7 +94,7 @@ public class ZoneGenerator : MonoBehaviour
                     CreateZone();
                 }
             }
-            
+
             if (zone.index == _zones.Count)
             {
                 _zones.Add(zone);
@@ -92,7 +106,7 @@ public class ZoneGenerator : MonoBehaviour
         }
 
         //find zones in zone map
-        _pixels = _zoneMap.GetPixels();
+        _pixels = layout.map.GetPixels();
         for (int i = 0; i < _pixels.Length; i++)
         {
             if (!_colorToZoneIndex.ContainsKey(_pixels[i]))
@@ -111,16 +125,16 @@ public class ZoneGenerator : MonoBehaviour
         //apply zone colors for debugging
         for (int i = 0; i < _zones.Count; i++)
         {
-            _zones[i].color = _zoneColors.Evaluate(((float)i)/_zones.Count);
+            _zones[i].color = _zoneColors.Evaluate(((float)i) / _zones.Count);
         }
 
         //build zones with debug colors
-        for (int i = 0; i < _zoneMap.width; i++)
+        for (int i = 0; i < layout.map.width; i++)
         {
-            for (int j = 0; j < _zoneMap.height; j++)
+            for (int j = 0; j < layout.map.height; j++)
             {
                 Vector3Int pos = new Vector3Int(i, j, 0);
-                int zIndex = _colorToZoneIndex[_pixels[pos.x + (pos.y * _zoneMap.width)]];
+                int zIndex = _colorToZoneIndex[_pixels[pos.x + (pos.y * layout.map.width)]];
                 _zones[zIndex].tilesInZone.Add(pos);
 
                 _zoneTilemap.SetTile(pos, _tile);
@@ -130,12 +144,6 @@ public class ZoneGenerator : MonoBehaviour
             }
         }
 
-        //generate zones
-        StartCoroutine(Generate());
-    }
-
-    private IEnumerator Generate()
-    {
         foreach (var z in _zones)
         {
             z.GenerateBoundingBox();
@@ -157,17 +165,17 @@ public class ZoneGenerator : MonoBehaviour
         newZone.index = _zones.Count;
         newZone.name = "Zone " + _zones.Count.ToString();
         newZone.subtitle = "Placeholder Subtitle";
-        newZone.generator = new EGeneratorType[2] { EGeneratorType.Border, EGeneratorType.Doors };
+        newZone.generator = new EGeneratorType[1] { EGeneratorType.Border };
         _zones.Add(newZone);
         return newZone;
     }
 
     public Zone GetZoneAtTile(Vector3Int pos)
     {
-        if (pos.x >= _zoneMap.width || pos.x < 0 || pos.y >= _zoneMap.height || pos.y < 0)
+        if (pos.x >= _levelLayout.map.width || pos.x < 0 || pos.y >= _levelLayout.map.height || pos.y < 0)
             return null;
 
-        return _zones[_colorToZoneIndex[_pixels[pos.x + (pos.y * _zoneMap.width)]]];
+        return _zones[_colorToZoneIndex[_pixels[pos.x + (pos.y * _levelLayout.map.width)]]];
     }
 
     public Zone GetZoneAtIndex(int index)

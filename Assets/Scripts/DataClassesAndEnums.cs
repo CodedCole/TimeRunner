@@ -96,3 +96,10 @@ public static class GeneratorHelper
         }
     }
 }
+
+[Serializable]
+public struct LevelLayout
+{
+    public Texture2D map;
+    public Zone[] zones;
+}
