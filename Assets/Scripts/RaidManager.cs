@@ -39,6 +39,7 @@ public class RaidManager : MonoBehaviour
     [SerializeField] private TileBase _wall;
     [SerializeField] private bool _debug;
     private List<BuiltLevel> _builtLevels; 
+    private int _currentLevel;
 
     private Action onRaidBegin;
     public void RegisterOnRaidBegin(Action action) { onRaidBegin += action; }
@@ -54,6 +55,7 @@ public class RaidManager : MonoBehaviour
     private void Awake()
     {
         _builtLevels = new List<BuiltLevel>();
+        _currentLevel = 0;
         StartCoroutine(BeginRaid());
     }
 
@@ -92,5 +94,10 @@ public class RaidManager : MonoBehaviour
     {
         if (onRaidEnd != null)
             onRaidEnd();
+    }
+
+    public ZoneGenerator GetActiveLevel()
+    {
+        return _builtLevels[_currentLevel].zoneGenerator;
     }
 }

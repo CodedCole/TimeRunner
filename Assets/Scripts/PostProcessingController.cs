@@ -93,6 +93,7 @@ public class PostProcessingController : MonoBehaviour
     [SerializeField] private FlashEffect _takeDamageEffect;
     [SerializeField] private LerpEffect _lowHealthEffect;
 
+    private Coroutine current_takeDamageEffectRoutine;
     private Coroutine current_lowHealthEffectRoutine;
     private float currentHealthAmount;
 
@@ -104,7 +105,12 @@ public class PostProcessingController : MonoBehaviour
         h.RegisterOnHealthChange(UpdateLowHealth);
     }
 
-    void TakeDamageEffects() { StartCoroutine(_takeDamageEffect.PlayFlashEffect()); }
+    void TakeDamageEffects() 
+    { 
+        if (current_takeDamageEffectRoutine != null)
+            StopCoroutine(current_takeDamageEffectRoutine);
+        current_takeDamageEffectRoutine = StartCoroutine(_takeDamageEffect.PlayFlashEffect());
+    }
 
     void UpdateLowHealth(float currentPercent) 
     {
