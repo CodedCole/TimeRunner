@@ -115,3 +115,60 @@
     white-space: normal;
     -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
 }
+
+.main-menu-button {
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    font-size: 25px;
+    color: rgb(229, 229, 229);
+    background-color: rgba(255, 255, 255, 0.23);
+    min-width: 500px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+
+.main-menu-button:hover {
+    background-color: rgba(229, 37, 29, 0.5);
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+
+.tab-button {
+    flex-grow: 1;
+    max-height: 50px;
+    align-items: stretch;
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+}
+
+.options-sub-group-label {
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    color: rgb(229, 229, 229);
+    font-size: 25px;
+    border-bottom-color: rgb(229, 229, 229);
+    border-bottom-width: 2px;
+}
+
+.options-slider {
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    color: rgb(229, 229, 229);
+    font-size: 20px;
+}
+
+.unity-base-field {
+}
+
+.unity-base-slider__tracker {
+    background-color: rgb(255, 255, 255);
+}
+
+.unity-base-text-field__input {
+    background-color: rgb(154, 154, 154);
+    font-size: 18px;
+}
