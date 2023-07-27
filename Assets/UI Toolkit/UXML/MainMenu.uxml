@@ -19,19 +19,24 @@
     <ui:VisualElement name="OptionsMenu" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 600px; align-self: center; align-items: stretch; justify-content: center;">
             <ui:VisualElement name="tab-buttons" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-around;">
-                <ui:Button text="Controls" display-tooltip-when-elided="true" name="controls-options-tab-button" class="tab-button" />
-                <ui:Button text="Audio" display-tooltip-when-elided="true" name="audio-options-tab-button" class="tab-button" />
-                <ui:Button text="Graphics" display-tooltip-when-elided="true" name="graphics-options-tab-button" class="tab-button" />
+                <ui:Button text="Controls" display-tooltip-when-elided="true" name="controls-options-tab-button" focusable="false" class="tab-button" />
+                <ui:Button text="Audio" display-tooltip-when-elided="true" name="audio-options-tab-button" focusable="false" usage-hints="DynamicTransform, DynamicColor" class="tab-button tab-button-selected" />
+                <ui:Button text="Graphics" display-tooltip-when-elided="true" name="graphics-options-tab-button" focusable="false" class="tab-button" />
             </ui:VisualElement>
-            <ui:VisualElement name="tab-views" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); height: 700px;">
+            <ui:VisualElement name="tab-views" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); height: 600px;">
                 <ui:ScrollView name="audio-options-tab-view" style="flex-grow: 1;">
                     <ui:VisualElement name="volume-options" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                        <ui:Label tabindex="-1" text="Volume" display-tooltip-when-elided="true" class="options-sub-group-label" />
+                        <ui:Label tabindex="-1" text="Volume" display-tooltip-when-elided="true" class="options-sub-group-label">
+                            <ui:Button text="Reset to Default" display-tooltip-when-elided="true" name="reset-to-default-button" style="margin-left: 0; margin-right: 0; align-self: flex-end; font-size: 15px; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                        </ui:Label>
                         <ui:Slider picking-mode="Ignore" label="Master" value="80" high-value="100" show-input-field="true" name="master-volume-slider" class="options-slider" />
                         <ui:Slider picking-mode="Ignore" label="Music" value="80" high-value="100" show-input-field="true" name="music-volume-slider" class="options-slider" />
                         <ui:Slider picking-mode="Ignore" label="SFX" value="80" high-value="100" show-input-field="true" name="sfx-volume-slider" class="options-slider" />
                     </ui:VisualElement>
                 </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement style="background-color: rgba(0, 0, 0, 0);">
+                <ui:Button text="Back" display-tooltip-when-elided="true" name="back-button" focusable="false" class="back-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

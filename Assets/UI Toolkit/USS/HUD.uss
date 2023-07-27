@@ -145,6 +145,18 @@
     max-height: 50px;
     align-items: stretch;
     -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.tab-button:hover {
+    background-color: rgb(207, 153, 153);
+}
+
+.tab-button-selected {
+    background-color: rgb(221, 120, 120);
 }
 
 .options-sub-group-label {
@@ -165,10 +177,19 @@
 }
 
 .unity-base-slider__tracker {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(204, 204, 204);
+    min-height: 25px;
+    translate: 0 -10px;
+    opacity: 1;
 }
 
 .unity-base-text-field__input {
     background-color: rgb(154, 154, 154);
     font-size: 18px;
+}
+
+.back-button {
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    background-color: rgba(128, 128, 128, 0.5);
+    color: rgb(229, 229, 229);
 }
