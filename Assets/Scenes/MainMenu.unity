@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad4d5db7565fab24c871ec4576279c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hiddenClass: 
+  _fullscreenHiddenClass: fullscreen-hidden
 --- !u!1 &630300813
 GameObject:
   m_ObjectHideFlags: 0

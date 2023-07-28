@@ -193,3 +193,25 @@
     background-color: rgba(128, 128, 128, 0.5);
     color: rgb(229, 229, 229);
 }
+
+.fullscreen-overlay {
+    flex-grow: 1;
+    transition-duration: 2s, 0s;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition-timing-function: linear, ease;
+    transition-property: opacity, display;
+    transition-delay: 0s, 0s;
+}
+
+.fullscreen-hidden {
+    opacity: 0;
+    display: none;
+    transition-property: opacity, display;
+    transition-duration: 2s, 0s;
+    transition-delay: 0s, 2s;
+    transition-timing-function: linear, ease;
+}
