@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
-    <ui:VisualElement name="title-screen" class="fullscreen-overlay">
+    <ui:VisualElement name="title-screen" class="fullscreen-overlay fullscreen-hidden">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: center; justify-content: center; align-items: center;">
             <ui:VisualElement name="Title" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Materials/Title.asset?fileID=8600000&amp;guid=708496b82b6e788479b154e669382509&amp;type=2#Title&apos;); width: 876px; height: 104px; position: relative; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit;" />
             <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); margin-left: 20px; margin-right: 20px; margin-top: 20px; margin-bottom: 20px; align-self: center;">
@@ -8,7 +8,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="main-menu" class="fullscreen-overlay" style="flex-grow: 1;">
+    <ui:VisualElement name="main-menu" class="fullscreen-overlay fullscreen-hidden" style="flex-grow: 1;">
         <ui:VisualElement name="vertical-button-group" style="flex-grow: 1; align-self: center; justify-content: center; align-items: center;">
             <ui:Button text="Raid" display-tooltip-when-elided="true" name="raid-button" class="main-menu-button" />
             <ui:Button text="Outskirts" display-tooltip-when-elided="true" name="outskirts-button" class="main-menu-button" />
@@ -19,12 +19,20 @@
     <ui:VisualElement name="options-menu" class="fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 600px; align-self: center; align-items: stretch; justify-content: center;">
             <ui:VisualElement name="tab-buttons" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-around;">
-                <ui:Button text="Controls" display-tooltip-when-elided="true" name="controls-options-tab-button" focusable="false" class="tab-button" />
-                <ui:Button text="Audio" display-tooltip-when-elided="true" name="audio-options-tab-button" focusable="false" usage-hints="DynamicTransform, DynamicColor" class="tab-button tab-button-selected" />
-                <ui:Button text="Graphics" display-tooltip-when-elided="true" name="graphics-options-tab-button" focusable="false" class="tab-button" />
+                <ui:Button text="Controls" display-tooltip-when-elided="true" name="controls-options-tab-button" class="tab-button" />
+                <ui:Button text="Audio" display-tooltip-when-elided="true" name="audio-options-tab-button" usage-hints="DynamicTransform, DynamicColor" class="tab-button tab-button-selected" />
+                <ui:Button text="Graphics" display-tooltip-when-elided="true" name="graphics-options-tab-button" class="tab-button" />
             </ui:VisualElement>
             <ui:VisualElement name="tab-views" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); height: 600px;">
-                <ui:ScrollView name="audio-options-tab-view" style="flex-grow: 1;">
+                <ui:ScrollView name="controls-options-tab-view" class="options-tab-view hidden">
+                    <ui:VisualElement name="movement-keybinds" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:Label tabindex="-1" text="Movement" display-tooltip-when-elided="true" class="options-sub-group-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="combat-keybinds" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:Label tabindex="-1" text="Combat" display-tooltip-when-elided="true" class="options-sub-group-label" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+                <ui:ScrollView name="audio-options-tab-view" class="hidden options-tab-view">
                     <ui:VisualElement name="volume-options" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                         <ui:Label tabindex="-1" text="Volume" display-tooltip-when-elided="true" class="options-sub-group-label">
                             <ui:Button text="Reset to Default" display-tooltip-when-elided="true" name="reset-to-default-button" style="margin-left: 0; margin-right: 0; align-self: flex-end; font-size: 15px; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
@@ -34,9 +42,17 @@
                         <ui:Slider picking-mode="Ignore" label="SFX" value="80" high-value="100" show-input-field="true" name="sfx-volume-slider" class="options-slider" />
                     </ui:VisualElement>
                 </ui:ScrollView>
+                <ui:ScrollView name="graphics-options-tab-view" class="options-tab-view">
+                    <ui:VisualElement name="quality-options" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:Label tabindex="-1" text="Quality" display-tooltip-when-elided="true" class="options-sub-group-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="display-options" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:Label tabindex="-1" text="Display" display-tooltip-when-elided="true" class="options-sub-group-label" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
             </ui:VisualElement>
             <ui:VisualElement style="background-color: rgba(0, 0, 0, 0);">
-                <ui:Button text="Back" display-tooltip-when-elided="true" name="back-button" focusable="false" class="back-button" />
+                <ui:Button text="Back" display-tooltip-when-elided="true" name="back-button" class="back-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

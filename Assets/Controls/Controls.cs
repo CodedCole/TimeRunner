@@ -467,6 +467,54 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""MouseMenu"",
+            ""id"": ""4e0b74a6-5807-47ae-9bfb-47ed2eaff0e8"",
+            ""actions"": [
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""90f49796-3c21-4374-8103-443451cb6aa3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""96691f32-1280-4af9-8a7e-e7604fd76fe3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""02d47e4b-d986-4dab-b3f5-2ee624927e81"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50672c6c-29dc-4b2b-8d4f-8d0a69a96976"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""PointerClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -514,6 +562,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Menu_Select = m_Menu.FindAction("Select", throwIfNotFound: true);
         m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
         m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
+        // MouseMenu
+        m_MouseMenu = asset.FindActionMap("MouseMenu", throwIfNotFound: true);
+        m_MouseMenu_PointerPosition = m_MouseMenu.FindAction("PointerPosition", throwIfNotFound: true);
+        m_MouseMenu_PointerClick = m_MouseMenu.FindAction("PointerClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -735,6 +787,60 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         }
     }
     public MenuActions @Menu => new MenuActions(this);
+
+    // MouseMenu
+    private readonly InputActionMap m_MouseMenu;
+    private List<IMouseMenuActions> m_MouseMenuActionsCallbackInterfaces = new List<IMouseMenuActions>();
+    private readonly InputAction m_MouseMenu_PointerPosition;
+    private readonly InputAction m_MouseMenu_PointerClick;
+    public struct MouseMenuActions
+    {
+        private @Controls m_Wrapper;
+        public MouseMenuActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PointerPosition => m_Wrapper.m_MouseMenu_PointerPosition;
+        public InputAction @PointerClick => m_Wrapper.m_MouseMenu_PointerClick;
+        public InputActionMap Get() { return m_Wrapper.m_MouseMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MouseMenuActions set) { return set.Get(); }
+        public void AddCallbacks(IMouseMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MouseMenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MouseMenuActionsCallbackInterfaces.Add(instance);
+            @PointerPosition.started += instance.OnPointerPosition;
+            @PointerPosition.performed += instance.OnPointerPosition;
+            @PointerPosition.canceled += instance.OnPointerPosition;
+            @PointerClick.started += instance.OnPointerClick;
+            @PointerClick.performed += instance.OnPointerClick;
+            @PointerClick.canceled += instance.OnPointerClick;
+        }
+
+        private void UnregisterCallbacks(IMouseMenuActions instance)
+        {
+            @PointerPosition.started -= instance.OnPointerPosition;
+            @PointerPosition.performed -= instance.OnPointerPosition;
+            @PointerPosition.canceled -= instance.OnPointerPosition;
+            @PointerClick.started -= instance.OnPointerClick;
+            @PointerClick.performed -= instance.OnPointerClick;
+            @PointerClick.canceled -= instance.OnPointerClick;
+        }
+
+        public void RemoveCallbacks(IMouseMenuActions instance)
+        {
+            if (m_Wrapper.m_MouseMenuActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMouseMenuActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MouseMenuActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MouseMenuActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MouseMenuActions @MouseMenu => new MouseMenuActions(this);
     private int m_KeyboardandMouseSchemeIndex = -1;
     public InputControlScheme KeyboardandMouseScheme
     {
@@ -769,5 +875,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnSelect(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+    }
+    public interface IMouseMenuActions
+    {
+        void OnPointerPosition(InputAction.CallbackContext context);
+        void OnPointerClick(InputAction.CallbackContext context);
     }
 }

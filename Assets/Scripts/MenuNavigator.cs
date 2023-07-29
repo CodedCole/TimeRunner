@@ -39,7 +39,7 @@ public class MenuNavigator
 
     async UniTaskVoid BuildNavigation()
     {
-        await UniTask.Delay(2000);
+        await UniTask.NextFrame();
         //setup _menuItems
         List<VisualElement> menuItems = _menuRootElement.Query<VisualElement>(null, _menuItemClass).Build().ToList();
         _menuItems = new MenuItem[menuItems.Count];
@@ -111,6 +111,8 @@ public class MenuNavigator
 
     public void Navigate(Vector2 direction)
     {
+        
+
         Debug.Log($"Navigating in direction {direction}");
         if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
         {
@@ -144,5 +146,7 @@ public class MenuNavigator
     public void Select()
     {
         Debug.Log($"Selected menu item {_activeMenuItem}");
+        using (var e = new NavigationSubmitEvent() { target = _menuItems[_activeMenuItem].element })
+            _menuItems[_activeMenuItem].element.SendEvent(e);
     }
 }

@@ -151,13 +151,9 @@
     max-height: 50px;
     align-items: stretch;
     -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
 }
 
-.tab-button:hover {
+.tab-button:focus {
     background-color: rgb(207, 153, 153);
 }
 
@@ -202,7 +198,7 @@
 
 .fullscreen-overlay {
     flex-grow: 1;
-    transition-duration: 2s, 0s;
+    transition-duration: 0.5s, 0s;
     position: absolute;
     left: 0;
     top: 0;
@@ -217,7 +213,11 @@
     opacity: 0;
     display: none;
     transition-property: opacity, display;
-    transition-duration: 2s, 0s;
-    transition-delay: 0s, 2s;
+    transition-duration: 0.5s, 0s;
+    transition-delay: 0s, 0.5s;
     transition-timing-function: linear, ease;
+}
+
+.options-tab-view {
+    flex-grow: 1;
 }
