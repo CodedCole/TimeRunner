@@ -8,7 +8,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="main-menu" class="fullscreen-overlay fullscreen-hidden" style="flex-grow: 1;">
+    <ui:VisualElement name="main-menu" class="fullscreen-overlay" style="flex-grow: 1;">
         <ui:VisualElement name="vertical-button-group" style="flex-grow: 1; align-self: center; justify-content: center; align-items: center;">
             <ui:Button text="Raid" display-tooltip-when-elided="true" name="raid-button" class="main-menu-button" />
             <ui:Button text="Outskirts" display-tooltip-when-elided="true" name="outskirts-button" class="main-menu-button" />
@@ -16,7 +16,7 @@
             <ui:Button text="Exit" display-tooltip-when-elided="true" name="exit-button" class="main-menu-button" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="options-menu" class="hidden fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+    <ui:VisualElement name="options-menu" class="fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 600px; align-self: center; align-items: stretch; justify-content: center;">
             <ui:VisualElement name="tab-buttons" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-around;">
                 <ui:Button text="Controls" display-tooltip-when-elided="true" name="controls-options-tab-button" focusable="false" class="tab-button" />

@@ -140,6 +140,12 @@
     transition-timing-function: ease-out;
 }
 
+.main-menu-button-highlight {
+    background-color: rgba(229, 37, 29, 0.5);
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+
 .tab-button {
     flex-grow: 1;
     max-height: 50px;

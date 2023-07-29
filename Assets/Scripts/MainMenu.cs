@@ -11,6 +11,8 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     public enum EActiveMenu { Title, Main_Menu, Options }
 
     [SerializeField] private string _fullscreenHiddenClass;
+    [SerializeField] private string _mainMenuButtonClass;
+    [SerializeField] private string _mainMenuButtonHighlightedClass;
 
     private UIDocument _mainMenuDocument;
 
@@ -22,6 +24,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     private Controls _controls;
 
     private IDisposable _titleScreenAnyKeyPressEvent;
+    private MenuNavigator _mainMenuNavigator;
 
     private void Awake()
     {
@@ -49,12 +52,33 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         _mainMenu.RemoveFromClassList(_fullscreenHiddenClass);
         _controls.Menu.Enable();
         _titleScreenAnyKeyPressEvent.Dispose();
+        _activeMenu = EActiveMenu.Main_Menu;
+        SetupMainMenuNavigator();
     }
     //--------End-Title--------
 
+    //-------------------------
+    void SetupMainMenuNavigator()
+    {
+        _mainMenuNavigator = new MenuNavigator(_mainMenu, _mainMenuButtonClass, _mainMenuButtonHighlightedClass);
+    }
+    //-------------------------
+
     public void OnNavigation(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        if (!context.performed)
+            return;
+
+        switch (_activeMenu)
+        {
+            case EActiveMenu.Main_Menu:
+                if (_mainMenuNavigator.IsReady)
+                    _mainMenuNavigator.Navigate(context.ReadValue<Vector2>());
+                break;
+
+            default:
+                break;
+        }
     }
 
     public void OnSelect(InputAction.CallbackContext context)
@@ -62,7 +86,16 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         if (!context.performed)
             return;
 
+        switch (_activeMenu)
+        {
+            case EActiveMenu.Main_Menu:
+                if (_mainMenuNavigator.IsReady)
+                    _mainMenuNavigator.Select();
+                break;
 
+            default:
+                break;
+        }
     }
 
     public void OnBack(InputAction.CallbackContext context)
