@@ -56,7 +56,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="loading-screen" class="fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+    <ui:VisualElement name="loading-screen" class="fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); transition-duration: 0.2s, 0s;">
         <ui:VisualElement style="flex-grow: 1; background-color: rgb(31, 31, 31); justify-content: center;">
             <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); flex-grow: 1; align-self: center; min-width: 1200px; justify-content: center;">
                 <ui:ProgressBar value="22" title="my-progress" name="raid-load-progress" />

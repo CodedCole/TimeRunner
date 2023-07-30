@@ -34,6 +34,7 @@ public class RaidLoader : MonoBehaviour
     void RaidLoaded(AsyncOperation ao)
     {
         Debug.Log("Raid Loaded");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(_raidScene));
         onRaidLoaded();
     }
 

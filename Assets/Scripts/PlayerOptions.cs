@@ -108,10 +108,15 @@ public class PlayerOptions : MonoBehaviour
     }
     //----------End Volume----------
 
-    private void OnDisable()
+    public static void SaveAll()
     {
         SaveVolumeSettings();
 
         Debug.Log("Saved audio settings");
+    }
+
+    private void OnDestroy()
+    {
+        SaveAll();
     }
 }

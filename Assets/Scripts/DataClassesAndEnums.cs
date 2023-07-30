@@ -42,7 +42,7 @@ public struct GunStats
 }
 
 [Serializable]
-struct ItemInitialState
+public struct ItemInitialState
 {
     public Item item;
     public int stackSize;
