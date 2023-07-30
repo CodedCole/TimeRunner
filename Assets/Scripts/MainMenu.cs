@@ -186,6 +186,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     {
         VisualElement volumeOptionsSubGroup = _optionsMenu.Q<VisualElement>("volume-options");
 
+        //Volume Sliders
         _masterVolume = volumeOptionsSubGroup.Q<Slider>("master-volume-slider");
         _masterVolume.RegisterValueChangedCallback((ChangeEvent<float> evt) => PlayerOptions.SetMasterVolume(evt.newValue));
         _musicVolume = volumeOptionsSubGroup.Q<Slider>("music-volume-slider");
@@ -193,6 +194,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         _sfxVolume = volumeOptionsSubGroup.Q<Slider>("sfx-volume-slider");
         _sfxVolume.RegisterValueChangedCallback((ChangeEvent<float> evt) => PlayerOptions.SetSFXVolume(evt.newValue));
 
+        //Volume Reset Button
         volumeOptionsSubGroup.Q<Button>("reset-to-default-button").clicked += () => 
         { 
             PlayerOptions.VolumeResetToDefault();
@@ -201,6 +203,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
             _sfxVolume.SetValueWithoutNotify(PlayerOptions.GetSFXVolume());
         };
 
+        //Update sliders with initial player options
         _masterVolume.SetValueWithoutNotify(PlayerOptions.GetMasterVolume());
         _musicVolume.SetValueWithoutNotify(PlayerOptions.GetMusicVolume());
         _sfxVolume.SetValueWithoutNotify(PlayerOptions.GetSFXVolume());

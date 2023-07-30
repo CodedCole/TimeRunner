@@ -16,15 +16,24 @@ public class RaidLoader : MonoBehaviour
     {
         Debug.Log("Loading Raid");
 
-        sceneLoadOp = SceneManager.LoadSceneAsync(_raidScene, LoadSceneMode.Additive);
+        sceneLoadOp = SceneManager.LoadSceneAsync(_raidScene, LoadSceneMode.Single);
         sceneLoadOp.allowSceneActivation = false;
         sceneLoadOp.completed += RaidLoaded;
+        UniTask.Void(WatchRaidLoad);
+    }
+
+    async UniTaskVoid WatchRaidLoad()
+    {
+        while(sceneLoadOp.progress < 0.9f)
+        {
+            await UniTask.Yield();
+        }
+        sceneLoadOp.allowSceneActivation = true;
     }
 
     void RaidLoaded(AsyncOperation ao)
     {
         Debug.Log("Raid Loaded");
-        sceneLoadOp.allowSceneActivation = true;
         onRaidLoaded();
     }
 

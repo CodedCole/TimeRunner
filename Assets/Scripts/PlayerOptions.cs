@@ -9,7 +9,6 @@ public class PlayerOptions : MonoBehaviour
 {
     protected static PlayerOptions instance;
 
-    [SerializeField] private UIDocument _mainMenu;      //set in inspector
     [Header("Volume")]
     [SerializeField] protected AudioMixer _masterMixer;   //set in inspector
     [SerializeField] protected string MasterVolume = "MasterVolume";
