@@ -107,6 +107,9 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
 
     void OnDisable()
     {
+        if (_inventory == null || _inventory.GetContainer() == null)
+            return;
+
         _inventory.GetContainer().UnregisterItemAddEvent(_inventoryContainerController.UpdateUI);
         _inventory.GetContainer().UnregisterItemRemovedEvent(_inventoryContainerController.UpdateUI);
     }

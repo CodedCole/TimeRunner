@@ -7,114 +7,112 @@ using UnityEngine.UIElements;
 
 public class PlayerOptions : MonoBehaviour
 {
+    protected static PlayerOptions instance;
+
     [SerializeField] private UIDocument _mainMenu;      //set in inspector
     [Header("Volume")]
-    [SerializeField] private AudioMixer _masterMixer;   //set in inspector
-    [SerializeField] private string MasterVolume = "MasterVolume";
-    [SerializeField] private string MusicVolume = "MusicVolume";
-    [SerializeField] private string SFXVolume = "SFXVolume";
-
-    //volume
-    private Button _resetToDefaultButton;
-    private Slider _masterVolumeSlider;
-    private Slider _musicVolumeSlider;
-    private Slider _sfxVolumeSlider;
+    [SerializeField] protected AudioMixer _masterMixer;   //set in inspector
+    [SerializeField] protected string MasterVolume = "MasterVolume";
+    [SerializeField] protected string MusicVolume = "MusicVolume";
+    [SerializeField] protected string SFXVolume = "SFXVolume";
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+
         SetupVolume();
     }
 
     //----------Volume----------
     void SetupVolume()
     {
-        VisualElement volumeSubGroup = _mainMenu.rootVisualElement.Q<VisualElement>("volume-options");
-
-        //reset
-        _resetToDefaultButton = volumeSubGroup.Q<Button>("reset-to-default-button");
-        _resetToDefaultButton.clicked += VolumeResetToDefault;
-
         //master
         if (!PlayerPrefs.HasKey(MasterVolume))
             PlayerPrefs.SetFloat(MasterVolume, 80.0f);
         _masterMixer.SetFloat(MasterVolume, PlayerPrefs.GetFloat(MasterVolume) - 80.0f);
-
-        _masterVolumeSlider = volumeSubGroup.Q<Slider>("master-volume-slider");
-        _masterVolumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(MasterVolume));
-        _masterVolumeSlider.RegisterValueChangedCallback(MasterVolumeChanged);
 
         //music
         if (!PlayerPrefs.HasKey(MusicVolume))
             PlayerPrefs.SetFloat(MusicVolume, 80.0f);
         _masterMixer.SetFloat(MusicVolume, PlayerPrefs.GetFloat(MusicVolume) - 80.0f);
 
-        _musicVolumeSlider = volumeSubGroup.Q<Slider>("music-volume-slider");
-        _musicVolumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(MusicVolume));
-        _musicVolumeSlider.RegisterValueChangedCallback(MusicVolumeChanged);
-
         //sfx
         if (!PlayerPrefs.HasKey(SFXVolume))
             PlayerPrefs.SetFloat(SFXVolume, 80.0f);
         _masterMixer.SetFloat(SFXVolume, PlayerPrefs.GetFloat(SFXVolume) - 80.0f);
-
-        _sfxVolumeSlider = volumeSubGroup.Q<Slider>("sfx-volume-slider");
-        _sfxVolumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(SFXVolume));
-        _sfxVolumeSlider.RegisterValueChangedCallback(SFXVolumeChanged);
     }
 
-    void MasterVolumeChanged(ChangeEvent<float> evt)
+    public static void SetMasterVolume(float newValue)
     {
-        _masterMixer.SetFloat(MasterVolume, evt.newValue - 80.0f);
+        instance._masterMixer.SetFloat(instance.MasterVolume, newValue - 80.0f);
     }
-
-    void MusicVolumeChanged(ChangeEvent<float> evt)
+    public static float GetMasterVolume()
     {
-        _masterMixer.SetFloat(MusicVolume, evt.newValue - 80.0f);
+        float result;
+        instance._masterMixer.GetFloat(instance.MasterVolume, out result);
+        return result + 80.0f;
     }
 
-    void SFXVolumeChanged(ChangeEvent<float> evt)
+    public static void SetMusicVolume(float newValue)
     {
-        _masterMixer.SetFloat(SFXVolume, evt.newValue - 80.0f);
+        instance._masterMixer.SetFloat(instance.MusicVolume, newValue - 80.0f);
+    }
+    public static float GetMusicVolume()
+    {
+        float result;
+        instance._masterMixer.GetFloat(instance.MusicVolume, out result);
+        return result + 80.0f;
     }
 
-    void VolumeResetToDefault()
+    public static void SetSFXVolume(float newValue)
+    {
+        instance._masterMixer.SetFloat(instance.SFXVolume, newValue - 80.0f);
+    }
+    public static float GetSFXVolume()
+    {
+        float result;
+        instance._masterMixer.GetFloat(instance.SFXVolume, out result);
+        return result + 80.0f;
+    }
+
+    public static void VolumeResetToDefault()
     {
         //master
-        PlayerPrefs.SetFloat(MasterVolume, 80.0f);
-        _masterMixer.SetFloat(MasterVolume, PlayerPrefs.GetFloat(MasterVolume) - 80.0f);
-        _masterVolumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(MasterVolume));
+        instance._masterMixer.SetFloat(instance.MasterVolume, 0.0f);
 
         //music
-        PlayerPrefs.SetFloat(MusicVolume, 80.0f);
-        _masterMixer.SetFloat(MusicVolume, PlayerPrefs.GetFloat(MusicVolume) - 80.0f);
-        _musicVolumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(MusicVolume));
+        instance._masterMixer.SetFloat(instance.MusicVolume, 0.0f);
 
         //sfx
-        PlayerPrefs.SetFloat(SFXVolume, 80.0f);
-        _masterMixer.SetFloat(SFXVolume, PlayerPrefs.GetFloat(SFXVolume) - 80.0f);
-        _sfxVolumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(SFXVolume));
+        instance._masterMixer.SetFloat(instance.SFXVolume, 0.0f);
+    }
+
+    public static void SaveVolumeSettings()
+    {
+        float value;
+        instance._masterMixer.GetFloat(instance.MasterVolume, out value);
+        PlayerPrefs.SetFloat(instance.MasterVolume, value);
+
+        instance._masterMixer.GetFloat(instance.MusicVolume, out value);
+        PlayerPrefs.SetFloat(instance.MusicVolume, value);
+
+        instance._masterMixer.GetFloat(instance.SFXVolume, out value);
+        PlayerPrefs.SetFloat(instance.SFXVolume, value);
     }
     //----------End Volume----------
 
     private void OnDisable()
     {
-        //volume
-        //master
-        PlayerPrefs.SetFloat(MasterVolume, _masterVolumeSlider.value);
-        _masterVolumeSlider.UnregisterValueChangedCallback(MasterVolumeChanged);
-
-        //music
-        PlayerPrefs.SetFloat(MusicVolume, _musicVolumeSlider.value);
-        _musicVolumeSlider.UnregisterValueChangedCallback(MusicVolumeChanged);
-
-        //sfx
-        PlayerPrefs.SetFloat(SFXVolume, _sfxVolumeSlider.value);
-        _sfxVolumeSlider.UnregisterValueChangedCallback(SFXVolumeChanged);
-
-        //reset button
-        _resetToDefaultButton.clicked -= VolumeResetToDefault;
+        SaveVolumeSettings();
 
         Debug.Log("Saved audio settings");
-        //end volume
     }
 }

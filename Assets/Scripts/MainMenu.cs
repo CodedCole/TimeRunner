@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.CompilerServices;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class MainMenu : MonoBehaviour, Controls.IMenuActions
@@ -26,6 +28,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     private VisualElement _titleScreen;
     private VisualElement _mainMenu;
     private VisualElement _optionsMenu;
+    private VisualElement _loadingScreen;
 
     private Controls _controls;
 
@@ -33,10 +36,19 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     private IDisposable _titleScreenAnyKeyPressEvent;
 
     //main menu
+    private RaidLoader _raidLoader;
+    private bool _loadingRaid;
+    private ProgressBar _raidLoadProgress;
 
     //options menu
     private VisualElement _controlsTabView;
+
     private VisualElement _audioTabView;
+    private bool _setupAudioTab;
+    private Slider _masterVolume;
+    private Slider _musicVolume;
+    private Slider _sfxVolume;
+
     private VisualElement _graphicsTabView;
 
     private void Start()
@@ -45,11 +57,13 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         _titleScreen = _mainMenuDocument.rootVisualElement.Q<VisualElement>("title-screen");
         _mainMenu = _mainMenuDocument.rootVisualElement.Q<VisualElement>("main-menu");
         _optionsMenu = _mainMenuDocument.rootVisualElement.Q<VisualElement>("options-menu");
+        _loadingScreen = _mainMenuDocument.rootVisualElement.Q<VisualElement>("loading-screen");
 
         _activeMenu = EActiveMenu.Title;
         _titleScreen.RemoveFromClassList(_fullscreenHiddenClass);
         _mainMenu.AddToClassList(_fullscreenHiddenClass);
         _optionsMenu.AddToClassList(_fullscreenHiddenClass);
+        _loadingScreen.AddToClassList(_fullscreenHiddenClass);
 
         _controls = new Controls();
         _controls.Menu.SetCallbacks(this);
@@ -82,7 +96,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     //--------Main-Menu--------
     void SetupMainMenu()
     {
-        _mainMenu.Q<Button>("raid-button").clicked += () => { Debug.Log("RAID"); };
+        _mainMenu.Q<Button>("raid-button").clicked += StartLoadingRaid;
         _mainMenu.Q<Button>("options-button").clicked += SwitchToOptionsMenu;
         _mainMenu.Q<Button>("outskirts-button").clicked += () => { Debug.Log("OUTSKIRTS"); };
         _mainMenu.Q<Button>("exit-button").clicked += () => { Debug.Log("EXIT"); };
@@ -94,6 +108,43 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         _mainMenu.AddToClassList(_fullscreenHiddenClass);
         _activeMenu = EActiveMenu.Options;
         SetupOptionsMenu();
+    }
+
+    void StartLoadingRaid()
+    {
+        if (_raidLoader == null)
+            _raidLoader = FindObjectOfType<RaidLoader>();
+
+        _loadingRaid = true;
+        _controls.Menu.Disable();
+        _raidLoader.onRaidLoaded += OnRaidLoaded;
+        _raidLoader.LoadRaid();
+        UniTask.Void(RunLoadingScreen);
+    }
+
+    async UniTaskVoid RunLoadingScreen()
+    {
+        if (_raidLoadProgress == null)
+            _raidLoadProgress = _loadingScreen.Q<ProgressBar>("raid-load-progress");
+
+        _mainMenu.AddToClassList(_fullscreenHiddenClass);
+        _loadingScreen.RemoveFromClassList(_fullscreenHiddenClass);
+
+        float progress;
+        while (_loadingRaid)
+        {
+            progress = _raidLoader.GetLoadProgress();
+            _raidLoadProgress.value = progress;
+            _raidLoadProgress.title = $"Loading Raid {Mathf.RoundToInt(progress * 100)}%";
+            await UniTask.Yield();
+        }
+    }
+
+    void OnRaidLoaded()
+    {
+        _loadingRaid = false;
+        _mainMenuDocument.enabled = false;
+        _raidLoader.onRaidLoaded -= OnRaidLoaded;
     }
     //------End-Main-Menu------
 
@@ -123,9 +174,38 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
 
     void ShowAudioTab()
     {
+        if (!_setupAudioTab)
+            SetupAudioTab();
+
         _controlsTabView.AddToClassList(_optionsTabHiddenClass);
         _audioTabView.RemoveFromClassList(_optionsTabHiddenClass);
         _graphicsTabView.AddToClassList(_optionsTabHiddenClass);
+    }
+
+    void SetupAudioTab()
+    {
+        VisualElement volumeOptionsSubGroup = _optionsMenu.Q<VisualElement>("volume-options");
+
+        _masterVolume = volumeOptionsSubGroup.Q<Slider>("master-volume-slider");
+        _masterVolume.RegisterValueChangedCallback((ChangeEvent<float> evt) => PlayerOptions.SetMasterVolume(evt.newValue));
+        _musicVolume = volumeOptionsSubGroup.Q<Slider>("music-volume-slider");
+        _musicVolume.RegisterValueChangedCallback((ChangeEvent<float> evt) => PlayerOptions.SetMusicVolume(evt.newValue));
+        _sfxVolume = volumeOptionsSubGroup.Q<Slider>("sfx-volume-slider");
+        _sfxVolume.RegisterValueChangedCallback((ChangeEvent<float> evt) => PlayerOptions.SetSFXVolume(evt.newValue));
+
+        volumeOptionsSubGroup.Q<Button>("reset-to-default-button").clicked += () => 
+        { 
+            PlayerOptions.VolumeResetToDefault();
+            _masterVolume.SetValueWithoutNotify(PlayerOptions.GetMasterVolume());
+            _musicVolume.SetValueWithoutNotify(PlayerOptions.GetMusicVolume());
+            _sfxVolume.SetValueWithoutNotify(PlayerOptions.GetSFXVolume());
+        };
+
+        _masterVolume.SetValueWithoutNotify(PlayerOptions.GetMasterVolume());
+        _musicVolume.SetValueWithoutNotify(PlayerOptions.GetMusicVolume());
+        _sfxVolume.SetValueWithoutNotify(PlayerOptions.GetSFXVolume());
+
+        _setupAudioTab = true;
     }
 
     void ShowGraphicsTab()
@@ -181,11 +261,6 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         switch (_activeMenu)
         {
             case EActiveMenu.Main_Menu:
-                _titleScreenAnyKeyPressEvent = InputSystem.onAnyButtonPress.CallOnce(OnTitleAnyKeyPress);
-                _mainMenu.AddToClassList(_fullscreenHiddenClass);
-                _titleScreen.RemoveFromClassList(_fullscreenHiddenClass);
-                _controls.Disable();
-                _activeMenu = EActiveMenu.Title;
                 break;
 
             case EActiveMenu.Options:
