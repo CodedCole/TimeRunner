@@ -1,0 +1,51 @@
+.loading-screen-background {
+    flex-grow: 1;
+    background-color: rgb(22, 22, 22);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition-property: display, opacity;
+    transition-duration: 0s, 0.5s;
+    transition-delay: 0s, 0s;
+}
+
+.load-status-text {
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    color: rgb(229, 229, 229);
+    font-size: 25px;
+    -unity-text-align: lower-left;
+}
+
+.load-progress-bar {
+}
+
+.unity-progress-bar__background {
+    background-color: rgb(43, 43, 43);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.unity-progress-bar__progress {
+    background-color: rgb(0, 186, 255);
+    translate: 0 -3px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.hidden {
+    transition-property: display, all;
+    transition-delay: 0.5s, 0s;
+    transition-duration: 0s, 0.5s;
+    display: none;
+    opacity: 0;
+}

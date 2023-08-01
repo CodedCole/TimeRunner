@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/LoadingScreenStyleSheet.uss?fileID=7433441132597879392&amp;guid=5e942e50ece02344390ff189fbe7ca0b&amp;type=3#LoadingScreenStyleSheet" />
+    <ui:VisualElement name="background" class="loading-screen-background hidden">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: stretch; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px; flex-direction: column-reverse;">
+            <ui:ProgressBar value="0.25" name="load-progress-bar" high-value="1" class="load-progress-bar" />
+            <ui:Label tabindex="-1" text="Loading Raid" display-tooltip-when-elided="true" name="load-status-text" class="load-status-text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

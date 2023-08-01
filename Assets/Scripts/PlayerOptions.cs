@@ -18,14 +18,8 @@ public class PlayerOptions : MonoBehaviour
     private void Awake()
     {
         if (instance != null)
-        {
-            Destroy(this);
-            return;
-        }
-        else
-        {
-            instance = this;
-        }
+            Destroy(instance);
+        instance = this;
         SetupVolume();
     }
 

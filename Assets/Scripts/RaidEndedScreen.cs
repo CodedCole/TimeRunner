@@ -44,7 +44,7 @@ public class RaidEndedScreen : MonoBehaviour
 
     void SetupEndScreen()
     {
-        UIDocument document = FindObjectOfType<UIDocument>();
+        UIDocument document = GetComponent<UIDocument>();
         VisualElement endScreenRoot = document.rootVisualElement.Q<VisualElement>("RaidEndedScreen");
         endScreenRoot.RemoveFromClassList(_hiddenClass);
 
@@ -69,6 +69,9 @@ public class RaidEndedScreen : MonoBehaviour
                 ev.PreventDefault();
             }
         });
+
+        Button returnToOutskirtsButton = endScreenRoot.Q<Button>("return-to-outskirts-button");
+        returnToOutskirtsButton.clicked += SceneLoader.LoadMenu;
 
         _raidResultText = endScreenRoot.Q<Label>("raid-result-text");
     }

@@ -112,6 +112,8 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
 
     void StartLoadingRaid()
     {
+        SceneLoader.LoadRaid();
+        /*
         if (_raidLoader == null)
             _raidLoader = FindObjectOfType<RaidLoader>();
 
@@ -120,6 +122,7 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         _raidLoader.onRaidLoaded += OnRaidLoaded;
         _raidLoader.LoadRaid();
         UniTask.Void(RunLoadingScreen);
+        //*/
     }
 
     async UniTaskVoid RunLoadingScreen()
