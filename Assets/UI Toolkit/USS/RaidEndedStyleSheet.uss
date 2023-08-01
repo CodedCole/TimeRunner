@@ -1,0 +1,81 @@
+.raid-ended-background {
+    flex-grow: 1;
+    background-color: rgb(29, 29, 29);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.raid-result-text-base {
+    align-self: center;
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    font-size: 86px;
+    color: rgb(118, 118, 118);
+    translate: 0 50px;
+    opacity: 0;
+    transition-duration: 1s;
+    transition-delay: 1s;
+}
+
+.raid-result-text-success {
+    color: rgb(0, 192, 255);
+    translate: 0 0;
+    opacity: 1;
+}
+
+.raid-result-text-failed {
+    color: rgb(255, 0, 0);
+    translate: 0 0;
+    opacity: 1;
+}
+
+.stat-box {
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    justify-content: space-between;
+}
+
+.stat-box:focus {
+    background-color: rgba(79, 79, 79, 0.33);
+}
+
+.raid-ended-info-box {
+    flex-grow: 1;
+    max-width: 960px;
+    padding-left: 52px;
+    padding-right: 52px;
+    padding-top: 52px;
+    padding-bottom: 52px;
+}
+
+.raid-ended-button {
+    -unity-font-definition: url('project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&guid=54b54193606c10c47aefe62a00a2362c&type=2#BrunoAce-Regular SDF');
+    color: rgb(0, 0, 0);
+    font-size: 25px;
+    background-color: rgb(229, 229, 229);
+    transition-duration: 0.1s;
+}
+
+.raid-ended-return-to-outskirts-button {
+    background-color: rgb(197, 23, 23);
+    color: rgb(229, 229, 229);
+}
+
+.raid-ended-button:focus {
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    transition-duration: 0.1s;
+    translate: 0 0;
+}

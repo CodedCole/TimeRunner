@@ -1,0 +1,49 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/RaidEndedStyleSheet.uss?fileID=7433441132597879392&amp;guid=25d18822a54788046b64e6449597d49c&amp;type=3#RaidEndedStyleSheet" />
+    <ui:VisualElement name="background" class="raid-ended-background">
+        <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); justify-content: center; min-height: 400px;">
+            <ui:Label tabindex="-1" text="Dead on Another Timeline" display-tooltip-when-elided="true" name="raid-result-text" class="raid-result-text-base" />
+        </ui:VisualElement>
+        <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); flex-direction: row; min-height: 500px;">
+            <ui:VisualElement name="stat-info-box" class="raid-ended-info-box">
+                <ui:VisualElement style="background-color: rgb(43, 43, 43); flex-grow: 1;">
+                    <ui:ScrollView horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="kill-stat" focusable="true" class="stat-box">
+                            <ui:Label tabindex="-1" text="Kills" display-tooltip-when-elided="true" name="stat-name" style="font-size: 25px; color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                            <ui:Label tabindex="-1" text="12" display-tooltip-when-elided="true" name="stat-value" style="color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 25px; -unity-text-align: upper-right;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="damage-dealt-stat" focusable="true" class="stat-box">
+                            <ui:Label tabindex="-1" text="Damage Dealt" display-tooltip-when-elided="true" name="stat-name" style="font-size: 25px; color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                            <ui:Label tabindex="-1" text="2143" display-tooltip-when-elided="true" name="stat-value" style="color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 25px; -unity-text-align: upper-right;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="total-damage-received-stat" focusable="true" class="stat-box">
+                            <ui:Label tabindex="-1" text="Total Damage Received" display-tooltip-when-elided="true" name="stat-name" style="font-size: 25px; color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                            <ui:Label tabindex="-1" text="256" display-tooltip-when-elided="true" name="stat-value" style="color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 25px; -unity-text-align: upper-right;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="damage-blocked-by-armor-stat" focusable="true" class="stat-box">
+                            <ui:Label tabindex="-1" text="Damage Blocked by Armor" display-tooltip-when-elided="true" name="stat-name" style="font-size: 25px; color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                            <ui:Label tabindex="-1" text="128" display-tooltip-when-elided="true" name="stat-value" style="color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 25px; -unity-text-align: upper-right;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="value-found-stat" focusable="true" class="stat-box">
+                            <ui:Label tabindex="-1" text="Value Found" display-tooltip-when-elided="true" name="stat-name" style="font-size: 25px; color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                            <ui:Label tabindex="-1" text="5720 uc" display-tooltip-when-elided="true" name="stat-value" style="color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 25px; -unity-text-align: upper-right;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="value-collected-stat" focusable="true" class="stat-box">
+                            <ui:Label tabindex="-1" text="Value Collected" display-tooltip-when-elided="true" name="stat-name" style="font-size: 25px; color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+                            <ui:Label tabindex="-1" text="3420 uc" display-tooltip-when-elided="true" name="stat-value" style="color: rgb(229, 229, 229); -unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;); font-size: 25px; -unity-text-align: upper-right;" />
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="raid-ended-info-box" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement style="flex-grow: 1; background-color: rgb(43, 43, 43);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); min-height: 180px; padding-left: 52px; padding-right: 52px; padding-top: 0; padding-bottom: 52px;">
+            <ui:VisualElement name="button-box" style="flex-grow: 1; background-color: rgb(43, 43, 43); flex-direction: row-reverse; padding-left: 30px; padding-right: 30px; padding-top: 30px; padding-bottom: 30px;">
+                <ui:Button text="Return to Outskirts" display-tooltip-when-elided="true" name="return-to-outskirts-button" class="raid-ended-button raid-ended-return-to-outskirts-button" />
+                <ui:Button text="View Stats" display-tooltip-when-elided="true" name="view-stats-button" class="raid-ended-button" style="-unity-font-definition: url(&apos;project://database/Assets/Fonts/BrunoAce-Regular%20SDF.asset?fileID=11400000&amp;guid=54b54193606c10c47aefe62a00a2362c&amp;type=2#BrunoAce-Regular SDF&apos;);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

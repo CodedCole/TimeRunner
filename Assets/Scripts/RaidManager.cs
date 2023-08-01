@@ -76,13 +76,15 @@ public class RaidManager : MonoBehaviour
         bl.tilemap.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         bl.tilemap.AddComponent<CompositeCollider2D>();
         bl.tilemap.AddComponent<TilemapCollider2D>().usedByComposite = true;
-        yield return bl.zoneGenerator.Generate(bl.layout, bl.tilemap, _debug);
+        yield return StartCoroutine(bl.zoneGenerator.Generate(bl.layout, bl.tilemap, _debug));
         _builtLevels.Add(bl);
     }
 
     IEnumerator BeginRaid()
     {
         yield return StartCoroutine(BuildLevel(0));
+
+        FindObjectOfType<Player>().GetComponent<Health>().RegisterOnDeath(EndRaid);
 
         if (onRaidBegin != null)
             onRaidBegin();
@@ -92,6 +94,8 @@ public class RaidManager : MonoBehaviour
 
     public void EndRaid()
     {
+        FindObjectOfType<RaidEndedScreen>().FailReveal();
+
         if (onRaidEnd != null)
             onRaidEnd();
     }

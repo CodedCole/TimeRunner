@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 
 public class HUD : MonoBehaviour
 {
-    [SerializeField] private VisualTreeAsset _itemListTemplate;
     [SerializeField] private string _hiddenClass = "hidden";
 
     UIDocument _hud;

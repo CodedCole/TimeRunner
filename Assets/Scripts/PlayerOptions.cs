@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UIElements;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerOptions : MonoBehaviour
 {
@@ -26,7 +26,6 @@ public class PlayerOptions : MonoBehaviour
         {
             instance = this;
         }
-
         SetupVolume();
     }
 

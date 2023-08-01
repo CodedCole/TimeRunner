@@ -2,6 +2,7 @@
     <ui:Template name="Reticle" src="project://database/Assets/UI%20Toolkit/UXML/Reticle.uxml?fileID=9197481963319205126&amp;guid=c6c4d1f38346fc64cb609171891263b9&amp;type=3#Reticle" />
     <ui:Template name="DebugPanel" src="project://database/Assets/UI%20Toolkit/UXML/DebugPanel.uxml?fileID=9197481963319205126&amp;guid=4303ec2cc4c53374ea5df74187ec2722&amp;type=3#DebugPanel" />
     <ui:Template name="Inventory" src="project://database/Assets/UI%20Toolkit/UXML/Inventory.uxml?fileID=9197481963319205126&amp;guid=d63c3c081c9e75244a87935556f044c7&amp;type=3#Inventory" />
+    <ui:Template name="RaidEndedScreen" src="project://database/Assets/UI%20Toolkit/UXML/RaidEndedScreen.uxml?fileID=9197481963319205126&amp;guid=edaf8880941a4864d8ab5e0466363e7a&amp;type=3#RaidEndedScreen" />
     <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:Instance template="Reticle" name="Reticle" style="width: 100px; height: 100px; bottom: -50px; left: -50px; position: absolute;" />
@@ -15,4 +16,5 @@
         </ui:VisualElement>
         <ui:Instance template="Inventory" name="Inventory" class="hidden" style="align-self: stretch; height: 100%;" />
     </ui:VisualElement>
+    <ui:Instance template="RaidEndedScreen" name="RaidEndedScreen" focusable="false" class="hidden" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; transition-duration: 0.5s; transition-delay: 0.5s;" />
 </ui:UXML>

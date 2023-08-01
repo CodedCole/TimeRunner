@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!245 &-1358855327177360856
+AudioMixerSnapshotController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Menu
+  m_AudioMixer: {fileID: 24100000}
+  m_SnapshotID: 9a962f058675136408514c3b0953b095
+  m_FloatValues:
+    578475d096a6b894dbc4965e645cfa9b: -80
+    60caff367655f7a49a2d9abcdd0d1fe7: 0
+    aca8e13b4722409419a3fab6c12918e6: 0
+  m_TransitionOverrides: {}
 --- !u!244 &-984662151312483975
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -44,6 +58,7 @@ AudioMixerController:
   m_MasterGroup: {fileID: 24300002}
   m_Snapshots:
   - {fileID: 24500006}
+  - {fileID: -1358855327177360856}
   m_StartSnapshot: {fileID: 24500006}
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
@@ -104,7 +119,7 @@ AudioMixerSnapshotController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Snapshot
+  m_Name: Game
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 2cf51c3b28897044ea29f97132199df1
   m_FloatValues:
