@@ -20,7 +20,7 @@ public class SceneLoader : MonoBehaviour
             Destroy(instance);
         instance = this;
 
-        if(!SceneManager.GetSceneByName(_menuScene).isLoaded && !SceneManager.GetSceneByName(_raidScene).isLoaded)
+        if(SceneManager.sceneCount < 2)
         {
             LoadMenuOnInstance();
         }

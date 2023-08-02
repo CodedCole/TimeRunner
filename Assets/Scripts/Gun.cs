@@ -67,7 +67,7 @@ public class Gun : MonoBehaviour
     /// </summary>
     public CanReload canReload;
 
-    private void Start()
+    private void Awake()
     {
         _library = _spriteRenderer.GetComponent<SpriteLibrary>();
         _animator = GetComponent<Animator>();
@@ -142,7 +142,6 @@ public class Gun : MonoBehaviour
                 _animator.SetTrigger("Reload");
                 _animator.speed = 1 / _gunInstance.gun.GetStats().reloadTime;
             }
-            Debug.Log("Start Reload");
         }
     }
 

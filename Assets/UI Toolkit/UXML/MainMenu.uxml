@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/USS/HUD.uss?fileID=7433441132597879392&amp;guid=0fa09e4c6469e9d42af60bb2d91e22f8&amp;type=3#HUD" />
-    <ui:VisualElement name="title-screen" class="fullscreen-overlay fullscreen-hidden">
+    <ui:VisualElement name="title-screen" class="fullscreen-overlay">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: center; justify-content: center; align-items: center;">
             <ui:VisualElement name="Title" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Materials/Title.asset?fileID=8600000&amp;guid=708496b82b6e788479b154e669382509&amp;type=2#Title&apos;); width: 876px; height: 104px; position: relative; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit;" />
             <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); margin-left: 20px; margin-right: 20px; margin-top: 20px; margin-bottom: 20px; align-self: center;">
@@ -16,7 +16,7 @@
             <ui:Button text="Exit" display-tooltip-when-elided="true" name="exit-button" class="main-menu-button" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="options-menu" class="fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+    <ui:VisualElement name="options-menu" class="fullscreen-overlay fullscreen-hidden" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 600px; align-self: center; align-items: stretch; justify-content: center;">
             <ui:VisualElement name="tab-buttons" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-around;">
                 <ui:Button text="Controls" display-tooltip-when-elided="true" name="controls-options-tab-button" class="tab-button" />
@@ -56,7 +56,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="loading-screen" class="fullscreen-overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); transition-duration: 0.2s, 0s;">
+    <ui:VisualElement name="loading-screen" class="fullscreen-overlay fullscreen-hidden" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); transition-duration: 0.2s, 0s;">
         <ui:VisualElement style="flex-grow: 1; background-color: rgb(31, 31, 31); justify-content: center;">
             <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); flex-grow: 1; align-self: center; min-width: 1200px; justify-content: center;">
                 <ui:ProgressBar value="22" title="my-progress" name="raid-load-progress" />

@@ -117,12 +117,10 @@ public class GunController : MonoBehaviour
         if (_useSecondary)
         {
             _gun.GunInstance = _inventory.secondaryWeapon;
-            Debug.Log("Secondary");
         }
         else
         {
             _gun.GunInstance = _inventory.primaryWeapon;
-            Debug.Log("Primary");
         }
     }
 
@@ -135,7 +133,6 @@ public class GunController : MonoBehaviour
         if(_inventory != null)
             absent = _inventory.GetContainer().RemoveItem(_gun.GunInstance.gun.GetAmmo(), _gun.GunInstance.gun.GetStats().magSize - _gun.GunInstance.mag);
         _gun.GunInstance.mag = _gun.GunInstance.gun.GetStats().magSize - absent;
-        Debug.Log("Reloaded");
     }
 
     /// <summary>
@@ -147,7 +144,6 @@ public class GunController : MonoBehaviour
         if (_inventory == null)
             return true;
         bool canReload = _inventory.GetContainer().ContainsItem(_gun.GunInstance.gun.GetAmmo());
-        Debug.Log("Can reload? " + canReload);
         return canReload;
     }
 
