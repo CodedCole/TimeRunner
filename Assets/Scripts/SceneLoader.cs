@@ -26,128 +26,83 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    public static void LoadMenu()
-    {
-        instance.LoadMenuOnInstance();
-    }
-
-    protected void LoadMenuOnInstance()
-    {
-        UniTask.Void(LoadMenuOnInstanceAsync);
-    }
+    //External facing function for loading the menu
+    public static void LoadMenu() { instance.LoadMenuOnInstance(); }
+    protected void LoadMenuOnInstance() { UniTask.Void(LoadMenuOnInstanceAsync); }
 
     async UniTaskVoid LoadMenuOnInstanceAsync()
     {
-        AsyncOperation unloadRaid = null;
-        AsyncOperation loadMenu = null;
-
-        _backupCamera.gameObject.SetActive(true);
-
-        LoadingScreenUIManager.StartLoadingScreen(() =>
-        {
-            if (loadMenu != null && unloadRaid == null)
-            {
-                return loadMenu.progress;
-            }
-            else
-            {
-                float progress = 0;
-                if (loadMenu != null)
-                    progress += loadMenu.progress * 0.5f;
-                if (unloadRaid != null)
-                    progress += unloadRaid.progress * 0.5f;
-                return progress;
-            }
-        });
-
-        if (SceneManager.GetSceneByName(_raidScene).isLoaded)
-        {
-            unloadRaid = SceneManager.UnloadSceneAsync(_raidScene);
-            while (!unloadRaid.isDone)
-            {
-                await UniTask.Yield();
-            }
-        }
-
-        loadMenu = SceneManager.LoadSceneAsync(_menuScene, LoadSceneMode.Additive);
-        loadMenu.allowSceneActivation = false;
-        while (loadMenu.progress < 0.9f)
-        {
-            await UniTask.Yield();
-        }
-
-        loadMenu.allowSceneActivation = true;
-
-        while (!loadMenu.isDone)
-        {
-            await UniTask.Yield();
-        }
-
-        _backupCamera.gameObject.SetActive(false);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(_menuScene));
-
-        Debug.Log("done");
+        UniTask loadMenu = UnloadAndLoadScenesAsync(_raidScene, _menuScene);
+        await loadMenu;
     }
 
-    public static void LoadRaid()
-    {
-        instance.LoadRaidOnInstance();
-    }
-
-    protected void LoadRaidOnInstance()
-    {
-        UniTask.Void(LoadRaidOnInstanceAsync);
-    }
+    //External facing function for loading the raid
+    public static void LoadRaid() { instance.LoadRaidOnInstance(); }
+    protected void LoadRaidOnInstance() { UniTask.Void(LoadRaidOnInstanceAsync); }
 
     async UniTaskVoid LoadRaidOnInstanceAsync()
     {
-        AsyncOperation unloadMenu = null;
-        AsyncOperation loadRaid = null;
+        UniTask loadRaid = UnloadAndLoadScenesAsync(_menuScene, _raidScene);
+        await loadRaid;
+    }
 
+    /// <summary>
+    /// Async operation for unloading one scene and loading another. The loaded scene is set as the active scene
+    /// </summary>
+    /// <param name="sceneToUnload">asset path of the scene to unload</param>
+    /// <param name="sceneToLoad">asset path of the scene to load</param>
+    /// <returns></returns>
+    async UniTask UnloadAndLoadScenesAsync(string sceneToUnload, string sceneToLoad)
+    {
+        AsyncOperation unload = null;
+        AsyncOperation load = null;
+
+        //enable loading screen and loading screen camera
         _backupCamera.gameObject.SetActive(true);
-
         LoadingScreenUIManager.StartLoadingScreen(() =>
         {
-            if (loadRaid != null && unloadMenu == null)
+            if (load != null && unload == null)
             {
-                return loadRaid.progress;
+                return load.progress;
             }
             else
             {
                 float progress = 0;
-                if (loadRaid != null)
-                    progress += loadRaid.progress * 0.5f;
-                if (unloadMenu != null)
-                    progress += unloadMenu.progress * 0.5f;
+                if (load != null)
+                    progress += load.progress * 0.5f;
+                if (unload != null)
+                    progress += unload.progress * 0.5f;
                 return progress;
             }
         });
 
-        if (SceneManager.GetSceneByName(_menuScene).isLoaded)
+        //unload scene if it is loaded
+        if (SceneManager.GetSceneByName(sceneToUnload).isLoaded)
         {
-            unloadMenu = SceneManager.UnloadSceneAsync(_menuScene);
-            while (unloadMenu != null && !unloadMenu.isDone)
+            unload = SceneManager.UnloadSceneAsync(sceneToUnload);
+            while (unload != null && !unload.isDone)
             {
                 await UniTask.Yield();
             }
         }
 
-        loadRaid = SceneManager.LoadSceneAsync(_raidScene, LoadSceneMode.Additive);
-        loadRaid.allowSceneActivation = false;
-        while (loadRaid.progress < 0.9f)
+        //load scene
+        load = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+        load.allowSceneActivation = false;
+        while (load.progress < 0.9f)
         {
             await UniTask.Yield();
         }
 
-        loadRaid.allowSceneActivation = true;
+        load.allowSceneActivation = true;
 
-        while (!loadRaid.isDone)
+        while (!load.isDone)
         {
             await UniTask.Yield();
         }
 
+        //set as active and disable loading screen camera
         _backupCamera.gameObject.SetActive(false);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(_raidScene));
-        Debug.Log("raid scene loaded");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneToLoad));
     }
 }

@@ -1,13 +1,12 @@
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class MainMenu : MonoBehaviour, Controls.IMenuActions
@@ -36,9 +35,6 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
     private IDisposable _titleScreenAnyKeyPressEvent;
 
     //main menu
-    private RaidLoader _raidLoader;
-    private bool _loadingRaid;
-    private ProgressBar _raidLoadProgress;
 
     //options menu
     private VisualElement _controlsTabView;
@@ -99,7 +95,12 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         _mainMenu.Q<Button>("raid-button").clicked += StartLoadingRaid;
         _mainMenu.Q<Button>("options-button").clicked += SwitchToOptionsMenu;
         _mainMenu.Q<Button>("outskirts-button").clicked += () => { Debug.Log("OUTSKIRTS"); };
-        _mainMenu.Q<Button>("exit-button").clicked += () => { Debug.Log("EXIT"); };
+        _mainMenu.Q<Button>("exit-button").clicked += ExitGame;
+    }
+
+    void StartLoadingRaid()
+    {
+        SceneLoader.LoadRaid();
     }
 
     void SwitchToOptionsMenu()
@@ -110,45 +111,16 @@ public class MainMenu : MonoBehaviour, Controls.IMenuActions
         SetupOptionsMenu();
     }
 
-    void StartLoadingRaid()
+    void ExitGame()
     {
-        SceneLoader.LoadRaid();
-        /*
-        if (_raidLoader == null)
-            _raidLoader = FindObjectOfType<RaidLoader>();
+        Debug.Log("EXIT");
 
-        _loadingRaid = true;
-        _controls.Menu.Disable();
-        _raidLoader.onRaidLoaded += OnRaidLoaded;
-        _raidLoader.LoadRaid();
-        UniTask.Void(RunLoadingScreen);
-        //*/
+        if (Application.isEditor)
+            EditorApplication.ExitPlaymode();
+        else
+            Application.Quit();
     }
 
-    async UniTaskVoid RunLoadingScreen()
-    {
-        if (_raidLoadProgress == null)
-            _raidLoadProgress = _loadingScreen.Q<ProgressBar>("raid-load-progress");
-
-        _mainMenu.AddToClassList(_fullscreenHiddenClass);
-        _loadingScreen.RemoveFromClassList(_fullscreenHiddenClass);
-
-        float progress;
-        while (_loadingRaid)
-        {
-            progress = _raidLoader.GetLoadProgress();
-            _raidLoadProgress.value = progress;
-            _raidLoadProgress.title = $"Loading Raid {Mathf.RoundToInt(progress * 100)}%";
-            await UniTask.Yield();
-        }
-    }
-
-    void OnRaidLoaded()
-    {
-        _loadingRaid = false;
-        _mainMenuDocument.enabled = false;
-        _raidLoader.onRaidLoaded -= OnRaidLoaded;
-    }
     //------End-Main-Menu------
 
     //-------Options-Menu------
