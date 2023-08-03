@@ -124,6 +124,6 @@ public class HUD : MonoBehaviour
         _tileData.text = "on-tile: " + onTile.ToString();
         Zone zone = _zoneGenerator.GetZoneAtTile(pos);
         if (zone != null)
-            _tileData.text += "\nZone:\n" + zone.name;
+            _tileData.text += "\nZone:\n" + zone.data.name;
     }
 }

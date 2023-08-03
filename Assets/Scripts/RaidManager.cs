@@ -37,6 +37,7 @@ public class RaidManager : MonoBehaviour
     [SerializeField] private Gradient _zoneColors;
     [SerializeField] private TileBase _tile;
     [SerializeField] private TileBase _wall;
+    [SerializeField] private ZoneData _defaultZone;
     [SerializeField] private bool _debug;
     private List<BuiltLevel> _builtLevels; 
     private int _currentLevel;
@@ -69,6 +70,7 @@ public class RaidManager : MonoBehaviour
         bl.zoneGenerator._zoneColors = _zoneColors;
         bl.zoneGenerator._tile = _tile;
         bl.zoneGenerator._wall = _wall;
+        bl.zoneGenerator._defaultZone = _defaultZone;
         bl.tilemap = new GameObject(bl.name + "_tilemap").AddComponent<Tilemap>();
         bl.tilemap.gameObject.layer = _tilemapLayer;
         bl.tilemap.transform.SetParent(_tilemapGrid.transform);

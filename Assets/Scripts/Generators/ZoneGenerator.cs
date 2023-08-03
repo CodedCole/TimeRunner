@@ -11,12 +11,8 @@ using WaveFunctionCollapse;
 public class Zone
 {
     public int index;
-    public string name;
-    public string subtitle;
     public Color color;
-    public EGeneratorType[] generator = new EGeneratorType[0];
-    public WFCTemplate template;
-    public Tile[] doors;
+    public ZoneData data;
 
     public HashSet<Vector3Int> tilesInZone;
     public HashSet<Vector3Int> border;
@@ -57,6 +53,7 @@ public class ZoneGenerator : MonoBehaviour
     [SerializeField] private Tilemap _zoneTilemap;
     public TileBase _tile;
     public TileBase _wall;
+    public ZoneData _defaultZone;
     [SerializeField] private bool _debug;
 
     private List<Zone> _zones;
@@ -87,22 +84,7 @@ public class ZoneGenerator : MonoBehaviour
 
         foreach (var zone in layout.zones)
         {
-            if (zone.index > _zones.Count)
-            {
-                while (_zones.Count < zone.index)
-                {
-                    CreateZone();
-                }
-            }
-
-            if (zone.index == _zones.Count)
-            {
-                _zones.Add(zone);
-            }
-            else
-            {
-                _zones[zone.index] = zone;
-            }
+            CreateZone(zone);
         }
 
         //find zones in zone map
@@ -113,12 +95,12 @@ public class ZoneGenerator : MonoBehaviour
             {
                 if (_colorToZoneIndex.Count >= _zones.Count)
                 {
-                    CreateZone();
+                    CreateZone(_defaultZone);
                 }
                 _zones[_colorToZoneIndex.Count].tilesInZone = new HashSet<Vector3Int>();
                 _colorToZoneIndex.Add(_pixels[i], _colorToZoneIndex.Count);
                 if (_debug)
-                    Debug.Log("Found Zone: " + _zones[_colorToZoneIndex[_pixels[i]]].name);
+                    Debug.Log("Found Zone: " + _zones[_colorToZoneIndex[_pixels[i]]].data.zoneName);
             }
         }
 
@@ -147,7 +129,10 @@ public class ZoneGenerator : MonoBehaviour
         foreach (var z in _zones)
         {
             z.GenerateBoundingBox();
-            foreach (var gt in z.generator)
+            if (z.data.generator == null)
+                continue;
+
+            foreach (var gt in z.data.generator)
             {
                 ITilemapGenerator gen = gt.GetGenerator();
                 if (gen != null)
@@ -159,13 +144,11 @@ public class ZoneGenerator : MonoBehaviour
         }
     }
 
-    private Zone CreateZone()
+    private Zone CreateZone(ZoneData data)
     {
         Zone newZone = new Zone();
         newZone.index = _zones.Count;
-        newZone.name = "Zone " + _zones.Count.ToString();
-        newZone.subtitle = "Placeholder Subtitle";
-        newZone.generator = new EGeneratorType[1] { EGeneratorType.Border };
+        newZone.data = data;
         _zones.Add(newZone);
         return newZone;
     }

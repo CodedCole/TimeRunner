@@ -381,7 +381,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.25
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -479,7 +479,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 975bd28a547ff2a458139ae9fce7bd83, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -487,7 +487,7 @@ SpriteRenderer:
   m_Size: {x: 0.62, y: 0.89}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!1 &3086862460228057151
@@ -761,7 +761,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 40d3203816b76554198d4490dd802bd3, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -769,7 +769,7 @@ SpriteRenderer:
   m_Size: {x: 1.06, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!1 &4233069261870785867
@@ -1165,9 +1165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c14632b40909b14fbcdea27a9fd8b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 6972330818057093559}
-  helmet: {fileID: 6083959357550046921}
-  bodyArmor: {fileID: 4046917185353010499}
   _anchor: {fileID: 187623547654278325}
   _defaultGun: {fileID: 0}
 --- !u!114 &3651857942962609234

@@ -6717,9 +6717,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.0058139535
-    width: 0.99999994
-    height: 0.98729545
+    y: 0.006674082
+    width: 1
+    height: 0.98751694
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -13633,9 +13633,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c14632b40909b14fbcdea27a9fd8b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 475087324}
-  helmet: {fileID: 1594829232}
-  bodyArmor: {fileID: 1447425960}
   _anchor: {fileID: 1970381051}
   _defaultGun: {fileID: 11400000, guid: 54e80a260d3cf1d45ad8f7695a96d3d2, type: 2}
 --- !u!114 &1588912269
@@ -16801,43 +16798,7 @@ MonoBehaviour:
   _levels:
   - name: The Lowest Level
     levelLayouts:
-    - map: {fileID: 2800000, guid: c5321e93e5170624184157b31a4280c9, type: 3}
-      zones:
-      - index: 2
-        name: Diner
-        subtitle: Best food in the Arcology
-        color: {r: 0, g: 0, b: 0, a: 0}
-        generator: 010000000300000002000000
-        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-        doors: []
-      - index: 4
-        name: Diner 2
-        subtitle: 2nd best food in the Arcology
-        color: {r: 0, g: 0, b: 0, a: 0}
-        generator: 010000000300000002000000
-        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-        doors: []
-      - index: 3
-        name: Main Road
-        subtitle: 
-        color: {r: 0, g: 0, b: 0, a: 0}
-        generator: 
-        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-        doors: []
-      - index: 1
-        name: Perimeter
-        subtitle: Edge of the Law
-        color: {r: 0, g: 0, b: 0, a: 0}
-        generator: 
-        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-        doors: []
-      - index: 0
-        name: 
-        subtitle: 
-        color: {r: 0, g: 0, b: 0, a: 0}
-        generator: 
-        template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
-        doors: []
+    - {fileID: 11400000, guid: 1de316485417af949a51d8c1e7b9e66c, type: 2}
   _tilemapGrid: {fileID: 2138961933}
   _tilemapLayer: 8
   _zoneColors:
@@ -16872,6 +16833,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   _tile: {fileID: 11400000, guid: caaec0dd467ff2f44b0507c797a5d8b5, type: 2}
   _wall: {fileID: 11400000, guid: 85e3c901e1c77464ba6af4bccde772d1, type: 2}
+  _defaultZone: {fileID: 11400000, guid: ec664b2bb20110549a7b23755f780631, type: 2}
   _debug: 0
 --- !u!4 &1743946126
 Transform:

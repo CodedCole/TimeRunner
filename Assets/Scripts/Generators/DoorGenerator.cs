@@ -152,8 +152,8 @@ public class DoorGenerator : ITilemapGenerator
                 _zoneGenerator.GetZoneAtTile(pos + NEIGHBOR_DIRECTIONS[i]).index != _zoneIndex &&
                 _zoneGenerator.GetZoneAtTile(pos + NEIGHBOR_DIRECTIONS[next]).index != _zoneIndex)
             {
-                if (_zone.doors != null && _zone.doors.Length == NEIGHBOR_DIRECTIONS.Length)
-                    _zoneGenerator.Map.SetTile(pos, _zone.doors[i]);
+                if (_zone.data.doors != null && _zone.data.doors.Length == NEIGHBOR_DIRECTIONS.Length)
+                    _zoneGenerator.Map.SetTile(pos, _zone.data.doors[i]);
                 else
                     _zoneGenerator.Map.SetTile(pos, null);
             }

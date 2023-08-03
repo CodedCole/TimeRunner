@@ -16,7 +16,7 @@ public class ZoneWFCGenerator : ITilemapGenerator
     {
         _zoneIndex = zoneIndex;
         _zoneGenerator = zoneGenerator;
-        _template = zoneGenerator.GetZoneAtIndex(zoneIndex).template;
+        _template = zoneGenerator.GetZoneAtIndex(zoneIndex).data.template;
     }
 
     public IEnumerator Generate()
