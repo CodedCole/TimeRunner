@@ -5,19 +5,12 @@ using UnityEngine.U2D.Animation;
 
 public class GunController : MonoBehaviour
 {
-    [SerializeField] private CustomSpriteResolver character;
-    [SerializeField] private CustomSpriteResolver helmet;
-    [SerializeField] private CustomSpriteResolver bodyArmor;
-
     [SerializeField] private Transform _anchor;
     [SerializeField] private GunItem _defaultGun;
 
     private Gun _gun;
     private Inventory _inventory;
-    private TopDownMovement _movement;
     private bool _useSecondary;
-
-    private bool _reloading;
 
     private Vector2 _currentDirection;
 
@@ -35,19 +28,6 @@ public class GunController : MonoBehaviour
             _gun.GunInstance = _defaultGun.MakeItemInstance() as GunItemInstance;
         _gun.onReloaded += OnReloaded;
         _gun.canReload = CanReload;
-
-        if (character != null)
-            character.Category = "Right";
-        if (helmet != null)
-        {
-            helmet.Category = "Right";
-            helmet.Label = "Helmet";
-        }
-        if (bodyArmor != null)
-        {
-            bodyArmor.Category = "Right";
-            bodyArmor.Label = "BodyArmor";
-        }
     }
 
     /// <summary>
