@@ -23,6 +23,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _changeDirectionRate = 0.2f;
     [SerializeField] private float _wanderStrength = 1;
 
+    [Header("Aim")]
+    [SerializeField] private float _aimRoughness = 1;
+    [SerializeField] private float _aimError = 1;
+
     [Header("Debug")]
     [SerializeField] [Min(1)] private int _searchResolution = 1;
 
@@ -48,6 +52,7 @@ public class Enemy : MonoBehaviour
         _moveDirectionPerlinOffset = new Vector2(Random.Range(0f, 10000f), Random.Range(0f, 10000f));
 
         GetComponent<Health>().RegisterOnDeath(Die);
+        FindObjectOfType<RaidManager>().RegisterOnRaidEnd(Die);
 
         StartCoroutine(SearchForTargets(_searchDelay));
     }
@@ -55,10 +60,20 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _gunController.AimAtPos((Vector2)transform.position + new Vector2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)));
         if(_targets.Count != 0)
         {
+            _gunController.AimAtPos(
+                (Vector2)_targets[0].position 
+                + (new Vector2(
+                    Mathf.PerlinNoise1D(_targets[0].position.x + Time.time * _aimRoughness) - 0.5f,
+                    Mathf.PerlinNoise1D(_targets[0].position.y + Time.time * _aimRoughness) - 0.5f) 
+                * _aimError 
+                * (_targets[0].position - transform.position).magnitude));
             _gunController.Fire();
+        }
+        else
+        {
+            _gunController.AimAtPos((Vector2)transform.position + new Vector2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)));
         }
 
         _contextMovement._interestPoints[1] = transform.position + 

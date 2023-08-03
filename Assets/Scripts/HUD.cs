@@ -70,7 +70,7 @@ public class HUD : MonoBehaviour
 
     public void SetInteractBarValue(IInteractable interactable)
     {
-        _interactBar.value = interactable.GetInteractCompletion();
+        _interactBar.value = interactable.GetInteractProgress();
         _interactBar.title = interactable.GetInteractDescription();
     }
 

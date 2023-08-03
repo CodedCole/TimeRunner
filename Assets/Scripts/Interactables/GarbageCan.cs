@@ -22,7 +22,7 @@ public class GarbageCan : MonoBehaviour, IInteractable
         enabled = false;
     }
 
-    public float GetInteractCompletion()
+    public float GetInteractProgress()
     {
         return _discarding ? (Time.time - _discardStartTime) / discardTime : 0.0f;
     }

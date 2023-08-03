@@ -53,7 +53,7 @@ public class Crate : MonoBehaviour, IInteractable
         enabled = false;
     }
 
-    public float GetInteractCompletion()
+    public float GetInteractProgress()
     {
         return _interacting ? (Time.time - _interactionStartTime) / _unlockTime : 0;
     }

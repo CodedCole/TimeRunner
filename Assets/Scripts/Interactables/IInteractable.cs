@@ -9,7 +9,7 @@ public interface IInteractable
     public abstract void EndInteract();
 
     // returns a float between 0.0 and 1.0 as a percentage of completion
-    public abstract float GetInteractCompletion();
+    public abstract float GetInteractProgress();
 
     public abstract bool IsInteractable();
 

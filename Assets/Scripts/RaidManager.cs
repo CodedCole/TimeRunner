@@ -84,7 +84,7 @@ public class RaidManager : MonoBehaviour
     {
         yield return StartCoroutine(BuildLevel(0));
 
-        FindObjectOfType<Player>().GetComponent<Health>().RegisterOnDeath(EndRaid);
+        FindObjectOfType<Player>().GetComponent<Health>().RegisterOnDeath(() => EndRaid(false));
 
         if (onRaidBegin != null)
             onRaidBegin();
@@ -92,9 +92,12 @@ public class RaidManager : MonoBehaviour
             onLevelEntered(0);
     }
 
-    public void EndRaid()
+    public void EndRaid(bool playerReturned)
     {
-        FindObjectOfType<RaidEndedScreen>().FailReveal();
+        if (playerReturned)
+            FindObjectOfType<RaidEndedScreen>().SuccessReveal();
+        else
+            FindObjectOfType<RaidEndedScreen>().FailReveal();
 
         if (onRaidEnd != null)
             onRaidEnd();

@@ -21,6 +21,8 @@ namespace UIManagers
 
         private Func<float> _progressFunc;
         private bool _loadingScreenInProgress;
+        private string _statusText;
+        private bool _cancelLoadingScreen;
 
         private void Awake()
         {
@@ -59,7 +61,7 @@ namespace UIManagers
 
         protected void SetLoadingScreenLoadStatusOnInstance(string status)
         {
-            _loadingStatusLabel.text = status;
+            _statusText = status;
         }
 
         async UniTaskVoid RunLoadingScreen()
@@ -67,6 +69,7 @@ namespace UIManagers
             //show loading screen
             _loadingScreenDocument.enabled = true;
 
+            //allow ui document to be rebuilt
             await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
 
             //re-initialize from UIDocument disabling
@@ -74,17 +77,21 @@ namespace UIManagers
             _loadingStatusLabel = _loadingScreenRoot.Q<Label>("load-status-text");
             _loadingScreenProgress = _loadingScreenRoot.Q<ProgressBar>("load-progress-bar");
 
+            //reveal transtion
             _loadingScreenRoot.RemoveFromClassList(_hiddenClass);
 
             _loadingScreenInProgress = true;
 
+            //don't let the loading screen be cancelled before it starts
+            _cancelLoadingScreen = false;
+
             //update progress bar
             float progress = _progressFunc();
-            while (progress < 1)
+            while (progress < 1 && !_cancelLoadingScreen)
             {
                 progress = _progressFunc();
                 _loadingScreenProgress.value = progress;
-                _loadingStatusLabel.text = "Hello";
+                _loadingStatusLabel.text = _statusText;
                 await UniTask.Yield();
             }
 
@@ -94,6 +101,10 @@ namespace UIManagers
             _loadingScreenRoot.AddToClassList(_hiddenClass);
             await UniTask.Delay(Mathf.CeilToInt(_disableDocumentDelay * 1000));
             _loadingScreenDocument.enabled = false;
+            _cancelLoadingScreen = false;
         }
+
+        public static void CancelLoadingScreen() { instance.CancelLoadingScreenOnInstance(); }
+        protected void CancelLoadingScreenOnInstance() { _cancelLoadingScreen = true; }
     }
 }

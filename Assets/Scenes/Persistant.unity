@@ -495,4 +495,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _menuScene: Scenes/MainMenu
   _raidScene: Scenes/SampleScene
-  _backupCamera: {fileID: 941854759}

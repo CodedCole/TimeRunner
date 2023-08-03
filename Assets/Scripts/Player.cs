@@ -29,6 +29,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         _hud.RegisterOnCloseInventory(() => { _inventoryOpened = false; enabled = true; });
         _camera = Camera.main;
         _camera.GetComponent<CameraFollow>().SetTarget(transform);
+        FindObjectOfType<RaidManager>().RegisterOnRaidEnd(() => enabled = false);
     }
 
     private void OnEnable()
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IInteractable i = collision.GetComponentInChildren<IInteractable>();
+        IInteractable i = collision.GetComponentInParent<IInteractable>();
         if (i != null)
         {
             _interactables.Add(i);
@@ -80,7 +81,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        IInteractable i = collision.GetComponentInChildren<IInteractable>();
+        IInteractable i = collision.GetComponentInParent<IInteractable>();
         if (i != null)
         {
             if (_interacting && i == _interactables[0])
@@ -103,7 +104,6 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         // interact start
         if (context.started && _interactables[0].IsInteractable())
         {
-            Debug.Log("Started");
             _interactables[0].StartInteract();
             _movement.UpdateMove(Vector2.zero);
             _interacting = true;
@@ -111,7 +111,6 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         // interact finish
         if (context.performed)
         {
-            Debug.Log("Interact");
             _interactables[0].EndInteract();
             _interacting = false;
         }
@@ -125,12 +124,10 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
             {
                 _gunController.Fire();
                 _firing = true;
-                Debug.Log("Firing");
             }
             else if (context.control.magnitude < 0.5f && _firing)
             {
                 _firing = false;
-                Debug.Log("Stopped Firing");
             }
         }
     }

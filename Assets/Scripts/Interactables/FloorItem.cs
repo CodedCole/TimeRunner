@@ -20,7 +20,7 @@ public class FloorItem : MonoBehaviour, IInteractable
 
     }
 
-    public float GetInteractCompletion()
+    public float GetInteractProgress()
     {
         return 0;
     }

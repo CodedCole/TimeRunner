@@ -39,7 +39,8 @@ public class RaidEndedScreen : MonoBehaviour
 
     void PlaySting()
     {
-        GameObject.Find("GlobalAudioSource").GetComponent<AudioSource>().PlayOneShot(_sting);
+        AudioSource a = GetComponent<AudioSource>();
+        a.PlayOneShot(_sting);
     }
 
     void SetupEndScreen()
