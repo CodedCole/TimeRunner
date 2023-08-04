@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoneName: Main Road
   subtitle: Well travelled
-  generator: 
-  template: {fileID: 0}
+  generator: 0100000003000000
+  template: {fileID: 11400000, guid: f59fe11622a850e4092cb40b33ab14c2, type: 2}
   doors: []
