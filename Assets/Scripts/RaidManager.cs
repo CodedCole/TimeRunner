@@ -32,12 +32,14 @@ public class RaidManager : MonoBehaviour
 
     [SerializeField] private Difficulty[] _difficultyProgression;
     [SerializeField] private Level[] _levels;
+    [SerializeField] private float _switchLevelDuration = 2.0f;
     [SerializeField] private Grid _tilemapGrid;
     [SerializeField] private int _tilemapLayer;
     [SerializeField] private Gradient _zoneColors;
     [SerializeField] private TileBase _tile;
     [SerializeField] private TileBase _wall;
     [SerializeField] private ZoneData _defaultZone;
+    [SerializeField] private int _floorDepth = 1;
     [SerializeField] private bool _debug;
     private List<BuiltLevel> _builtLevels; 
     private int _currentLevel;
@@ -50,8 +52,8 @@ public class RaidManager : MonoBehaviour
     public void RegisterOnRaidEnd(Action action) { onRaidEnd += action; }
     public void UnregisterOnRaidEnd(Action action) { onRaidEnd -= action; }
 
-    private Action<int> onLevelLeft;
-    private Action<int> onLevelEntered;
+    public event Action<int> onLevelLeft;
+    public event Action<int> onLevelEntered;
 
     private void Awake()
     {
@@ -71,6 +73,7 @@ public class RaidManager : MonoBehaviour
         bl.zoneGenerator._tile = _tile;
         bl.zoneGenerator._wall = _wall;
         bl.zoneGenerator._defaultZone = _defaultZone;
+        bl.zoneGenerator._floorDepth = _floorDepth;
         bl.tilemap = new GameObject(bl.name + "_tilemap").AddComponent<Tilemap>();
         bl.tilemap.gameObject.layer = _tilemapLayer;
         bl.tilemap.transform.SetParent(_tilemapGrid.transform);
@@ -78,13 +81,21 @@ public class RaidManager : MonoBehaviour
         bl.tilemap.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         bl.tilemap.AddComponent<CompositeCollider2D>();
         bl.tilemap.AddComponent<TilemapCollider2D>().usedByComposite = true;
+        //center the tower at (0,0)
+        bl.tilemap.transform.position = Vector3.down * _tilemapGrid.cellSize.y * bl.layout.map.Size().y * 0.5f;
+
+        //hide until ready
+        bl.tilemap.gameObject.SetActive(false);
         yield return StartCoroutine(bl.zoneGenerator.Generate(bl.layout, bl.tilemap, _debug));
+
         _builtLevels.Add(bl);
     }
 
     IEnumerator BeginRaid()
     {
         yield return StartCoroutine(BuildLevel(0));
+
+        _builtLevels[0].tilemap.gameObject.SetActive(true);
 
         FindObjectOfType<Player>().GetComponent<Health>().RegisterOnDeath(() => EndRaid(false));
 
@@ -105,8 +116,45 @@ public class RaidManager : MonoBehaviour
             onRaidEnd();
     }
 
-    public ZoneGenerator GetActiveLevel()
+    public BuiltLevel? GetActiveLevel()
     {
-        return _builtLevels[_currentLevel].zoneGenerator;
+        if (_builtLevels.Count == 0)
+            return null;
+        return _builtLevels[_currentLevel];
+    }
+
+    public bool MoveToLevel(int targetLevel)
+    {
+        if (targetLevel >= _levels.Length || targetLevel < 0 || _builtLevels.Count < targetLevel || targetLevel == _currentLevel)
+            return false;
+
+        StartCoroutine(MoveToLevelAsync(targetLevel));
+
+        return true;
+    }
+
+    IEnumerator MoveToLevelAsync(int targetLevel)
+    {
+        if (onLevelLeft != null)
+            onLevelLeft(_currentLevel);
+
+        _builtLevels[_currentLevel].parent.SetActive(false);
+        _builtLevels[_currentLevel].tilemap.gameObject.SetActive(false);
+
+        //check if a new level needs to be made
+        if (_builtLevels.Count <= targetLevel)
+        {
+            yield return StartCoroutine(BuildLevel(targetLevel));
+        }
+
+        yield return new WaitForSeconds(_switchLevelDuration);
+
+        _builtLevels[targetLevel].parent.SetActive(true);
+        _builtLevels[targetLevel].tilemap.gameObject.SetActive(true);
+
+        _currentLevel = targetLevel;
+
+        if (onLevelEntered != null)
+            onLevelEntered(targetLevel);
     }
 }

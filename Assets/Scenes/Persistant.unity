@@ -494,4 +494,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _menuScene: Scenes/MainMenu
-  _raidScene: Scenes/SampleScene
+  _raidScene: Scenes/Raid

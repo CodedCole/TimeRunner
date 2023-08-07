@@ -54,6 +54,7 @@ public class ZoneGenerator : MonoBehaviour
     public TileBase _tile;
     public TileBase _wall;
     public ZoneData _defaultZone;
+    public int _floorDepth;
     [SerializeField] private bool _debug;
 
     private List<Zone> _zones;
@@ -115,7 +116,7 @@ public class ZoneGenerator : MonoBehaviour
         {
             for (int j = 0; j < layout.map.height; j++)
             {
-                Vector3Int pos = new Vector3Int(i, j, 0);
+                Vector3Int pos = new Vector3Int(i - _floorDepth, j - _floorDepth, _floorDepth);
                 int zIndex = _colorToZoneIndex[_pixels[pos.x + (pos.y * layout.map.width)]];
                 _zones[zIndex].tilesInZone.Add(pos);
 

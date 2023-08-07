@@ -28,7 +28,7 @@ public class HUD : MonoBehaviour
     Action onCloseInventory;
 
     Tilemap _tilemap;
-    ZoneGenerator _zoneGenerator;
+    RaidManager _raidManager;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +50,7 @@ public class HUD : MonoBehaviour
         _inventoryPanel.RegisterCallback<MouseEnterEvent>(EnterInventoryPanel);
 
         _tilemap = FindObjectOfType<Tilemap>();
-        _zoneGenerator = FindObjectOfType<ZoneGenerator>();
+        _raidManager = FindObjectOfType<RaidManager>();
     }
 
     void EnterInventoryPanel(MouseEnterEvent ev)
@@ -116,14 +116,14 @@ public class HUD : MonoBehaviour
 
     public void PlayerCellPosition(Vector3 position)
     {
-        Vector3Int pos = _tilemap.WorldToCell(new Vector3(position.x, position.y));
-        //pos.y += pos.z;
-        //pos.x += pos.z;
-        _playerCellPos.text = "player-cell: (x: " + pos.x + ", y: " + pos.y + ", z: " + pos.z + ")";
-        bool onTile = _tilemap.HasTile(pos);
-        _tileData.text = "on-tile: " + onTile.ToString();
-        Zone zone = _zoneGenerator.GetZoneAtTile(pos);
-        if (zone != null)
-            _tileData.text += "\nZone:\n" + zone.data.name;
+        RaidManager.BuiltLevel? level = _raidManager.GetActiveLevel();
+        if (level.HasValue)
+        {
+            Vector3Int pos = level.Value.tilemap.WorldToCell(new Vector3(position.x, position.y));
+            _playerCellPos.text = "player-cell: (x: " + pos.x + ", y: " + pos.y + ", z: " + pos.z + ")";
+            Zone zone = level.Value.zoneGenerator.GetZoneAtTile(pos);
+            if (zone != null)
+                _tileData.text = "\nZone:\n" + zone.data.name;
+        }
     }
 }

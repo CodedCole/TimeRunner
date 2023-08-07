@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 778213bdbd60e554ead5c264c2896415, type: 3}
+  m_Name: ResidenceLevel1
+  m_EditorClassIdentifier: 
+  map: {fileID: 2800000, guid: 8dd1681c8a412a744ab4b8a4bbd6de53, type: 3}
+  zones:
+  - {fileID: 11400000, guid: d241a070a8abb4c4b9c62697a0530992, type: 2}
+  - {fileID: 11400000, guid: faa85888f2747654c8b28973f3868130, type: 2}
+  - {fileID: 11400000, guid: 0c6c9e370b45d6c4582fe00e6d6741d0, type: 2}
