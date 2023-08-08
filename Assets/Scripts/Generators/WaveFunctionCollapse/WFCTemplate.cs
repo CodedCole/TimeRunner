@@ -78,6 +78,7 @@ namespace WaveFunctionCollapse
             _tileToIndex.Clear();
             _tiles.Clear();
             _idToPattern.Clear();
+            _doorTiles.Clear();
 
             //adds the empty tile at index 0
             TileColumn tc = new TileColumn();

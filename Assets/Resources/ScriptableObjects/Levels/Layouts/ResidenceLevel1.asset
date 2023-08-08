@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d241a070a8abb4c4b9c62697a0530992, type: 2}
   - {fileID: 11400000, guid: faa85888f2747654c8b28973f3868130, type: 2}
   - {fileID: 11400000, guid: 0c6c9e370b45d6c4582fe00e6d6741d0, type: 2}
+  tileReplaceLibrary: {fileID: 11400000, guid: f1f6eb7d852607c4481c9f2f00ded22a, type: 2}

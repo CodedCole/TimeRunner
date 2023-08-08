@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9064032121055953362}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.306, y: -0.549, z: -0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -184,6 +184,7 @@ MonoBehaviour:
   _openedSprite: {fileID: 252886237, guid: 1e007684081a71344810dc2993ee361b, type: 3}
   _maxWeight: 20
   _maxItems: 12
+  _crateTypeName: basic_crate
   _startingItems:
   - item: {fileID: 11400000, guid: 54e80a260d3cf1d45ad8f7695a96d3d2, type: 2}
     stackSize: 1

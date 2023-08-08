@@ -7,4 +7,5 @@ public class LevelLayout : ScriptableObject
 {
     public Texture2D map;
     public ZoneData[] zones;
+    public TileReplaceLibrary tileReplaceLibrary;
 }

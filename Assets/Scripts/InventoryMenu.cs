@@ -80,8 +80,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _inventoryContainerController = new ContainerListController();
         _inventoryContainerController.InitializeList(_inventoryScrollView, _itemSlotTemplate, ref _inventory.GetContainer(), _itemSlotsPerRow);
 
-        Debug.Log("inventory weight: " + _inventoryContainerController.GetContainer().GetWeight());
-
         _lootContainerController = new ContainerListController();
         _lootContainerController.InitializeList(
             _lootPanel.Q<ScrollView>("ItemSlotScrollView"),
@@ -160,7 +158,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         if (container == null)
         {
             _lootPanel.AddToClassList(_hiddenClass);
-            Debug.Log("Hidden");
             _lootPanelOpen = false;
             _selectedLoot = false;
 
@@ -173,7 +170,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         else
         {
             _lootPanel.RemoveFromClassList(_hiddenClass);
-            Debug.Log("Shown");
             _lootContainerController.RefreshListWithNewContainer(container);
             _lootContainerSize = container.GetMaxItems();
             _lootPanelOpen = true;
@@ -205,7 +201,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
                         _selectedGearIndex--;
                     else if (navDir.y < -0.5f && _selectedGearIndex < _selectableGear.Count - 1)
                         _selectedGearIndex++;
-                    Debug.Log(_selectedGearIndex);
 
                     //select
                     _gearSelectScrollView.ElementAt(_selectedGearIndex).Q<VisualElement>("Background").AddToClassList(_selectedClass);
@@ -381,8 +376,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         {
             SwapItems();
         }
-
-        Debug.Log("inventory weight: " + _inventoryContainerController.GetContainer().GetWeight());
     }
 
     /// <summary>
@@ -390,37 +383,30 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// </summary>
     void StartSelectGear()
     {
-        Debug.Log("Gear Select");
         ItemInstance currentGear;
         switch (_currentSelectedSlot)
         {
             case -1:            //right gadget
-                Debug.Log("Right_Gadget");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Right_Gadget);
                 currentGear = _inventory.GetGearSlot(EGearSlot.Right_Gadget);
                 break;
             case -2:            //body armor
-                Debug.Log("Body_Armor");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Body_Armor);
                 currentGear = _inventory.GetGearSlot(EGearSlot.Body_Armor);
                 break;
             case -3:            //left gadget
-                Debug.Log("Left_Gadget");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Left_Gadget);
                 currentGear = _inventory.GetGearSlot(EGearSlot.Left_Gadget);
                 break;
             case -4:            //secondary weapon
-                Debug.Log("Secondary_Weapon");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Secondary_Weapon);
                 currentGear = _inventory.GetGearSlot(EGearSlot.Secondary_Weapon);
                 break;
             case -5:            //helmet
-                Debug.Log("Helmet");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Helmet);
                 currentGear = _inventory.GetGearSlot(EGearSlot.Helmet);
                 break;
             case -6:            //primary weapon
-                Debug.Log("Primary_Weapon");
                 _selectableGear = _inventory.GetContainer().GetItemsForSlot(EGearSlot.Primary_Weapon);
                 currentGear = _inventory.GetGearSlot(EGearSlot.Primary_Weapon);
                 break;
@@ -438,10 +424,6 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         {
             _gearSlotHasItem = false;
         }
-        string debug = "valid: ";
-        foreach (var i in _selectableGear)
-            debug += i.item.GetItemName() + ", ";
-        Debug.Log(debug);
         OpenGearEquipMenu();
     }
 
@@ -455,27 +437,21 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             switch (_currentSelectedSlot)
             {
                 case -1:            //right gadget
-                    Debug.Log("Right_Gadget");
                     EquipGear(EGearSlot.Right_Gadget);
                     break;
                 case -2:            //body armor
-                    Debug.Log("Body_Armor");
                     EquipGear(EGearSlot.Body_Armor);
                     break;
                 case -3:            //left gadget
-                    Debug.Log("Left_Gadget");
                     EquipGear(EGearSlot.Left_Gadget);
                     break;
                 case -4:            //secondary weapon
-                    Debug.Log("Secondary_Weapon");
                     EquipGear(EGearSlot.Secondary_Weapon);
                     break;
                 case -5:            //helmet
-                    Debug.Log("Helmet");
                     EquipGear(EGearSlot.Helmet);
                     break;
                 case -6:            //primary weapon
-                    Debug.Log("Primary_Weapon");
                     EquipGear(EGearSlot.Primary_Weapon);
                     break;
                 default:

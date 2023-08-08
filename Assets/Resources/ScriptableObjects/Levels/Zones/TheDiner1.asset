@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoneName: The Diner
   subtitle: Best food within 100 meters
-  generator: 010000000300000002000000
+  generator: 0100000003000000
   template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
   doors:
   - {fileID: 11400000, guid: 22c5eb9a650c64949a9e1d4d90fb8a16, type: 2}
