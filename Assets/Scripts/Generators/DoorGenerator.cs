@@ -7,14 +7,14 @@ public class DoorGenerator : ITilemapGenerator
 {
     private readonly Vector3Int[] NEIGHBOR_DIRECTIONS = new Vector3Int[8]
     {
-        Vector3Int.up,
-        Vector3Int.up + Vector3Int.right,
         Vector3Int.right,
         Vector3Int.right + Vector3Int.down,
         Vector3Int.down,
         Vector3Int.down + Vector3Int.left,
         Vector3Int.left,
-        Vector3Int.left + Vector3Int.up
+        Vector3Int.left + Vector3Int.up,
+        Vector3Int.up,
+        Vector3Int.up + Vector3Int.right,
     };
     private const int TRY_COUNT = 10;
     private const int TILES_PER_DOOR = 40;
@@ -63,6 +63,7 @@ public class DoorGenerator : ITilemapGenerator
             }
         }
         //_zoneGenerator.MakeEmptySpace(doors.ToArray());
+        _zone.doors = doors.ToHashSet();
         yield return null;
     }
 
@@ -87,7 +88,7 @@ public class DoorGenerator : ITilemapGenerator
             return false;
 
         //check that the position is not a corner
-        int cornersInZone = 0;
+        neighbors = 0;
         for (int i = -1; i <= 1; i++)
         {
             for (int j = -1; j <= 1; j++)
@@ -96,10 +97,10 @@ public class DoorGenerator : ITilemapGenerator
                     continue;
                 Zone z = _zoneGenerator.GetZoneAtTile(pos + new Vector3Int(i, j));
                 if (z != null && z.index == _zoneIndex)
-                    cornersInZone++;
+                    neighbors++;
             }
         }
-        if (cornersInZone != 5)
+        if (neighbors != 5)
             return false;
 
         return true;
@@ -107,39 +108,6 @@ public class DoorGenerator : ITilemapGenerator
 
     private Vector3Int[] MakeDoor(Vector3Int pos)
     {
-        /*
-        EDirection dir = EDirection.North;
-        bool diagonal = false;
-        bool previous = false;
-        //check north an extra time
-        for (int i = 0; i < 5; i++)
-        {
-            if (_zone.border.Contains(pos + (Vector3Int)dir.GetDirectionVector()))
-            {
-                if (previous)
-                {
-                    diagonal = true;
-                }
-                previous = true;
-            }
-            else
-            {
-                previous = false;
-            }
-            if (dir != EDirection.West)
-                dir++;
-            else 
-                dir = EDirection.North;
-        }
-        if (diagonal)
-        {
-            return new Vector3Int[5] { pos, pos + Vector3Int.up, pos + Vector3Int.down, pos + Vector3Int.left, pos + Vector3Int.right };
-        }
-        else
-        {
-            return new Vector3Int[1] { pos };
-        }
-        //*/
         int prev = NEIGHBOR_DIRECTIONS.Length - 1;
         int next;
         for (int i = 0; i < NEIGHBOR_DIRECTIONS.Length; i++)

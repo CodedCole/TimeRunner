@@ -150,8 +150,11 @@ namespace WaveFunctionCollapse
             //Start
             yield return caller.StartCoroutine(RestartWFC());
 
-            BuildOutputTilemap();
-            yield return null;
+            if (_debug)
+            {
+                BuildOutputTilemap();
+                yield return null;
+            }
 
             //Collapse
             Vector3Int collapsePos = FindCellWithLeastEntropy();
@@ -169,8 +172,11 @@ namespace WaveFunctionCollapse
                     _restart = false;
                     yield return caller.StartCoroutine(RestartWFC());
 
-                    BuildOutputTilemap();
-                    yield return null;
+                    if (_debug)
+                    {
+                        BuildOutputTilemap();
+                        yield return null;
+                    }
                 }
 
 

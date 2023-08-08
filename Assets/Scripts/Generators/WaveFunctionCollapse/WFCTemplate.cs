@@ -11,7 +11,7 @@ namespace WaveFunctionCollapse
     [CreateAssetMenu(fileName = "NewWFCTemplate", menuName = "WFC Template")]
     public class WFCTemplate : ScriptableObject, ISerializationCallbackReceiver
     {
-        private Vector3Int COLUMN_OFFSET = new Vector3Int(1, 1, -1);
+        private readonly Vector3Int COLUMN_OFFSET = new Vector3Int(0, 0, 1);
 
         [Serializable]
         public class TileColumn
@@ -26,7 +26,6 @@ namespace WaveFunctionCollapse
                     if (tiles[i] != null)
                         hash += tiles[i].GetHashCode() * (int)Mathf.Pow(32, i);
                 }
-                //Debug.Log("hash " + hash);
                 return hash;
             }
 
@@ -34,24 +33,7 @@ namespace WaveFunctionCollapse
             {
                 if (obj is TileColumn)
                 {
-                    //Debug.Log("Equals Evaluation");
                     return tiles.SequenceEqual(((TileColumn)obj).tiles);
-                    /*
-                    TileColumn tc = (TileColumn)obj;
-                    if (tc.tiles.Length == tiles.Length)
-                    {
-                        for (int i = 0; i < tiles.Length; i++)
-                        {
-                            if (tc.tiles[i] == null && tiles[i] != null)
-                                return false;
-                            else if (tc.tiles[i] != null && tiles[i] == null)
-                                return false;
-                            else if (tc.tiles[i] != null && tc.tiles[i].name != tiles[i].name)
-                                return false;
-                        }
-                        return true;
-                    }
-                    //*/
                 }
                 return false;
             }
@@ -62,11 +44,14 @@ namespace WaveFunctionCollapse
         [SerializeField] private bool _wrapTiles;
         [SerializeField] private TileBase _debugTile;
         [SerializeField] private int _columnSize;
+        [SerializeField] private int _buildOffset = -1;
+        [SerializeField] private TileBase[] _possibleDoorTiles;
         
         private Tilemap _source;
 
         //baked data
         [SerializeField] private List<TileColumn> _tiles = new List<TileColumn>();
+        [SerializeField] private List<int> _doorTiles = new List<int>();
         private Dictionary<TileColumn, int> _tileToIndex = new Dictionary<TileColumn, int>();
         private Dictionary<ulong, Pattern> _idToPattern = new Dictionary<ulong, Pattern>();
 
@@ -78,6 +63,7 @@ namespace WaveFunctionCollapse
         public int PatternSize { get { return _patternSize; } }
         public Dictionary<ulong, Pattern> IDtoPattern { get { return _idToPattern; } }
         public List<TileColumn> Tiles { get { return _tiles; } }
+        public List<int> Doors { get { return _doorTiles; } }
 
         public void GenerateTemplate(Tilemap source)
         {
@@ -104,7 +90,6 @@ namespace WaveFunctionCollapse
             FindAllPatterns();
             FindNeighbors();
 
-            Debug.Log("Marked WFC Template as dirty: " + this.name);
             EditorUtility.SetDirty(this);
 
             //DEBUG
@@ -117,20 +102,25 @@ namespace WaveFunctionCollapse
             BoundsInt bounds = _source.cellBounds;
             bounds.min -= new Vector3Int(1, 1);
             //bounds.max -= new Vector3Int(1, 1);
-            foreach (var point in bounds.allPositionsWithin)
+            Debug.LogWarning(bounds.zMin);
+            for (int x = 0; x < bounds.size.x; x++)
             {
-                Pattern p = BuildPattern(point);
-                if (p.Tiles[0] != 0 || p.Tiles[1] != 0 || p.Tiles[_patternSize] != 0 || p.Tiles[_patternSize + 1] != 0)
+                for (int y = 0; y < bounds.size.y; y++)
                 {
-                    if (!_idToPattern.ContainsKey(p.PatternID))
+                    Vector3Int point = new Vector3Int(bounds.xMin + x, bounds.yMin + y, bounds.zMin);
+                    Pattern p = BuildPattern(point);
+                    if (p.Tiles[0] != 0 || p.Tiles[1] != 0 || p.Tiles[_patternSize] != 0 || p.Tiles[_patternSize + 1] != 0)
                     {
-                        _idToPattern.Add(p.PatternID, p);
-                        Debug.Log("new pattern: " + p.PatternID.ToString());
+                        if (!_idToPattern.ContainsKey(p.PatternID))
+                        {
+                            _idToPattern.Add(p.PatternID, p);
+                            Debug.Log("new pattern: " + p.PatternID.ToString());
+                        }
                     }
-                }
-                else
-                {
-                    Debug.Log("invalid pattern: " + p.PatternID.ToString());
+                    else
+                    {
+                        Debug.Log("invalid pattern: " + p.PatternID.ToString());
+                    }
                 }
             }
         }
@@ -150,16 +140,27 @@ namespace WaveFunctionCollapse
 
         int GetTileIndex(Vector3Int tile)
         {
-            //Debug.Log("tile index at " + tile);
             TileColumn tc = new TileColumn();
             tc.tiles = new TileBase[_columnSize];
             for (int i = 0; i < _columnSize; i++)
                 tc.tiles[i] = _source.GetTile(tile + (COLUMN_OFFSET * i));
-            
+
+            //check if this tile column has already been found
             if (_tileToIndex.ContainsKey(tc))
                 return _tileToIndex[tc];
             else
             {
+                //check if this tile column counts as a door tile
+                for (int i = 0; i < _columnSize; i++)
+                {
+                    if (_possibleDoorTiles.Contains(tc.tiles[i]))
+                    {
+                        _doorTiles.Add(_tiles.Count);
+                        break;
+                    }
+                }
+
+                //add new tile column
                 _tileToIndex.Add(tc, _tiles.Count);
                 _tiles.Add(tc);
                 return _tiles.Count - 1;
@@ -201,7 +202,7 @@ namespace WaveFunctionCollapse
                 {
                     Pattern p = _idToPattern[c.Value.ElementAt(0)];
                     for (int i = 0; i < _columnSize; i++)
-                        map.SetTile(c.Key + (COLUMN_OFFSET * i), _tiles[p.Tiles[0]].tiles[i]);
+                        map.SetTile(c.Key + (COLUMN_OFFSET * (i + _buildOffset)), _tiles[p.Tiles[0]].tiles[i]);
                 }
                 else if (c.Value.Count == 0)
                 {
@@ -229,7 +230,7 @@ namespace WaveFunctionCollapse
             }
         }
 
-        //Serialize
+        #region Serialization
         public void OnBeforeSerialize()
         {
             s_id.Clear();
@@ -249,5 +250,6 @@ namespace WaveFunctionCollapse
                 _idToPattern.Add(s_id[i], s_pattern[i]);
             }
         }
+        #endregion
     }
 }

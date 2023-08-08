@@ -16,6 +16,7 @@ public class Zone
 
     public HashSet<Vector3Int> tilesInZone;
     public HashSet<Vector3Int> border;
+    public HashSet<Vector3Int> doors;
     private BoundsInt boundingBox;
 
     public void GenerateBoundingBox()

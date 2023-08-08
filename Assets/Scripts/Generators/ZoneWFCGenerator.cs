@@ -46,6 +46,23 @@ public class ZoneWFCGenerator : ITilemapGenerator
                 restrictions.Add(point, new HashSet<int> { 0 });
             }
         }
+
+        //place door restrictions
+        if (zone.doors != null)
+        {
+            foreach (var point in zone.doors)
+            {
+                if (!restrictions.ContainsKey(point))
+                {
+                    restrictions.Add(point, zone.data.template.Doors.ToHashSet());
+                }
+                else
+                {
+                    foreach (var d in zone.data.template.Doors)
+                        restrictions[point].Add(d);
+                }
+            }
+        }
         wfc.SetTileRestrictions(restrictions);
 
         yield return _zoneGenerator.StartCoroutine(wfc.GenerateCoroutine(_zoneGenerator));

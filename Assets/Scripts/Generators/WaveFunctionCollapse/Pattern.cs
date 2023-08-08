@@ -10,7 +10,7 @@ namespace WaveFunctionCollapse
     [Serializable]
     public class Pattern : ISerializationCallbackReceiver
     {
-        private const int TILE_COUNT_IN_TILESET = 25;
+        private const int TILE_COUNT_IN_TILESET = 64;
 
         [SerializeField] private int[] _tiles;  //index of tiles used in the pattern from bottom left to top right
         private int _size;                      //width and height of the pattern in tiles
@@ -107,37 +107,6 @@ namespace WaveFunctionCollapse
                     _neighbors[i].Add(neighbor);
                 }
             }
-        }
-    }
-
-    public class PatternWFC
-    {
-        private Tilemap _input;
-        private Tilemap _output;
-        private int _patternSize;
-        private HashSet<Vector3Int> _targetArea;
-
-        private Dictionary<TileBase, int> _tileToIndex;
-        private List<TileBase> _tiles;
-        private Dictionary<int, Pattern> _possiblePatterns;
-
-        public PatternWFC(Tilemap input, Tilemap output, int patternSize, HashSet<Vector3Int> targetArea)
-        {
-            _tileToIndex = new Dictionary<TileBase, int>();
-            _tiles = new List<TileBase>();
-            _possiblePatterns = new Dictionary<int, Pattern>();
-
-            _input = input;
-            _output = output;
-            _patternSize = patternSize;
-            _targetArea = targetArea;
-
-            FindPatterns();
-        }
-
-        private void FindPatterns()
-        {
-
         }
     }
 }

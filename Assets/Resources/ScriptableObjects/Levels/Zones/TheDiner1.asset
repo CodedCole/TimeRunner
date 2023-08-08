@@ -17,11 +17,11 @@ MonoBehaviour:
   generator: 010000000300000002000000
   template: {fileID: 11400000, guid: daa67a6d04f9f17438e2e19ae4fca55e, type: 2}
   doors:
+  - {fileID: 11400000, guid: 22c5eb9a650c64949a9e1d4d90fb8a16, type: 2}
   - {fileID: 0}
+  - {fileID: 11400000, guid: 14aad33780de95e47aeab3fe29bee9bb, type: 2}
   - {fileID: 0}
+  - {fileID: 11400000, guid: e8d504fe20f12a047922bb2a84c5079b, type: 2}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 339b671e4fcd5e64f90563756c774f51, type: 2}
   - {fileID: 0}
