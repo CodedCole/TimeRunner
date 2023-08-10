@@ -15298,6 +15298,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1
+  - first: {x: 22, y: 13, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 43
+      m_TileSpriteIndex: 43
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: 23, y: 13, z: -1}
     second:
       serializedVersion: 2
@@ -29186,7 +29196,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: cc28aa9b56351c846b33c7214bb58716, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 468469dff044c804084e66366bece7f1, type: 2}
-  - m_RefCount: 2
+  - m_RefCount: 3
     m_Data: {fileID: 11400000, guid: e636a572a477d1a43a9afa696ce0ee6f, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 66
@@ -29275,10 +29285,10 @@ Tilemap:
     m_Data: {fileID: -1906568239, guid: bec5b58f46fdeaf4785bd087245812a5, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1816944424, guid: bec5b58f46fdeaf4785bd087245812a5, type: 3}
-  - m_RefCount: 2
+  - m_RefCount: 3
     m_Data: {fileID: -699845855, guid: 1e007684081a71344810dc2993ee361b, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 1579
+  - m_RefCount: 1580
     m_Data:
       e00: 1
       e01: 0
@@ -29297,7 +29307,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 1579
+  - m_RefCount: 1580
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -31540,7 +31550,7 @@ MonoBehaviour:
   _wall: {fileID: 11400000, guid: 85e3c901e1c77464ba6af4bccde772d1, type: 2}
   _defaultZone: {fileID: 11400000, guid: ec664b2bb20110549a7b23755f780631, type: 2}
   _floorDepth: 0
-  _debug: 1
+  _debug: 0
 --- !u!4 &1743946126
 Transform:
   m_ObjectHideFlags: 0
@@ -31685,72 +31695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lootCrates:
-  - crateTypeName: basic_crate
-    probabilities:
-      itemCount:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0.01
-          inSlope: 1.6353548
-          outSlope: 1.6353548
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.2107438
-        - serializedVersion: 3
-          time: 0.5
-          value: 1
-          inSlope: 2.4601104
-          outSlope: 2.4601104
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.20661157
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.8
-          value: 2
-          inSlope: 3.8357046
-          outSlope: 3.8357046
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.5041323
-        - serializedVersion: 3
-          time: 1
-          value: 3
-          inSlope: 8.889352
-          outSlope: 8.889352
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.15289259
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      allowDuplicates: 1
-      possibleLoot:
-      - itemStack:
-          item: {fileID: 11400000, guid: 73c948c994e384b4a9c9fbe58dab5c6a, type: 2}
-          stackSize: 15
-        choiceWeight: 0.8
-      - itemStack:
-          item: {fileID: 11400000, guid: c9592debeeb8648458a192e14c4d3f07, type: 2}
-          stackSize: 1
-        choiceWeight: 0.05
-      - itemStack:
-          item: {fileID: 11400000, guid: 54e80a260d3cf1d45ad8f7695a96d3d2, type: 2}
-          stackSize: 1
-        choiceWeight: 0.4
-      - itemStack:
-          item: {fileID: 11400000, guid: 465b2a38ca1adef49884f0e8657f35df, type: 2}
-          stackSize: 1
-        choiceWeight: 0.08
-      - itemStack:
-          item: {fileID: 11400000, guid: ba9edb048df7b594fbc1f5c37b8ad303, type: 2}
-          stackSize: 1
-        choiceWeight: 0.07
+  - {fileID: 11400000, guid: 70ccf4a0cba85be4eb8b79b6138e34b1, type: 2}
 --- !u!1 &1916198718
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67007928c92daf04d98e0ca1c6a5eec6, type: 3}
+  m_Name: BasicCrate
+  m_EditorClassIdentifier: 
+  probabilitiesName: basic_crate
+  itemCount:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 2
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8
+      value: 3
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 3
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.090909064
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  allowDuplicates: 0
+  possibleLoot:
+  - itemStack:
+      item: {fileID: 11400000, guid: 73c948c994e384b4a9c9fbe58dab5c6a, type: 2}
+      stackSize: 15
+    choiceWeight: 5
+  - itemStack:
+      item: {fileID: 11400000, guid: 54e80a260d3cf1d45ad8f7695a96d3d2, type: 2}
+      stackSize: 1
+    choiceWeight: 1
+  - itemStack:
+      item: {fileID: 11400000, guid: 465b2a38ca1adef49884f0e8657f35df, type: 2}
+      stackSize: 1
+    choiceWeight: 0.8
+  - itemStack:
+      item: {fileID: 11400000, guid: ba9edb048df7b594fbc1f5c37b8ad303, type: 2}
+      stackSize: 1
+    choiceWeight: 0.7
+  - itemStack:
+      item: {fileID: 11400000, guid: 8ce10c8e99f268c4a8e0b066d2b26884, type: 2}
+      stackSize: 1
+    choiceWeight: 0.1
+  - itemStack:
+      item: {fileID: 11400000, guid: c9592debeeb8648458a192e14c4d3f07, type: 2}
+      stackSize: 1
+    choiceWeight: 0.05
+  - itemStack:
+      item: {fileID: 11400000, guid: 985522f997c7d0546a6d7f77b5b0659d, type: 2}
+      stackSize: 1
+    choiceWeight: 0.05

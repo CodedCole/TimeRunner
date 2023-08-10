@@ -7,8 +7,9 @@ public class TileReplacer
 {
     private Tilemap _targetMap;
     private Dictionary<TileBase, GameObject> _replaceDictionary;
+    private Transform _parentForReplacements;
 
-    public TileReplacer(Tilemap targetMap, TileReplaceLibrary replaceLibrary)
+    public TileReplacer(Tilemap targetMap, TileReplaceLibrary replaceLibrary, Transform parentForReplacements)
     {
         _targetMap = targetMap;
         _replaceDictionary = new Dictionary<TileBase, GameObject>();
@@ -16,6 +17,7 @@ public class TileReplacer
         {
             _replaceDictionary.Add(r.tile, r.replacement);
         }
+        _parentForReplacements = parentForReplacements;
     }
 
     public void ReplaceTiles(Vector3Int start, Vector3Int end)
@@ -29,7 +31,8 @@ public class TileReplacer
                     TileBase tile = _targetMap.GetTile(new Vector3Int(x, y, z));
                     if (tile != null && _replaceDictionary.TryGetValue(tile, out GameObject replacement))
                     {
-                        Object.Instantiate(replacement, _targetMap.GetCellCenterWorld(new Vector3Int(x, y, z)) + replacement.transform.position, Quaternion.identity);
+                        GameObject obj = Object.Instantiate(replacement, _targetMap.GetCellCenterWorld(new Vector3Int(x, y, z)) + replacement.transform.position, Quaternion.identity);
+                        obj.transform.SetParent(_parentForReplacements);
                         _targetMap.SetTile(new Vector3Int(x, y, z), null);
                     }
                 }

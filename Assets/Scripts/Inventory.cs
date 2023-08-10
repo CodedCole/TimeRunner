@@ -63,7 +63,7 @@ public class Inventory : MonoBehaviour
     {
         if (gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon)
         {
-            if (item is GunItemInstance)
+            if (item is GunItemInstance)    //equip gear
             {
                 if (gearSlot == EGearSlot.Primary_Weapon)
                     primaryWeapon = item as GunItemInstance;
@@ -77,12 +77,26 @@ public class Inventory : MonoBehaviour
 
                 return true;
             }
-            else
+            else if (item == null)
+            {
+                if (gearSlot == EGearSlot.Primary_Weapon)
+                    primaryWeapon = null;
+                else
+                    secondaryWeapon = null;
+                Debug.Log("Removed");
+                if (onEquip != null)
+                    onEquip();
+                if (onEquipWeapon != null)
+                    onEquipWeapon(null);
+
+                return true;
+            }
+            else    //invalid gear
                 return false;
         }
         else if (gearSlot == EGearSlot.Helmet || gearSlot == EGearSlot.Body_Armor)
         {
-            if (item is ArmorItemInstance)
+            if (item is ArmorItemInstance)  //equip gear
             {
                 if (gearSlot == EGearSlot.Helmet && ((item as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Helmet)
                 {
@@ -102,12 +116,32 @@ public class Inventory : MonoBehaviour
 
                 return true;
             }
-            else
+            else if (item == null)  //remove gear
+            {
+                if (gearSlot == EGearSlot.Helmet)
+                {
+                    helmet = null;
+                    _helmetLibrary.spriteLibraryAsset = null;
+                    _helmetLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
+                }
+                else
+                {
+                    bodyArmor = null;
+                    _bodyArmorLibrary.spriteLibraryAsset = null;
+                    _bodyArmorLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
+                }
+                Debug.Log("Removed");
+                if (onEquip != null)
+                    onEquip();
+
+                return true;
+            }
+            else    //invalid gear
                 return false;
         }
         else if (gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget)
         {
-            if (item is GunItemInstance || item is ArmorItemInstance)
+            if (item != null && (item is GunItemInstance || item is ArmorItemInstance))
             {
                 return false;
             }

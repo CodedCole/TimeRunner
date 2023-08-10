@@ -199,7 +199,7 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
                     //move
                     if (navDir.y > 0.5f && _selectedGearIndex > 0)
                         _selectedGearIndex--;
-                    else if (navDir.y < -0.5f && _selectedGearIndex < _selectableGear.Count - 1)
+                    else if (navDir.y < -0.5f && _selectedGearIndex < _selectableGear.Count /* - 1*/)   //now that selecting none is an option, being at the selectableGear.Count is okay.
                         _selectedGearIndex++;
 
                     //select
@@ -471,17 +471,29 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
     /// <param name="gearSlot"></param>
     void EquipGear(EGearSlot gearSlot)
     {
-        //gear is already equipped
-        if (_gearSlotHasItem && _selectedGearIndex == 0)
+        //gear is already equipped (selectedGearIndex == 0 is now removing gear) or none was selected and none is equipped
+        if (_gearSlotHasItem && _selectedGearIndex == 1 || !_gearSlotHasItem && _selectedGearIndex == 0)
             return;
 
-        ItemInstance currentGear = _inventory.GetGearSlot(gearSlot);
-        bool success = _inventory.EquipGear(_selectableGear[_selectedGearIndex], gearSlot);
-        if (success)
+        if (_selectedGearIndex != 0)
         {
-            _inventory.GetContainer().RemoveItemAtIndex(_inventory.GetContainer().GetIndexOfItemInstance(_selectableGear[_selectedGearIndex]), _selectableGear[_selectedGearIndex].stack);
-            if (currentGear != null)
+            ItemInstance currentGear = _inventory.GetGearSlot(gearSlot);
+            bool success = _inventory.EquipGear(_selectableGear[_selectedGearIndex - 1], gearSlot);
+            if (success)
+            {
+                _inventory.GetContainer().RemoveItemAtIndex(_inventory.GetContainer().GetIndexOfItemInstance(_selectableGear[_selectedGearIndex - 1]), _selectableGear[_selectedGearIndex - 1].stack);
+                if (currentGear != null)
+                    _inventory.GetContainer().MoveItemInstance(currentGear);
+            }
+        }
+        else
+        {
+            ItemInstance currentGear = _inventory.GetGearSlot(gearSlot);
+            bool success = _inventory.EquipGear(null, gearSlot);
+            if (success && currentGear != null)
+            {
                 _inventory.GetContainer().MoveItemInstance(currentGear);
+            }
         }
     }
 
@@ -501,6 +513,12 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _gearSelectScrollView.Clear();
         if (_selectableGear.Count > 0)
         {
+            var removeGear = _gearSelectEntryTemplate.Instantiate();
+            _gearSelectScrollView.Add(removeGear);
+            removeGear.Q<VisualElement>("ItemIcon").style.backgroundImage = null;
+            removeGear.Q<Label>("ItemName").text = "None";
+            removeGear.Q<Label>("ItemWeight").text = "";
+
             for (int i = 0; i < _selectableGear.Count; i++)
             {
                 var gear = _gearSelectEntryTemplate.Instantiate();
@@ -533,19 +551,39 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _inventoryScrollView.RemoveFromClassList(_hiddenClass);
     }
 
-    int SwapItems(int amount = 1)
+    int SwapItems(int amount = -1)
     {
         ItemInstance item = GetItemFromIndex(_currentSelectedSlot);
         int left;
         if (_selectedLoot)
         {
-            left = _inventoryContainerController.GetContainer().AddItem(item, amount);
-            _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
+            //check for item existance
+            if (_lootContainerController.GetContainer().GetItemAtIndex(_currentSelectedSlot) == null)
+            {
+                left = 0;
+            }
+            else
+            {
+                if (amount == -1)
+                    amount = _lootContainerController.GetContainer().GetItemAtIndex(_currentSelectedSlot).stack;
+                left = _inventoryContainerController.GetContainer().AddItem(item, amount);
+                _lootContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
+            }
         }
         else
         {
-            left = _lootContainerController.GetContainer().AddItem(item, amount);
-            _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
+            //check for item existance
+            if (_inventoryContainerController.GetContainer().GetItemAtIndex(_currentSelectedSlot) == null)
+            {
+                left = 0;
+            }
+            else
+            {
+                if (amount == -1)
+                    amount = _inventoryContainerController.GetContainer().GetItemAtIndex(_currentSelectedSlot).stack;
+                left = _lootContainerController.GetContainer().AddItem(item, amount);
+                _inventoryContainerController.GetContainer().RemoveItemAtIndex(_currentSelectedSlot, amount - left);
+            }
         }
 
         UpdateItemDataCard();

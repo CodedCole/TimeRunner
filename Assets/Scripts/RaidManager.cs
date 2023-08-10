@@ -88,7 +88,7 @@ public class RaidManager : MonoBehaviour
         bl.tilemap.gameObject.SetActive(false);
         yield return StartCoroutine(bl.zoneGenerator.Generate(bl.layout, bl.tilemap, _debug));
 
-        new TileReplacer(bl.tilemap, bl.layout.tileReplaceLibrary).ReplaceTiles(bl.tilemap.cellBounds.min, bl.tilemap.cellBounds.max);
+        new TileReplacer(bl.tilemap, bl.layout.tileReplaceLibrary, bl.parent.transform).ReplaceTiles(bl.tilemap.cellBounds.min, bl.tilemap.cellBounds.max);
 
         _builtLevels.Add(bl);
     }

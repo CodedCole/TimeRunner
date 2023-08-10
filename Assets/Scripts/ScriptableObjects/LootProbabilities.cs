@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class LootCrateProbabilities
+[CreateAssetMenu(fileName = "NewLootProbabilities", menuName = "Loot Probabilities")]
+public class LootProbabilities : ScriptableObject
 {
     [System.Serializable]
     public struct LootWeight
@@ -12,6 +12,7 @@ public class LootCrateProbabilities
         public float choiceWeight;
     }
 
+    public string probabilitiesName;
     public AnimationCurve itemCount;
     public bool allowDuplicates;
     public LootWeight[] possibleLoot;
@@ -55,43 +56,5 @@ public class LootCrateProbabilities
             }
         }
         return result;
-    }
-}
-
-public class LootManager : MonoBehaviour
-{
-    [System.Serializable]
-    public class LootCrateProbabilitiesPair
-    {
-        public string crateTypeName;
-        public LootCrateProbabilities probabilities;
-    }
-
-    protected static LootManager instance;
-
-    [SerializeField] protected LootProbabilities[] _lootCrates;
-
-    private void Awake()
-    {
-        if (instance != null)
-            Destroy(instance);
-        instance = this;
-    }
-
-    public static ItemInitialState[] GetLootForCrateType(string crateTypeName)
-    {
-        return instance.GetLootForCrateTypeOnInstance(crateTypeName);
-    }
-
-    protected ItemInitialState[] GetLootForCrateTypeOnInstance(string crateTypeName)
-    {
-        foreach (var crate in _lootCrates)
-        {
-            if (crate.probabilitiesName == crateTypeName)
-            {
-                return crate.ChooseLoot();
-            }
-        }
-        return null;
     }
 }

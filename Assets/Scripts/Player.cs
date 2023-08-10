@@ -6,6 +6,8 @@ using UnityEngine.InputSystem.HID;
 
 public class Player : MonoBehaviour, Controls.IDuringRunActions
 {
+    private readonly Vector2 AIM_OFFSET = new Vector2(0.0001f, -0.0001f);
+
     private TopDownMovement _movement;
     private Inventory _inventory;
     private GunController _gunController;
@@ -153,10 +155,10 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         {
             if (context.control.name == "rightStick")
             {
-                Vector2 v = context.ReadValue<Vector2>();
+                Vector2 v = context.ReadValue<Vector2>() + AIM_OFFSET;
                 Vector2 retPos = _camera.WorldToScreenPoint(((Vector2)transform.position) + v);
                 _hud.MoveReticle(Vector2.down * retPos.y + Vector2.right * retPos.x);
-                _gunController.AimAtPos(((Vector2)transform.position) + v);
+                _gunController.AimInDirection(v);
             }
             else
             {

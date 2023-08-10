@@ -62,7 +62,6 @@ public class DoorGenerator : ITilemapGenerator
                 pos = _zone.border.ElementAt(Random.Range(0, _zone.border.Count));
             }
         }
-        //_zoneGenerator.MakeEmptySpace(doors.ToArray());
         _zone.doors = doors.ToHashSet();
         yield return null;
     }

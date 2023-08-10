@@ -39,6 +39,8 @@ public class ZoneWFCGenerator : ITilemapGenerator
             }
         }
         Dictionary<Vector3Int, HashSet<int>> restrictions = new Dictionary<Vector3Int, HashSet<int>>();
+
+        //place border resrctions
         foreach (var point in border)
         {
             if (!restrictions.ContainsKey(point))
@@ -50,16 +52,40 @@ public class ZoneWFCGenerator : ITilemapGenerator
         //place door restrictions
         if (zone.doors != null)
         {
-            foreach (var point in zone.doors)
+            HashSet<int> doors = zone.data.template.Doors.ToHashSet();
+            HashSet<int> inverseDoors = new HashSet<int>();
+            for (int i = 0; i < zone.data.template.Tiles.Count; i++)
             {
-                if (!restrictions.ContainsKey(point))
+                if (!doors.Contains(i))
+                    inverseDoors.Add(i);
+            }
+
+            foreach (var point in zone.border)
+            {
+                //ensure that doors are only placed where the generator wanted them
+                if (zone.doors.Contains(point))
                 {
-                    restrictions.Add(point, zone.data.template.Doors.ToHashSet());
+                    if (!restrictions.ContainsKey(point))
+                    {
+                        restrictions.Add(point, doors);
+                    }
+                    else
+                    {
+                        foreach (var d in doors)
+                            restrictions[point].Add(d);
+                    }
                 }
                 else
                 {
-                    foreach (var d in zone.data.template.Doors)
-                        restrictions[point].Add(d);
+                    if (!restrictions.ContainsKey(point))
+                    {
+                        restrictions.Add(point, inverseDoors);
+                    }
+                    else
+                    {
+                        foreach (var d in inverseDoors)
+                            restrictions[point].Add(d);
+                    }
                 }
             }
         }

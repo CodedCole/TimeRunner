@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <uie:ObjectField label="Zone Map Image" name="zone-map-image-field" type="UnityEngine.Texture2D, UnityEngine.CoreModule" allow-scene-objects="false" binding-path="map" />
+    <ui:VisualElement name="zone-map-display" style="-unity-background-scale-mode: scale-to-fit; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; flex-basis: 512px; transform-origin: top; border-left-color: rgba(168, 168, 168, 0.41); border-right-color: rgba(168, 168, 168, 0.41); border-top-color: rgba(168, 168, 168, 0.41); border-bottom-color: rgba(168, 168, 168, 0.41); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px;" />
+    <ui:ListView focusable="true" fixed-item-height="50" />
+</ui:UXML>

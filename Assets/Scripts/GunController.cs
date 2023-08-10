@@ -42,6 +42,15 @@ public class GunController : MonoBehaviour
     }
 
     /// <summary>
+    /// Aims the right vactor of the gunAnchor in the direction of 'dir'
+    /// </summary>
+    /// <param name="dir">direction to aim in</param>
+    public void AimInDirection(Vector2 dir)
+    {
+        AimAtPos((Vector2)_anchor.position + dir);
+    }
+
+    /// <summary>
     /// Fires the active weapon
     /// </summary>
     public void Fire()
