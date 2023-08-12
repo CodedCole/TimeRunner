@@ -17,7 +17,7 @@ public class Crate : MonoBehaviour, IInteractable
     private bool _interacting;
     private float _interactionStartTime;
 
-    void Start()
+    void Awake()
     {
         _container = new Container(_maxWeight, _maxItems);
         ItemInitialState[] loot;
@@ -51,14 +51,14 @@ public class Crate : MonoBehaviour, IInteractable
         }
     }
 
-    public void StartInteract()
+    public void StartInteract(GameObject actor)
     {
         _interacting = true;
         _interactionStartTime = Time.time;
         enabled = true;
     }
 
-    public void EndInteract()
+    public void EndInteract(GameObject actor)
     {
         _interacting = false;
         enabled = false;
@@ -77,5 +77,15 @@ public class Crate : MonoBehaviour, IInteractable
     public string GetInteractDescription()
     {
         return _interacting ? "Opening..." : "Open";
+    }
+
+    public string GetCrateTypeName()
+    {
+        return _crateTypeName;
+    }
+
+    public void InsertItem(ItemInitialState itemStack)
+    {
+        _container.AddItem(itemStack.item.MakeItemInstance(), itemStack.stackSize);
     }
 }

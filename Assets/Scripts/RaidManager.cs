@@ -19,6 +19,8 @@ public class RaidManager : MonoBehaviour
     {
         public string name;
         public LevelLayout[] levelLayouts;
+        public Item keyToNextLevel;
+        public string crateTypeForKey;
     }
 
     public struct BuiltLevel
@@ -28,6 +30,8 @@ public class RaidManager : MonoBehaviour
         public GameObject parent;
         public ZoneGenerator zoneGenerator;
         public Tilemap tilemap;
+        public Item keyToNextLevel;
+        public string crateTypeForKey;
     }
 
     [SerializeField] private Difficulty[] _difficultyProgression;
@@ -67,6 +71,8 @@ public class RaidManager : MonoBehaviour
         BuiltLevel bl = new BuiltLevel();
         bl.name = _levels[levelIndex].name;
         bl.layout = _levels[levelIndex].levelLayouts[UnityEngine.Random.Range(0, _levels[levelIndex].levelLayouts.Length)];
+        bl.keyToNextLevel = _levels[levelIndex].keyToNextLevel;
+        bl.crateTypeForKey= _levels[levelIndex].crateTypeForKey;
         bl.parent = new GameObject(bl.name);
         bl.zoneGenerator = bl.parent.AddComponent<ZoneGenerator>();
         bl.zoneGenerator._zoneColors = _zoneColors;
@@ -89,6 +95,9 @@ public class RaidManager : MonoBehaviour
         yield return StartCoroutine(bl.zoneGenerator.Generate(bl.layout, bl.tilemap, _debug));
 
         new TileReplacer(bl.tilemap, bl.layout.tileReplaceLibrary, bl.parent.transform).ReplaceTiles(bl.tilemap.cellBounds.min, bl.tilemap.cellBounds.max);
+
+        if (bl.keyToNextLevel != null && bl.crateTypeForKey != string.Empty)
+            LootManager.TryPutItemInCrate(bl.keyToNextLevel, bl.crateTypeForKey);
 
         _builtLevels.Add(bl);
     }
@@ -123,6 +132,14 @@ public class RaidManager : MonoBehaviour
         if (_builtLevels.Count == 0)
             return null;
         return _builtLevels[_currentLevel];
+    }
+
+    public Item GetKeyToNextLevel()
+    {
+        if (_builtLevels.Count == 0)
+            return null;
+        return _builtLevels[_currentLevel].keyToNextLevel;
+
     }
 
     public bool MoveToLevel(int targetLevel)

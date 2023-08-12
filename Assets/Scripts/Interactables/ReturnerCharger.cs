@@ -20,6 +20,7 @@ public class ReturnerCharger : MonoBehaviour, IInteractable
 
     private AudioSource _audio;
     private float c_inverseChargeDuration;
+    private GameObject _actor;
 
     void Awake()
     {
@@ -32,15 +33,17 @@ public class ReturnerCharger : MonoBehaviour, IInteractable
         FindObjectOfType<RaidManager>().RegisterOnRaidEnd(OnEndRaid);
     }
 
-    public void StartInteract()
+    public void StartInteract(GameObject actor)
     {
         _interacting = true;
         _startInteractTime = Time.time;
+        _actor = actor;
         enabled = true;
     }
 
-    public void EndInteract()
+    public void EndInteract(GameObject actor)
     {
+        _actor = null;
         _interacting = false;
         if (!_charging)
             enabled = false;
@@ -78,7 +81,7 @@ public class ReturnerCharger : MonoBehaviour, IInteractable
         {
             //interaction complete
             _charging = true;
-            EndInteract();
+            EndInteract(_actor);
             _startChargingTime = Time.time;
             _audio.Play();
         }

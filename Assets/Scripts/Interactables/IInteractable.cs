@@ -4,9 +4,9 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public abstract void StartInteract();
+    public abstract void StartInteract(GameObject actor);
 
-    public abstract void EndInteract();
+    public abstract void EndInteract(GameObject actor);
 
     // returns a float between 0.0 and 1.0 as a percentage of completion
     public abstract float GetInteractProgress();

@@ -6,16 +6,16 @@ public class FloorItem : MonoBehaviour, IInteractable
 {
     [SerializeField] private Item _item;
 
-    public void StartInteract()
+    public void StartInteract(GameObject actor)
     {
-        int pickedUp = FindObjectOfType<Inventory>().GetContainer().AddItem(_item.MakeItemInstance());
+        int pickedUp = actor.GetComponentInChildren<Inventory>().GetContainer().AddItem(_item.MakeItemInstance());
         if (pickedUp == 0)
         {
             Destroy(gameObject);
         }
     }
 
-    public void EndInteract()
+    public void EndInteract(GameObject actor)
     {
 
     }

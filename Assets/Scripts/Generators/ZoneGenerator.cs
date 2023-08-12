@@ -150,7 +150,10 @@ public class ZoneGenerator : MonoBehaviour
     {
         Zone newZone = new Zone();
         newZone.index = _zones.Count;
-        newZone.data = data;
+        if (data == null)
+            newZone.data = _defaultZone;
+        else
+            newZone.data = data;
         _zones.Add(newZone);
         return newZone;
     }

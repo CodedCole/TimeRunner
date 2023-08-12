@@ -87,7 +87,7 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         if (i != null)
         {
             if (_interacting && i == _interactables[0])
-                i.EndInteract();
+                i.EndInteract(this.gameObject);
             _interactables.Remove(i);
         }
     }
@@ -106,14 +106,14 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
         // interact start
         if (context.started && _interactables[0].IsInteractable())
         {
-            _interactables[0].StartInteract();
+            _interactables[0].StartInteract(this.gameObject);
             _movement.UpdateMove(Vector2.zero);
             _interacting = true;
         }
         // interact finish
         if (context.performed)
         {
-            _interactables[0].EndInteract();
+            _interactables[0].EndInteract(this.gameObject);
             _interacting = false;
         }
     }

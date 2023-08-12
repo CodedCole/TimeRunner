@@ -6735,7 +6735,6 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
-  - component: {fileID: 519420033}
   - component: {fileID: 519420034}
   - component: {fileID: 519420035}
   m_Layer: 0
@@ -6825,9 +6824,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.0058139535
-    width: 0.99999994
-    height: 0.98729545
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -6863,30 +6862,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &519420033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
-  m_AssetsPPU: 50
-  m_RefResolutionX: 540
-  m_RefResolutionY: 300
-  m_CropFrame: 4
-  m_GridSnapping: 2
-  m_FilterMode: 1
-  m_UpscaleRT: 0
-  m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
-  m_StretchFill: 0
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29447,7 +29422,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 892076061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.96, y: 0, z: -1}
+  m_LocalPosition: {x: 1.978, y: -1.159, z: -1}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -29577,7 +29552,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1097623650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.385, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -31510,9 +31485,13 @@ MonoBehaviour:
   - name: The Lowest Level
     levelLayouts:
     - {fileID: 11400000, guid: 1de316485417af949a51d8c1e7b9e66c, type: 2}
+    keyToNextLevel: {fileID: 11400000, guid: c9592debeeb8648458a192e14c4d3f07, type: 2}
+    crateTypeForKey: basic_crate
   - name: The Residence Level
     levelLayouts:
     - {fileID: 11400000, guid: 1aa4fde1cd4ab534e9ba6d3bc61397ff, type: 2}
+    keyToNextLevel: {fileID: 0}
+    crateTypeForKey: 
   _switchLevelDuration: 2
   _tilemapGrid: {fileID: 2138961933}
   _tilemapLayer: 8
@@ -32093,11 +32072,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8053292951734878327, guid: bb3a9b122d158ba4ab1c61a4b10e42ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.306
+      value: 1.27
       objectReference: {fileID: 0}
     - target: {fileID: 8053292951734878327, guid: bb3a9b122d158ba4ab1c61a4b10e42ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.549
+      value: -0.6
       objectReference: {fileID: 0}
     - target: {fileID: 8053292951734878327, guid: bb3a9b122d158ba4ab1c61a4b10e42ad, type: 3}
       propertyPath: m_LocalPosition.z

@@ -5,7 +5,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - _inspectorAsset: {fileID: 9197481963319205126, guid: c885f9cb54e591345bd5e30272174712, type: 3}
-  - _zoneFieldAsset: {instanceID: 0}
+  - _zoneFieldAsset: {fileID: 9197481963319205126, guid: dd8d3344f22584944a1d16cdfa8af629, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

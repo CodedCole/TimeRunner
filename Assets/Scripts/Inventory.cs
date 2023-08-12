@@ -19,6 +19,7 @@ public class Inventory : MonoBehaviour
     public ItemInstance rightGadget { get; private set; }
 
     private Container _container;
+    private RaidManager _raidManager;
 
     private Action onStart;
     private Action onEquip;
@@ -26,6 +27,7 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        _raidManager = FindAnyObjectByType<RaidManager>();
         _container = new Container(_maxWeight, _maxItems);
         foreach(var i in _startingItems)
         {

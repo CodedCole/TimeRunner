@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
@@ -93,5 +94,26 @@ public class LootManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public static bool TryPutItemInCrate(Item item, string crateTypeName)
+    {
+        Crate[] crates = Resources.FindObjectsOfTypeAll<Crate>();
+        List<Crate> validCrates = new List<Crate>();
+        foreach (var crate in crates)
+        {
+            if (EditorUtility.IsPersistent(crate) || !crate.gameObject.activeInHierarchy)
+                continue;
+
+            if (crate.GetCrateTypeName() == crateTypeName)
+                validCrates.Add(crate);
+        }
+
+        if (validCrates.Count == 0)
+            return false;
+
+        validCrates[Random.Range(0, validCrates.Count)].InsertItem(new ItemInitialState() { item=item, stackSize=1 });
+
+        return true;
     }
 }

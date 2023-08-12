@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+        <ui:VisualElement name="zone-color" style="background-color: rgb(156, 156, 156); margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; min-width: 100px;" />
+        <uie:ObjectField type="ZoneData, Assembly-CSharp" name="zone-data-field" style="flex-grow: 1; -unity-text-align: middle-left; font-size: 14px; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
+    </ui:VisualElement>
+</ui:UXML>
