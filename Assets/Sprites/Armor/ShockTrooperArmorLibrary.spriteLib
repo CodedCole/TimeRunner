@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Down
+    m_Hash: 1020083973
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: BodyArmor
+      m_Hash: 884383522
+      m_Sprite: {fileID: 1553798488, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1553798488, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    - m_Name: Helmet
+      m_Hash: 1023863696
+      m_Sprite: {fileID: 947880768, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 947880768, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: DownRight
+    m_Hash: 77912368
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: BodyArmor
+      m_Hash: 884383522
+      m_Sprite: {fileID: -2133116761, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2133116761, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    - m_Name: Helmet
+      m_Hash: 1023863696
+      m_Sprite: {fileID: 178198431, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 178198431, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: Right
+    m_Hash: 889936400
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: BodyArmor
+      m_Hash: 884383522
+      m_Sprite: {fileID: -708293904, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -708293904, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    - m_Name: Helmet
+      m_Hash: 1023863696
+      m_Sprite: {fileID: 1443851700, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1443851700, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: UpRight
+    m_Hash: 344635810
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: BodyArmor
+      m_Hash: 884383522
+      m_Sprite: {fileID: -714004130, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -714004130, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    - m_Name: Helmet
+      m_Hash: 1023863696
+      m_Sprite: {fileID: -994141045, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -994141045, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: Up
+    m_Hash: 370199250
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: BodyArmor
+      m_Hash: 884383522
+      m_Sprite: {fileID: -1779680833, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1779680833, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    - m_Name: Helmet
+      m_Hash: 1023863696
+      m_Sprite: {fileID: -1105408337, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1105408337, guid: bc95a53b66559174dbf02cafd337ba49, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 638274306382518356
+  m_Version: 1

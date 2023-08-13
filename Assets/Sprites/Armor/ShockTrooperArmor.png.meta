@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ShockTrooperArmor_0
+      name: ShockTrooper_Helmet_Down
       rect:
         serializedVersion: 2
         x: 0
@@ -131,7 +131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_1
+      name: ShockTrooper_Helmet_DownRight
       rect:
         serializedVersion: 2
         x: 16
@@ -152,7 +152,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_2
+      name: ShockTrooper_Helmet_Right
       rect:
         serializedVersion: 2
         x: 32
@@ -173,7 +173,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_3
+      name: ShockTrooper_Helmet_UpRight
       rect:
         serializedVersion: 2
         x: 48
@@ -194,7 +194,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_4
+      name: ShockTrooper_Helmet_Up
       rect:
         serializedVersion: 2
         x: 64
@@ -215,7 +215,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_5
+      name: ShockTrooper_BodyArmor_Down
       rect:
         serializedVersion: 2
         x: 0
@@ -236,7 +236,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_6
+      name: ShockTrooper_BodyArmor_DownRight
       rect:
         serializedVersion: 2
         x: 16
@@ -257,7 +257,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_7
+      name: ShockTrooper_BodyArmor_Right
       rect:
         serializedVersion: 2
         x: 32
@@ -278,7 +278,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_8
+      name: ShockTrooper_BodyArmor_UpRight
       rect:
         serializedVersion: 2
         x: 48
@@ -299,7 +299,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShockTrooperArmor_9
+      name: ShockTrooper_BodyArmor_Up
       rect:
         serializedVersion: 2
         x: 64
@@ -330,16 +330,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ShockTrooperArmor_0: 947880768
-      ShockTrooperArmor_1: 178198431
-      ShockTrooperArmor_2: 1443851700
-      ShockTrooperArmor_3: -994141045
-      ShockTrooperArmor_4: -1105408337
-      ShockTrooperArmor_5: 1553798488
-      ShockTrooperArmor_6: -2133116761
-      ShockTrooperArmor_7: -708293904
-      ShockTrooperArmor_8: -714004130
-      ShockTrooperArmor_9: -1779680833
+      ShockTrooper_BodyArmor_Down: 1553798488
+      ShockTrooper_BodyArmor_DownRight: -2133116761
+      ShockTrooper_BodyArmor_Right: -708293904
+      ShockTrooper_BodyArmor_Up: -1779680833
+      ShockTrooper_BodyArmor_UpRight: -714004130
+      ShockTrooper_Helmet_Down: 947880768
+      ShockTrooper_Helmet_DownRight: 178198431
+      ShockTrooper_Helmet_Right: 1443851700
+      ShockTrooper_Helmet_Up: -1105408337
+      ShockTrooper_Helmet_UpRight: -994141045
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

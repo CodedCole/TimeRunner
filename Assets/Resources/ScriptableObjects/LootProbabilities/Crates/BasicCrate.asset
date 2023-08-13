@@ -78,10 +78,6 @@ MonoBehaviour:
       stackSize: 1
     choiceWeight: 0.1
   - itemStack:
-      item: {fileID: 11400000, guid: c9592debeeb8648458a192e14c4d3f07, type: 2}
-      stackSize: 1
-    choiceWeight: 0.05
-  - itemStack:
       item: {fileID: 11400000, guid: 985522f997c7d0546a6d7f77b5b0659d, type: 2}
       stackSize: 1
     choiceWeight: 0.05

@@ -24,6 +24,7 @@ public class Inventory : MonoBehaviour
     private Action onStart;
     private Action onEquip;
     public Action<GunItemInstance> onEquipWeapon;
+    public bool Started { get; private set; } = false;
 
     private void Start()
     {
@@ -37,6 +38,7 @@ public class Inventory : MonoBehaviour
         }
         if (onStart != null)
             onStart();
+        Started = true;
     }
 
     public void RegisterOnStart(Action action) { onStart += action; }

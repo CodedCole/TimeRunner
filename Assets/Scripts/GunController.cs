@@ -6,6 +6,7 @@ using UnityEngine.U2D.Animation;
 public class GunController : MonoBehaviour
 {
     [SerializeField] private Transform _anchor;
+    [SerializeField] private SpriteRenderer _stowedWeaponSprite;
     [SerializeField] private GunItem _defaultGun;
 
     private Gun _gun;
@@ -23,6 +24,10 @@ public class GunController : MonoBehaviour
         {
             _gun.GunInstance = _inventory.primaryWeapon;
             _inventory.RegisterOnEquip(UpdateUsedWeapon);
+            if (_inventory.Started)
+                UpdateUsedWeapon();
+            else
+                _inventory.RegisterOnStart(UpdateUsedWeapon);
         }
         else
             _gun.GunInstance = _defaultGun.MakeItemInstance() as GunItemInstance;
@@ -106,10 +111,14 @@ public class GunController : MonoBehaviour
         if (_useSecondary)
         {
             _gun.GunInstance = _inventory.secondaryWeapon;
+            if (_stowedWeaponSprite != null)
+                _stowedWeaponSprite.sprite = _inventory.primaryWeapon?.gun.GetSprite();
         }
         else
         {
             _gun.GunInstance = _inventory.primaryWeapon;
+            if (_stowedWeaponSprite != null)
+                _stowedWeaponSprite.sprite = _inventory.secondaryWeapon?.gun.GetSprite();
         }
     }
 
