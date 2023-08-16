@@ -67,6 +67,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UseLeftGadget",
+                    "type": "PassThrough",
+                    "id": "31b0f411-8d51-4c22-8357-030b94a0b4d5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UseRightGadget",
+                    "type": "PassThrough",
+                    "id": "383ef66a-5748-40f2-8c64-465378f21eca",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -228,7 +246,7 @@
                     "name": "",
                     "id": "be2e2982-31a9-4f98-b043-db698789b2f6",
                     "path": "<Keyboard>/r",
-                    "interactions": "",
+                    "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "Reload",
@@ -265,6 +283,50 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7e45eca-f1bd-46e6-9be8-41d059683731",
+                    "path": "<Keyboard>/q",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "UseLeftGadget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ede43b27-5557-48cb-b050-c4d31d050f80",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UseLeftGadget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c138f347-9dca-4f68-ae65-23fd1abfd785",
+                    "path": "<Keyboard>/e",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "UseRightGadget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ce03866-04ee-4808-905f-79f93c8f754f",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UseRightGadget",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -219,7 +219,7 @@ public class Container
             if ((gearSlot == EGearSlot.Helmet && _items[i] is ArmorItemInstance && ((_items[i] as ArmorItemInstance).armor.GetArmorType() == EArmorType.Helmet)) ||
                 (gearSlot == EGearSlot.Body_Armor && _items[i] is ArmorItemInstance && ((_items[i] as ArmorItemInstance).armor.GetArmorType() == EArmorType.Body_Armor)) ||
                 ((gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon) && _items[i] is GunItemInstance) ||
-                ((gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget) && !(_items[i] is GunItemInstance) && !(_items[i] is ArmorItemInstance)))
+                ((gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget) && _items[i] is GadgetItemInstance))
             {
                 validItems.Add(_items[i]);
             }

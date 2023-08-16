@@ -11,6 +11,9 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
+        if (_target == null)
+            return;
+
         if ((_target.position - transform.position).sqrMagnitude > _stopDistance * _stopDistance)
             transform.Translate((_target.position.x - transform.position.x) * _followSpeed, (_target.position.y - transform.position.y) * _followSpeed, 0);
     }

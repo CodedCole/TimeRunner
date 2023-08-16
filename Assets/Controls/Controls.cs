@@ -89,6 +89,24 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseLeftGadget"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""31b0f411-8d51-4c22-8357-030b94a0b4d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseRightGadget"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""383ef66a-5748-40f2-8c64-465378f21eca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -250,7 +268,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""be2e2982-31a9-4f98-b043-db698789b2f6"",
                     ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Reload"",
@@ -287,6 +305,50 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7e45eca-f1bd-46e6-9be8-41d059683731"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UseLeftGadget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ede43b27-5557-48cb-b050-c4d31d050f80"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UseLeftGadget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c138f347-9dca-4f68-ae65-23fd1abfd785"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UseRightGadget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ce03866-04ee-4808-905f-79f93c8f754f"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UseRightGadget"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -556,6 +618,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_DuringRun_Inventory = m_DuringRun.FindAction("Inventory", throwIfNotFound: true);
         m_DuringRun_SwapWeapons = m_DuringRun.FindAction("SwapWeapons", throwIfNotFound: true);
         m_DuringRun_Reload = m_DuringRun.FindAction("Reload", throwIfNotFound: true);
+        m_DuringRun_UseLeftGadget = m_DuringRun.FindAction("UseLeftGadget", throwIfNotFound: true);
+        m_DuringRun_UseRightGadget = m_DuringRun.FindAction("UseRightGadget", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Navigation = m_Menu.FindAction("Navigation", throwIfNotFound: true);
@@ -634,6 +698,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_DuringRun_Inventory;
     private readonly InputAction m_DuringRun_SwapWeapons;
     private readonly InputAction m_DuringRun_Reload;
+    private readonly InputAction m_DuringRun_UseLeftGadget;
+    private readonly InputAction m_DuringRun_UseRightGadget;
     public struct DuringRunActions
     {
         private @Controls m_Wrapper;
@@ -645,6 +711,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Inventory => m_Wrapper.m_DuringRun_Inventory;
         public InputAction @SwapWeapons => m_Wrapper.m_DuringRun_SwapWeapons;
         public InputAction @Reload => m_Wrapper.m_DuringRun_Reload;
+        public InputAction @UseLeftGadget => m_Wrapper.m_DuringRun_UseLeftGadget;
+        public InputAction @UseRightGadget => m_Wrapper.m_DuringRun_UseRightGadget;
         public InputActionMap Get() { return m_Wrapper.m_DuringRun; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -675,6 +743,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @UseLeftGadget.started += instance.OnUseLeftGadget;
+            @UseLeftGadget.performed += instance.OnUseLeftGadget;
+            @UseLeftGadget.canceled += instance.OnUseLeftGadget;
+            @UseRightGadget.started += instance.OnUseRightGadget;
+            @UseRightGadget.performed += instance.OnUseRightGadget;
+            @UseRightGadget.canceled += instance.OnUseRightGadget;
         }
 
         private void UnregisterCallbacks(IDuringRunActions instance)
@@ -700,6 +774,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @UseLeftGadget.started -= instance.OnUseLeftGadget;
+            @UseLeftGadget.performed -= instance.OnUseLeftGadget;
+            @UseLeftGadget.canceled -= instance.OnUseLeftGadget;
+            @UseRightGadget.started -= instance.OnUseRightGadget;
+            @UseRightGadget.performed -= instance.OnUseRightGadget;
+            @UseRightGadget.canceled -= instance.OnUseRightGadget;
         }
 
         public void RemoveCallbacks(IDuringRunActions instance)
@@ -868,6 +948,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnInventory(InputAction.CallbackContext context);
         void OnSwapWeapons(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnUseLeftGadget(InputAction.CallbackContext context);
+        void OnUseRightGadget(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

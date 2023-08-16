@@ -144,7 +144,15 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
         _rightGadgetSlot.style.backgroundImage = _inventory.rightGadget != null ? new StyleBackground(_inventory.rightGadget.item.GetIcon()) : null;
     }
 
-    void UpdateItemDataCard() { _cardController.UpdateItemData(GetItemFromIndex(_currentSelectedSlot)); }
+    void UpdateItemDataCard() 
+    {
+        if (_selectedGearIndex == -1)
+            _cardController.UpdateItemData(GetItemFromIndex(_currentSelectedSlot));
+        else if (_selectedGearIndex != 0)
+            _cardController.UpdateItemData(_selectableGear[_selectedGearIndex - 1]);
+        else
+            _cardController.UpdateItemData(null);
+    }
 
     /// <summary>
     /// Opens the Inventory UI with 'container' as a lootable container (a null 'container' will open a normal inventory)
@@ -492,7 +500,13 @@ public class InventoryMenu : MonoBehaviour, Controls.IMenuActions
             bool success = _inventory.EquipGear(null, gearSlot);
             if (success && currentGear != null)
             {
-                _inventory.GetContainer().MoveItemInstance(currentGear);
+                bool moved = _inventory.GetContainer().MoveItemInstance(currentGear);
+
+                //return to gear slot if the item doesn't fit in the inventory
+                if (!moved)
+                {
+                    _inventory.EquipGear(currentGear, gearSlot);
+                }
             }
         }
     }

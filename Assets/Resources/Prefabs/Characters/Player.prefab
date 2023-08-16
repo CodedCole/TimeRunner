@@ -1250,7 +1250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anchor: {fileID: 187623547654278325}
-  _stowedWeaponSprite: {fileID: 0}
+  _stowedWeaponSprite: {fileID: 366443242693460484}
   _defaultGun: {fileID: 0}
 --- !u!114 &3651857942962609234
 MonoBehaviour:

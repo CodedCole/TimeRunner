@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b94330eda5c23284798757151e3dbfd7, type: 3}
+  m_Script: {fileID: 11500000, guid: fb621c2ea9454a149af13ca75409b7b2, type: 3}
   m_Name: Medkit
   m_EditorClassIdentifier: 
   itemName: Medkit
   description: Full of most things a citizen or soldier might need for an injury.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 37eb373a3f5bde947b3adc6a5532c2f7, type: 3}
   weight: 1.2
   maxStackSize: 3
-  <ConsumedOnUse>k__BackingField: 0
+  <ConsumedOnUse>k__BackingField: 1
+  <HealthRestored>k__BackingField: 25
+  <UseDuration>k__BackingField: 0

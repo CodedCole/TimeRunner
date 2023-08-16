@@ -39,6 +39,12 @@ public class Enemy : MonoBehaviour
 
     private List<Transform> _targets = new List<Transform>();
 
+    private void Awake()
+    {
+        FindObjectOfType<RaidManager>().RegisterOnRaidBegin(() => gameObject.SetActive(true));
+        gameObject.SetActive(false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

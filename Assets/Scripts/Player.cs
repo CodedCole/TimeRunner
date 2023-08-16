@@ -20,6 +20,12 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
     private bool _inventoryOpened = false;
     private bool _firing = false;
 
+    void Awake()
+    {
+        FindObjectOfType<RaidManager>().RegisterOnRaidBegin(() => this.enabled = true);
+        this.enabled = false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +52,9 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
 
     private void OnDisable()
     {
+        if (_controls == null)
+            return;
+
         _controls.DuringRun.Disable();
         _interacting = false;
     }
@@ -179,5 +188,21 @@ public class Player : MonoBehaviour, Controls.IDuringRunActions
     {
         if (context.performed)
             _gunController.Reload();
+    }
+
+    public void OnUseLeftGadget(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        _inventory.UseLeftGadget();
+    }
+
+    public void OnUseRightGadget(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        _inventory.UseRightGadget();
     }
 }

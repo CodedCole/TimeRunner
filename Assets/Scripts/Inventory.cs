@@ -15,8 +15,8 @@ public class Inventory : MonoBehaviour
     public GunItemInstance secondaryWeapon { get; private set; }
     public ArmorItemInstance helmet { get; private set; }
     public ArmorItemInstance bodyArmor { get; private set; }
-    public ItemInstance leftGadget { get; private set; }
-    public ItemInstance rightGadget { get; private set; }
+    public GadgetItemInstance leftGadget { get; private set; }
+    public GadgetItemInstance rightGadget { get; private set; }
 
     private Container _container;
     private RaidManager _raidManager;
@@ -67,102 +67,110 @@ public class Inventory : MonoBehaviour
     {
         if (gearSlot == EGearSlot.Primary_Weapon || gearSlot == EGearSlot.Secondary_Weapon)
         {
-            if (item is GunItemInstance)    //equip gear
+            if (item == null || item is GunItemInstance)
             {
+                //equip gear
+                GunItemInstance gun = item == null ? null : item as GunItemInstance;
                 if (gearSlot == EGearSlot.Primary_Weapon)
-                    primaryWeapon = item as GunItemInstance;
+                    primaryWeapon = gun;
                 else
-                    secondaryWeapon = item as GunItemInstance;
-                Debug.Log("Equipped");
+                    secondaryWeapon = gun;
+
+                Debug.Log(gun == null ? "Removed" : "Equipped");
+
+                //equip events
                 if (onEquip != null)
                     onEquip();
                 if (onEquipWeapon != null)
-                    onEquipWeapon(item as GunItemInstance);
+                    onEquipWeapon(gun);
 
                 return true;
             }
-            else if (item == null)
-            {
-                if (gearSlot == EGearSlot.Primary_Weapon)
-                    primaryWeapon = null;
-                else
-                    secondaryWeapon = null;
-                Debug.Log("Removed");
-                if (onEquip != null)
-                    onEquip();
-                if (onEquipWeapon != null)
-                    onEquipWeapon(null);
-
-                return true;
-            }
-            else    //invalid gear
-                return false;
         }
         else if (gearSlot == EGearSlot.Helmet || gearSlot == EGearSlot.Body_Armor)
         {
-            if (item is ArmorItemInstance)  //equip gear
+            if (item == null || item is ArmorItemInstance)
             {
-                if (gearSlot == EGearSlot.Helmet && ((item as ArmorItemInstance).item as ArmorItem).GetArmorType() == EArmorType.Helmet)
+                //equip gear
+                ArmorItemInstance armor = item == null ? null : item as ArmorItemInstance;
+                if (gearSlot == EGearSlot.Helmet && armor.armor.GetArmorType() == EArmorType.Helmet)
                 {
-                    helmet = item as ArmorItemInstance;
-                    _helmetLibrary.spriteLibraryAsset = helmet.armor.GetSpriteLibrary();
+                    helmet = armor;
+                    _helmetLibrary.spriteLibraryAsset = helmet?.armor.GetSpriteLibrary();
                     _helmetLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
                 }
                 else
                 {
-                    bodyArmor = item as ArmorItemInstance;
-                    _bodyArmorLibrary.spriteLibraryAsset = bodyArmor.armor.GetSpriteLibrary();
+                    bodyArmor = armor;
+                    _bodyArmorLibrary.spriteLibraryAsset = bodyArmor?.armor.GetSpriteLibrary();
                     _bodyArmorLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
                 }
-                Debug.Log("Equipped");
+
+                Debug.Log(armor == null ? "Removed" : "Equipped");
+
+                //equip event
                 if (onEquip != null)
                     onEquip();
 
                 return true;
             }
-            else if (item == null)  //remove gear
-            {
-                if (gearSlot == EGearSlot.Helmet)
-                {
-                    helmet = null;
-                    _helmetLibrary.spriteLibraryAsset = null;
-                    _helmetLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
-                }
-                else
-                {
-                    bodyArmor = null;
-                    _bodyArmorLibrary.spriteLibraryAsset = null;
-                    _bodyArmorLibrary.GetComponent<CustomSpriteResolver>().UpdateSprite();
-                }
-                Debug.Log("Removed");
-                if (onEquip != null)
-                    onEquip();
-
-                return true;
-            }
-            else    //invalid gear
-                return false;
         }
         else if (gearSlot == EGearSlot.Left_Gadget || gearSlot == EGearSlot.Right_Gadget)
         {
-            if (item != null && (item is GunItemInstance || item is ArmorItemInstance))
+            if (item == null || item is GadgetItemInstance)
             {
-                return false;
+                //equip gear
+                GadgetItemInstance gadget = item == null ? null : item as GadgetItemInstance;
+                if (gearSlot == EGearSlot.Left_Gadget)
+                {
+                    if (leftGadget != null)
+                        leftGadget.OnGadgetConsumed -= OnGadgetConsumed;
+
+                    leftGadget = gadget;
+                }
+                else
+                {
+                    if (rightGadget != null)
+                        rightGadget.OnGadgetConsumed -= OnGadgetConsumed;
+
+                    rightGadget = gadget;
+                }
+                if (gadget != null)
+                    gadget.OnGadgetConsumed += OnGadgetConsumed;
+
+                Debug.Log(gadget == null ? "Removed" : "Equipped");
+
+                //equip event
+                if (onEquip != null)
+                    onEquip();
+
+                return true;
+            }
+        }
+
+        //invalid gear
+        return false;
+    }
+
+    void OnGadgetConsumed(GadgetItemInstance gadget)
+    {
+        if (gadget.stack <= 0)
+        {
+            if (gadget == leftGadget)
+            {
+                leftGadget = null;
+            }
+            else if (gadget == rightGadget)
+            {
+                rightGadget = null;
             }
             else
             {
-                if (gearSlot == EGearSlot.Left_Gadget)
-                    leftGadget = item;
-                else
-                    rightGadget = item;
-                Debug.Log("Equipped");
-                if (onEquip != null)
-                    onEquip();
-
-                return true;
+                Debug.LogError("gadget (" + gadget.gadget.GetItemName() + ") is not in a gadget slot but was consumed");
             }
+            if (onEquip != null)
+                onEquip();
         }
-        return false;
     }
 
     public void RegisterOnEquip(Action action) { onEquip += action; }
@@ -177,5 +185,17 @@ public class Inventory : MonoBehaviour
         if (bodyArmor != null)
             body = bodyArmor.armor.GetStats();
         return ArmorStats.Combine(body, helm);
+    }
+
+    public void UseLeftGadget()
+    {
+        if (leftGadget != null)
+            leftGadget.Use(this.gameObject);
+    }
+
+    public void UseRightGadget()
+    {
+        if (rightGadget != null)
+            rightGadget.Use(this.gameObject);
     }
 }

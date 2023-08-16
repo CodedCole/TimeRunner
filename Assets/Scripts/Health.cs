@@ -43,16 +43,15 @@ public class Health : MonoBehaviour
             _damageFlashTimer -= Time.deltaTime;
             if (_damageFlashTimer <= 0)
                 _spriteRenderer.material.SetFloat("_DamageFlashIntensity", 0);
-            //_spriteRenderer.color = _damageFlashColor;
-        }
-        else
-        {
-            //_spriteRenderer.color = Color.white;
-            
         }
     }
 
-    // returns true if the damage is fatal
+    /// <summary>
+    /// Deals damage to this Health component
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <param name="damageType"></param>
+    /// <returns>Whether the damage was fatal</returns>
     public bool TakeDamage(float amount, EDamageType damageType)
     {
         if (_health <= 0)
@@ -91,6 +90,22 @@ public class Health : MonoBehaviour
             if (onDeath != null)
                 onDeath();
 
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Heals this Health component
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns>Whether the max health was reached</returns>
+    public bool Heal(float amount)
+    {
+        _health += amount;
+        if (_health >= _maxHealth)
+        {
+            _health = _maxHealth;
             return true;
         }
         return false;
